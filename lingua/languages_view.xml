@@ -2,9 +2,9 @@
 <openerp>
     <data>
     <!-- Languages view -->
-        <record id="lingua_languages_tree_view" model="ir.ui.view" >
-            <field name="name">"lingua_languages_tree_view"</field>
-            <field name="model">lingua.languages</field>
+        <record id="lingua_language_tree_view" model="ir.ui.view" >
+            <field name="name">"lingua_language_tree_view"</field>
+            <field name="model">lingua.language</field>
             <field name="arch" type="xml">
                 <tree string="Languages">
                     <field name="name" />
@@ -14,9 +14,9 @@
                 </tree>
             </field>
         </record>
-        <record id="lingua_languages_form_view" model="ir.ui.view" >
-            <field name="name">lingua_languages_form_view</field>
-            <field name="model">lingua.languages</field>
+        <record id="lingua_language_form_view" model="ir.ui.view" >
+            <field name="name">lingua_language_form_view</field>
+            <field name="model">lingua.language</field>
             <field name="arch" type="xml">
                 <form string="Languages">
                     <field name="name"/>
@@ -38,7 +38,7 @@
                 <notebook position="inside">
                     <page string="Languages">
                        <group>
-                        <field name="languages_ids" nolabel="1"/>
+                        <field name="language_ids" nolabel="1"/>
                         </group>
                      </page>
                 </notebook>
@@ -46,9 +46,9 @@
         </record>   
         
         
-        <record id='lingua_languages_action' model='ir.actions.act_window' >
+        <record id='lingua_language_action' model='ir.actions.act_window' >
             <field name="name">Languages</field>
-            <field name="res_model">lingua.languages</field>
+            <field name="res_model">lingua.language</field>
             <field name="view_mode">tree,form</field>
             <!-- field name="help" type="html">
               <p class="oe_view_nocontent_create">
@@ -62,6 +62,6 @@
         </record>
         
         <!-- MENU ITEMS -->
-        <menuitem action="lingua_languages_action" parent="hr.menu_hr_configuration" id="lingua_languages_menu" />
+        <menuitem action="lingua_language_action" parent="hr.menu_hr_configuration" id="lingua_languages_menu" />
     </data>
 </openerp>

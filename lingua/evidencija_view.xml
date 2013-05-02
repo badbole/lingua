@@ -3,11 +3,11 @@
 	<data>
 
 		<!-- Evidencija prijevoda -->
-		<record id="evidencija_prijevoda_tree_view" model="ir.ui.view" >
-			<field name="name">"evidencija_prijevoda_tree_view"</field>
-			<field name="model">prijevod.evidencija</field>
+		<record id="lingua_evidencija_tree_view" model="ir.ui.view" >
+			<field name="name">"lingua_evidencija_tree_view"</field>
+			<field name="model">lingua.evidencija</field>
 			<field name="arch" type="xml">
-				<tree string="Prijevodi">
+				<tree string="Evidention">
 					<field name="name" />
 					<field name="broj_evidencije" />
 					<field name="broj_evidencija_pod" />
@@ -19,11 +19,11 @@
 				</tree>
 			</field>
 		</record>
-		<record id="evidencija_prijevoda_form_view" model="ir.ui.view" >
-			<field name="name">evidencija_prijevoda_form_view</field>
-			<field name="model">prijevod.evidencija</field>
+		<record id="lingua_evidencija_form_view" model="ir.ui.view" >
+			<field name="name">lingua_evidencija_form_view</field>
+			<field name="model">lingua.evidencija</field>
 			<field name="arch" type="xml">
-				<form string="EVIDENCIJA PRIJEVODA">
+				<form string="Evidention">
 					<field name="name"/>
                     <field name="broj_evidencije" />
                     <field name="broj_evidencija_pod" />
@@ -31,14 +31,16 @@
                     <field name="date_recived" />
                     <field name="date_due" />
                     <field name="state" />
+                    <field name="lang_origin"/>
+                    <field name="lang_translate" colspan="4" nolabel="1"/>
         		</form>
 			</field>
 		</record>
 		
 		<!-- Actions -->
-		<record model='ir.actions.act_window' id='evidencija_translations_evidention'>
+		<record model='ir.actions.act_window' id='lingua_translations_evidention'>
             <field name="name">Evidention</field>
-            <field name="res_model">prijevod.evidencija</field>
+            <field name="res_model">lingua.evidencija</field>
             <field name="view_mode">tree,form</field>
             <!-- field name="help" type="html">
               <p class="oe_view_nocontent_create">
@@ -56,7 +58,7 @@
 		<menuitem name="Translations" id="menu_translations" sequence="10"/>
 		<menuitem name="Overwiev" id="translations_overview" parent="menu_translations" />
 		
-		<menuitem action="evidencija_translations_evidention" parent="translations_overview" id="translations_evidention_menu" />
+		<menuitem action="lingua_translations_evidention" parent="translations_overview" id="translations_evidention_menu" />
 		
  </data>
  </openerp>

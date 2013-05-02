@@ -28,7 +28,7 @@
 from openerp.osv import fields, osv
 
 class lingua_languages (osv.Model):
-    _name = 'lingua.languages'
+    _name = 'lingua.language'
     _description = 'Languages for translation'
     
     _columns = {
@@ -36,11 +36,11 @@ class lingua_languages (osv.Model):
                 'iso_code1':fields.char('ISO 1', size=3),
                 'iso_code2':fields.char('ISO 2', size=3),
                 'iso_code3':fields.char('ISO 3', size=2),
-                'employee_ids':fields.many2many('hr.employee','hr_employee_lingua_languages_res','hr_employee_id','lingua_languages_id')
+                'employee_ids':fields.many2many('hr.employee','lingua_employee_language_res','lingua_language_id','hr_employee_id')
                 }
     
 class hr_employee(osv.osv):
     _inherit = "hr.employee"
     _columns = {
-                'languages_ids':fields.many2many('lingua.languages','hr_employee_lingua_languages_res','hr_employee_id','lingua_languages_id')
+                'language_ids':fields.many2many('lingua.language','lingua_employee_language_res','hr_employee_id','lingua_language_id')
                 }

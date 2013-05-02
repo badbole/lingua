@@ -26,5 +26,6 @@
 ##############################################################################
 import languages
 #import project
+import evidencija
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -30,25 +30,25 @@ from osv import osv, fields
 
     
 class lingua_evidencija(osv.Model):
-    _name = 'lungua.evidencija'
-    _description = 'Evidencija prijevoda'
+    _name = 'lingua.evidencija'
+    _description = 'Evidention of translations'
     
     _columns = {
         'name': fields.char('Naziv evidencije prijevoda', size=128 , select=1),
-        'broj_evidencije':fields.char('Broj evidencija',size=32),
-        'broj_evidencija_pod': fields.char('Broj Evidencije Podruznica', required="True", size=20),
+        'broj_evidencije':fields.char('Evidention number',size=32),
+        'broj_evidencija_pod': fields.char('Chapter evidention number', size=32),
         'partner_id':fields.many2one('res.partner','partner_id', 'Partner'),
-        'user_id':fields.one2many('res.users', 'user_id','Korisnik-prevoditelj'),
-        #'lang_origin':fields.one2many('prijevod.jezici','jezici_id'),
-        #'lang_trans':fields.one2many('prijevod.jezici','prijevod_jezici_id'),
-        'date_recived':fields.datetime('Zaprimljeno', help="datum i vrijeme zaprimanja"),
-        'date_due':fields.datetime('Vrijeme podizanja'),
+        'employee_id':fields.many2one('hr.employee', 'employee_id','Employee'),
+        'lang_origin':fields.many2one('lingua.language','language_id','Origin language'),
+        'lang_translate':fields.many2many('lingua.language','lingua_tranlslate_to_res','lingua_languages_id','lingua_evidencija_id'),
+        'date_recived':fields.datetime('Recived', help="date and time of recieving"),
+        'date_due':fields.datetime('Pickup time'),
         'state':fields.selection (( ('draft','Zaprimljeno')
                                    ,('active','U procesu')
                                    ,('closed','Prevedeno')
                                    ,('canceled','Otkazano')
                                    )
-                                  ,'Status prijevoda'),
+                                  ,'Translation status'),
                 }
 
     _defaults = {
