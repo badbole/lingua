@@ -1,4 +1,8 @@
 *.py[cod]
+*.pyc[cod]
+
+#eclipse
+*.project
 
 # C extensions
 *.so
