@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+    <!-- Languages view -->
+        <record id="lingua_languages_tree_view" model="ir.ui.view" >
+            <field name="name">"lingua_languages_tree_view"</field>
+            <field name="model">lingua.languages</field>
+            <field name="arch" type="xml">
+                <tree string="Languages">
+                    <field name="name" />
+                    <field name="iso_code1" />
+                    <field name="iso_code2" />
+                    <field name="iso_code3" />
+                </tree>
+            </field>
+        </record>
+        <record id="lingua_languages_form_view" model="ir.ui.view" >
+            <field name="name">lingua_languages_form_view</field>
+            <field name="model">lingua.languages</field>
+            <field name="arch" type="xml">
+                <form string="Languages">
+                    <field name="name"/>
+                    <field name="iso_code1" />
+                    <field name="iso_code2" />
+                    <field name="iso_code3" />
+                    <newline/>
+                    <field name="employee_ids" colspan ="4" nolabel="1"/>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Employee - Lang add -->
+        <record id="lingua_hr_employee_form_view" model="ir.ui.view">
+            <field name="name">lingua.hr.employee.form.view</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="Languages">
+                       <group>
+                        <field name="languages_ids" nolabel="1"/>
+                        </group>
+                     </page>
+                </notebook>
+            </field>
+        </record>   
+        
+        
+        <record id='lingua_languages_action' model='ir.actions.act_window' >
+            <field name="name">Languages</field>
+            <field name="res_model">lingua.languages</field>
+            <field name="view_mode">tree,form</field>
+            <!-- field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a vehicule status.
+              </p><p>
+                You can customize available status to track the evolution of
+                each vehicule. Example: Active, Being Repaired, Sold.
+              </p>
+            </field> 
+             -->
+        </record>
+        
+        <!-- MENU ITEMS -->
+        <menuitem action="lingua_languages_action" parent="hr.menu_hr_configuration" id="lingua_languages_menu" />
+    </data>
+</openerp>
