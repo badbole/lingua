@@ -40,8 +40,9 @@ Authors: Davor Bojkić - Bole @ DAJ MI 5     www.dajmi5.com
     "website": "http://www.dajmi5.com",
 
     'depends': [
-                'project',
-                'hr'
+                #'project',
+                'hr',
+                'l10n_hr_fiskal'
                 ],
     
     'update_xml': [

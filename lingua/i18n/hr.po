@@ -4,11 +4,11 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenERP Server 7.0-20130314-DAJMI5\n"
+"Project-Id-Version: OpenERP Server 7.0-20130331-231656\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-02 20:25+0000\n"
-"PO-Revision-Date: 2013-05-02 22:28+0100\n"
-"Last-Translator: Davor Bojkić <bole@dajmi5.com>\n"
+"POT-Creation-Date: 2013-05-03 08:23+0000\n"
+"PO-Revision-Date: 2013-05-03 10:27+0100\n"
+"Last-Translator: Davor Bojkić - Bole <bole@dajmi5.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16,38 +16,44 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: lingua
-#: model:ir.model,name:lingua.model_project_task
-msgid "Task"
-msgstr ""
+#: selection:lingua.evidencija,state:0
+msgid "Delivered"
+msgstr "Isporučeno"
 
 #. module: lingua
-#: field:hr.employee,languages_ids:0
-#: field:lingua.languages,employee_ids:0
-msgid "unknown"
-msgstr ""
+#: model:ir.ui.menu,name:lingua.translations_overview
+msgid "Overwiev"
+msgstr "Pregled"
 
 #. module: lingua
-#: view:hr.employee:0
-#: model:ir.actions.act_window,name:lingua.lingua_languages_action
-#: model:ir.ui.menu,name:lingua.lingua_languages_menu
-#: view:lingua.languages:0
-msgid "Languages"
-msgstr "Jezici"
+#: model:project.task.type,name:lingua.progress
+msgid "Prijevod u tijeku"
+msgstr "Prijevod u tijeku"
 
 #. module: lingua
-#: field:lingua.languages,iso_code2:0
+#: field:lingua.evidencija,note:0
+msgid "Note"
+msgstr "Napomena"
+
+#. module: lingua
+#: field:lingua.language,iso_code2:0
 msgid "ISO 2"
 msgstr "ISO 2"
 
 #. module: lingua
-#: field:lingua.languages,name:0
+#: field:lingua.language,name:0
 msgid "Language name"
-msgstr "Naziv jezika"
+msgstr "Jezik"
 
 #. module: lingua
-#: model:ir.model,name:lingua.model_lingua_languages
-msgid "Languages for translation"
-msgstr "Jezici za prevođenje"
+#: selection:lingua.evidencija,state:0
+msgid "Draft"
+msgstr "Nacrt"
+
+#. module: lingua
+#: model:project.task.type,name:lingua.gotovo
+msgid "Završeno"
+msgstr "Završeno"
 
 #. module: lingua
 #: model:ir.model,name:lingua.model_hr_employee
@@ -55,12 +61,150 @@ msgid "Employee"
 msgstr "Djelatnik"
 
 #. module: lingua
-#: field:lingua.languages,iso_code3:0
+#: field:lingua.language,iso_code3:0
 msgid "ISO 3"
 msgstr "ISO 3"
 
 #. module: lingua
-#: field:lingua.languages,iso_code1:0
+#: field:lingua.language,iso_code1:0
 msgid "ISO 1"
 msgstr "ISO 1"
+
+#. module: lingua
+#: field:lingua.evidencija,partner_id:0
+msgid "partner_id"
+msgstr "partner_id"
+
+#. module: lingua
+#: field:lingua.evidencija,broj_evidencije:0
+msgid "Evidention number"
+msgstr "Broj evidencije"
+
+#. module: lingua
+#: model:ir.model,name:lingua.model_lingua_evidencija
+msgid "Evidention of translations"
+msgstr "Evidencija prijevoda"
+
+#. module: lingua
+#: field:lingua.evidencija,employee_id:0
+msgid "employee_id"
+msgstr "employee_id"
+
+#. module: lingua
+#: field:lingua.evidencija,lectoring:0
+msgid "Mandatory lectoring"
+msgstr "Obavezno lektoriranje"
+
+#. module: lingua
+#: model:project.task.type,name:lingua.new
+msgid "Zaprimljeno"
+msgstr "Zaprimljeno"
+
+#. module: lingua
+#: field:hr.employee,language_ids:0
+#: field:lingua.evidencija,lang_translate:0
+#: field:lingua.language,employee_ids:0
+msgid "unknown"
+msgstr "unknown"
+
+#. module: lingua
+#: model:ir.ui.menu,name:lingua.menu_translations
+msgid "Translations"
+msgstr "Prijevodi"
+
+#. module: lingua
+#: field:lingua.evidencija,lang_origin:0
+msgid "language_id"
+msgstr "language_id"
+
+#. module: lingua
+#: view:hr.employee:0
+#: model:ir.actions.act_window,name:lingua.lingua_language_action
+#: model:ir.ui.menu,name:lingua.lingua_languages_menu
+#: view:lingua.language:0
+msgid "Languages"
+msgstr "Jezici"
+
+#. module: lingua
+#: selection:lingua.evidencija,state:0
+msgid "Finished"
+msgstr "Završeno"
+
+#. module: lingua
+#: model:project.task.type,name:lingua.canceled
+msgid "Otkazano"
+msgstr "Otkazano"
+
+#. module: lingua
+#: field:lingua.evidencija,name:0
+msgid "Name"
+msgstr "Naziv"
+
+#. module: lingua
+#: field:lingua.evidencija,date_due:0
+msgid "Pickup time"
+msgstr "Vrijeme podizanja"
+
+#. module: lingua
+#: selection:lingua.evidencija,state:0
+msgid "Lectoring"
+msgstr "Lektoriranje"
+
+#. module: lingua
+#: field:lingua.evidencija,state:0
+msgid "Translation status"
+msgstr "Status prijevoda"
+
+#. module: lingua
+#: model:ir.actions.act_window,name:lingua.lingua_translations_evidention
+#: model:ir.ui.menu,name:lingua.translations_evidention_menu
+#: view:lingua.evidencija:0
+msgid "Evidention"
+msgstr "Evidencija"
+
+#. module: lingua
+#: field:lingua.evidencija,fiskal_prostor_id:0
+msgid "Chapter name"
+msgstr "Naziv podružnice"
+
+#. module: lingua
+#: help:lingua.evidencija,date_recived:0
+msgid "Date and time of recieving"
+msgstr "Datum i vrijeme zaprimanja"
+
+#. module: lingua
+#: field:lingua.evidencija,broj_evidencija_pod:0
+msgid "Chapter evidention number"
+msgstr "Evidencijski broj u podružnici"
+
+#. module: lingua
+#: field:lingua.evidencija,date_recived:0
+#: selection:lingua.evidencija,state:0
+msgid "Recived"
+msgstr "Zaprimljeno"
+
+#. module: lingua
+#: model:project.task.type,name:lingua.progress2
+msgid "Na Lekturiranju"
+msgstr "Na Lekturiranju"
+
+#. module: lingua
+#: selection:lingua.evidencija,state:0
+msgid "Canceled"
+msgstr "Ozkazano"
+
+#. module: lingua
+#: model:ir.model,name:lingua.model_lingua_language
+msgid "Languages for translation"
+msgstr "Jezici za prevođenje"
+
+#. module: lingua
+#: selection:lingua.evidencija,state:0
+msgid "Translating"
+msgstr "Prevođenje"
+
+#. module: lingua
+#: model:project.task.type,name:lingua.pending
+msgid "Za isporuku"
+msgstr "Za isporuku"
 
