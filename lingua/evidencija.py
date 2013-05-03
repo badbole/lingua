@@ -33,6 +33,15 @@ class lingua_evidencija(osv.Model):
     _name = 'lingua.evidencija'
     _description = 'Evidention of translations'
     
+    _translation_status = [('draft','Draft')
+                   ,('recived','Recived')
+                   ,('translate','Translating')
+                   ,('lector','Lectoring')
+                   ,('finished','Finished')
+                   ,('delivered','Delivered')
+                   ,('canceled','Canceled')
+                   ]
+    
     _columns = {
         'name': fields.char('Name', size=128 , select=1),
         'broj_evidencije':fields.char('Evidention number',size=32),
@@ -43,18 +52,10 @@ class lingua_evidencija(osv.Model):
         'lang_origin':fields.many2one('lingua.language','language_id','Origin language'),
         'lang_translate':fields.many2many('lingua.language','lingua_tranlslate_to_res','lingua_languages_id','lingua_evidencija_id'),
         'date_recived':fields.datetime('Recived', help="Date and time of recieving"),
-        'date_due':fields.datetime('Pickup time'),
+        'date_due':fields.datetime('Deadline'),
         'note':fields.text('Note'),
         'lectoring':fields.boolean ('Mandatory lectoring'),
-        'state':fields.selection (( ('draft','Draft')
-                                   ,('recived','Recived')
-                                   ,('translate','Translating')
-                                   ,('lector','Lectoring')
-                                   ,('finished','Finished')
-                                   ,('delivered','Delivered')
-                                   ,('canceled','Canceled')
-                                   )
-                                  ,'Translation status'),
+        'state':fields.selection (_translation_status,'Translation status'),
                 }
 
     _defaults = {
