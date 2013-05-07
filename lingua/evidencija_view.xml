@@ -24,27 +24,99 @@
 			<field name="name">lingua_evidencija_form_view</field>
 			<field name="model">lingua.evidencija</field>
 			<field name="arch" type="xml">
-				<form string="Evidention">
+				<form string="Evidention" version="7.0">
+					<header>
+						<!-- button name="button_recive" type="object" string="Zaprimi prijevod" 
+							attrs="{'invisible':[('state', '!=', 'draft')]}" class="oe_highlight" /> -->
+						<button name="button_recive" type="object" string="Zaprimi prijevod"
+							class="oe_highlight" />
+						<field name="state" widget="statusbar" />
+					</header>
+					<sheet>
+						<h1>
+							<field name="seq_no" class="oe_inline" />
+						</h1>
+						<group string="Evidention of translations" colspan="4">
+							<field name="name" />
+							<field name="broj_evidencije" />
+							<field name="fiskal_prostor_id" />
+							<field name="broj_evidencija_pod" />
+							<field name="partner_id" />
+							<field name="date_recived" />
+							<field name="date_due" />
+						</group>
+						<notebook colspan="4">
+							<page string="Translations">
+								<group>
+									<field name="lang_origin" string="Origin language"
+										on_change="onchange_lang_origin(lang_origin)" />
+								</group>
+								<newline />
+								<field name="evidencija_line_ids" colspan="4" nolabel="1" />
+							</page>
+							<page string="Note">
+								<field name="note" colspan="4" />
+							</page>
+						</notebook>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<!-- Evidencija Line -->
+		<record id="lingua_evidencija_line_tree_view" model="ir.ui.view">
+			<field name="name">"lingua_evidencija_line_tree_view"</field>
+			<field name="model">lingua.evidencija.line</field>
+			<field name="arch" type="xml">
+				<tree colors="blue:state == 'new';black:state in ('translation','lectoring');gray:state in ('cancel','pause');green:state == 'finished'" string="Evidention line">
 					<field name="name" />
-					<field name="broj_evidencije" />
-					<field name="fiskal_prostor_id" />
-					<field name="broj_evidencija_pod" />
-					<field name="partner_id" />
-					<field name="date_recived" />
-					<field name="date_due" />
-					<field name="state" />
-					<field name="lang_origin" />
+					<field name="evidencija_id" invisible="1" />
+					<field name="language_id" />
+					<field name="employee_id" />
 					<field name="lectoring" />
-					<newline />
-					<field name="lang_translate" colspan="4" nolabel="1" />
-					<field name="note" colspan="4" />
+					<field name="state" />
+				</tree>
+			</field>
+		</record>
+		<record id="lingua_evidencija_line_form_view" model="ir.ui.view">
+			<field name="name">lingua_evidencija_line_form_view</field>
+			<field name="model">lingua.evidencija.line</field>
+			<field name="arch" type="xml">
+				<form string="Evidention line" version="7.0">
+					<header>
+						<button name="button_translation_start" type="object" states="asigned"
+							string="Start translating" />
+						<button name="button_translation_finish" type="object" states="translation"
+                            string="Finish translating" />
+                        <button name="button_translation2product" type="object" string="Prebaci u proizvod"/>
+						<field name="state" widget="statusbar" />
+					</header>
+					<sheet>
+						<h1>
+							<field name="name" />
+						</h1>
+						<group>
+							<field name="evidencija_id" readonly="1" />
+							<field name="language_id" />
+							<field name="employee_id" on_change="onchange_employee_id(employee_id)"
+								domain="[('language_ids','=',language_id)]" />
+							<field name="lectoring" />
+							<field name="translated_cards" />
+						</group>
+						<group colspan="4" col="4">
+							<field name="translation_start" />
+							<field name="translation_finish" />
+							<field name="lectoring_start" />
+							<field name="lectoring_finish" />
+						</group>
+					</sheet>
 				</form>
 			</field>
 		</record>
 
 		<!-- Actions -->
 		<record model='ir.actions.act_window' id='lingua_translations_evidention'>
-			<field name="name">Evidention</field>
+			<field name="name">Translation Evidention</field>
 			<field name="res_model">lingua.evidencija</field>
 			<field name="view_mode">tree,form</field>
 			<!-- field name="help" type="html"> <p class="oe_view_nocontent_create"> 
@@ -52,7 +124,11 @@
 				to track the evolution of each vehicule. Example: Active, Being Repaired, 
 				Sold. </p> </field> -->
 		</record>
-
+		<record model='ir.actions.act_window' id='lingua_translations_evidention_line'>
+			<field name="name">Translation tasks</field>
+			<field name="res_model">lingua.evidencija.line</field>
+			<field name="view_mode">tree,form</field>
+		</record>
 
 		<!-- MENU ITEMS -->
 		<menuitem name="Translations" id="menu_translations"
@@ -61,6 +137,8 @@
 
 		<menuitem action="lingua_translations_evidention" parent="translations_overview"
 			id="translations_evidention_menu" />
+		<menuitem action="lingua_translations_evidention_line"
+			parent="translations_overview" id="translations_evidention_line_menu" />
 
 	</data>
 </openerp>

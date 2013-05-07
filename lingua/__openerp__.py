@@ -49,7 +49,8 @@ Authors: Davor Bojkić - Bole @ DAJ MI 5     www.dajmi5.com
                    'data/lingua.language.csv',
                    'languages_view.xml',
                    #'data/project.task.type.csv',
-                   'evidencija_view.xml'
+                   'evidencija_view.xml',
+                   'lingua_sequence.xml'
                    ],
     "active": False,
     "installable": True,

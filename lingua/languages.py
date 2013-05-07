@@ -41,6 +41,26 @@ class lingua_languages (osv.Model):
     
 class hr_employee(osv.osv):
     _inherit = "hr.employee"
+
+
+    
+    def onchange_primary_lang(self, cr, uid, ids, primary_lang):
+        if primary_lang:
+            employee=self.pool.get('hr.employee').browse(cr,uid,ids)[0]
+            if employee.language_ids:
+                for language_id in employee.language_ids:
+                    if language_id.id==primary_lang:
+                        return True
+            self.write(cr,uid,employee.id,{'language_ids':[(4,primary_lang)]})
+            
+        return True            
+               
     _columns = {
-                'language_ids':fields.many2many('lingua.language','lingua_employee_language_res','hr_employee_id','lingua_language_id')
+                'language_ids':fields.many2many('lingua.language','lingua_employee_language_res','hr_employee_id','lingua_language_id'),
+                'primary_lang':fields.many2one('lingua.language','Primary language'),
+                #'lector':fields.boolean('Lector'),  -> user rola! 
+                
                 }
+    _defaults = {
+                 #'primary_lang':'Croatian'
+                 }
