@@ -151,6 +151,9 @@ class lingua_evidencija_line (osv.Model):
     
     def onchange_employee_id(self, cr, uid, ids, employee_id):
         evid_line = self.pool.get('lingua.evidencija.line').browse(cr,uid,ids)[0]
+        
+        if not evid_line.name: #zasad bacim error ako nije zaprimljen bolja verzija je call super!!
+            raise osv.except_osv(_('Error !'), _('If translation is not recived, you cannot assign it!'))
         evidention = self.pool.get('lingua.evidencija').browse(cr, uid, evid_line.evidencija_id.id) 
         if evidention.state=='open':
             self.pool.get('lingua.evidencija').write(cr, uid, evidention.id, {'state':'process'})
@@ -162,8 +165,9 @@ class lingua_evidencija_line (osv.Model):
     def button_translation_start(self, cr, uid, ids, context=None):
         evid_line=self.pool.get('lingua.evidencija.line').browse(cr, uid, ids)[0]
         if evid_line.translation_start:
-            #već postoji datum? kaj sad
-            return True
+            values = {
+                      'state':'translation'
+                      }
         else:
             time=zagreb_now()
             values = {'translation_start':time,
@@ -174,24 +178,68 @@ class lingua_evidencija_line (osv.Model):
     def button_translation_finish(self, cr, uid, ids, context=None):
         evid_line=self.pool.get('lingua.evidencija.line').browse(cr, uid, ids)[0]
         if evid_line.translation_finish:
-            #već postoji datum? kaj sad
+            #već postoji datum? jel reopen ili kaj? zasada niš
             return True
+        
+        time=zagreb_now()
+        if evid_line.lectoring:
+            values = {'translation_finish':time,
+                      'state':'lectoring'}
+        else:
+            values = {'translation_finish':time,
+                      'state':'finished'}
+        self.pool.get('lingua.evidencija.line').write(cr, uid, evid_line.id, values )
+        self.check_evidencija_state(cr, uid, evid_line.evidencija_id.id)
+        return True
+        
+    def button_lectoring_start(self, cr, uid, ids, context=None):
+        evid_line=self.pool.get('lingua.evidencija.line').browse(cr, uid, ids)[0]
+        if evid_line.lectoring_start:
+            values = {
+                      'state':'lectoring'
+                      }
         else:
             time=zagreb_now()
-            if evid_line.lectoring:
-                values = {'translation_finish':time,
-                          'state':'lectoring'}
-            else:
-                self.pool.get('lingua.evidencija').write(cr, uid, evid_line.evidencija_id.id, {'state':'finished'})
-                values = {'translation_finish':time,
-                          'state':'finished'}
-        return self.pool.get('lingua.evidencija.line').write(cr, uid, evid_line.id,values )
+            values = {'lectoring_start':time,
+                      'state':'lectoring'
+                      }
+        return self.pool.get('lingua.evidencija.line').write(cr, uid, evid_line.id, values)
     
+    def button_lectoring_finish(self, cr, uid, ids, context=None):
+        evid_line=self.pool.get('lingua.evidencija.line').browse(cr, uid, ids)[0]
+        if evid_line.lectoring_finish:
+            #već postoji datum? jel reopen ili kaj? zasada niš
+            return True
+        
+        time=zagreb_now()
+        values = {'lectoring_finish':time,
+                      'state':'finished'}
+        self.pool.get('lingua.evidencija.line').write(cr, uid, evid_line.id,values )
+        self.check_evidencija_state(cr, uid, evid_line.evidencija_id.id)
+        return True
+        
+    def check_evidencija_state(self, cr, uid, evidencija_id, context=None):
+        gotovo = True
+        for id in self.pool.get('lingua.evidencija').browse(cr, uid, evidencija_id).evidencija_line_ids:
+            if not (id.state == "finished") :
+                gotovo=False
+                break
+        if gotovo :     
+            return self.pool.get('lingua.evidencija').write(cr, uid, evidencija_id, {'state':'finished'})
+        return True
+        
     def button_translation2product(self, cr, uid, ids, context=None):
         
         raise osv.except_osv(_('TO DO!'), _('This function is not ready yet!'))
         return True
     
+    def button_pause(self, cr, uid, ids, context=None):
+        evid_line=self.pool.get('lingua.evidencija.line').browse(cr, uid, ids)[0]
+        if evid_line.state in ('translation','lectoring'):
+            return self.pool.get('lingua.evidencija.line').write(cr, uid, evid_line.id, {'state':'paused'} )
+
+
+
 """    
     def copy(self, cr, uid, id, default=None, context=None):
         default = default or {}
@@ -202,3 +250,5 @@ class lingua_evidencija_line (osv.Model):
         })
         return super(fiskal_prostor, self).copy(cr, uid, id, default, context)
 """   
+
+

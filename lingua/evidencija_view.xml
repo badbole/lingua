@@ -7,7 +7,12 @@
 			<field name="name">"lingua_evidencija_tree_view"</field>
 			<field name="model">lingua.evidencija</field>
 			<field name="arch" type="xml">
-				<tree string="Evidention">
+				<tree colors="black:state =='draft';
+				              blue:state in ('open','process');
+                              green:state == 'finished';
+                              gray:state =='delivered'
+                              red:state == 'canceled'"
+                string="Evidention">
 					<field name="name" />
 					<field name="broj_evidencije" />
 					<field name="fiskal_prostor_id" />
@@ -52,7 +57,26 @@
 										on_change="onchange_lang_origin(lang_origin)" />
 								</group>
 								<newline />
-								<field name="evidencija_line_ids" colspan="4" nolabel="1" />
+								<field name="evidencija_line_ids" colspan="4" nolabel="1">
+									<form>
+									    <field name="state" invisible="1" />
+										<field name="language_id" />
+										<field name="employee_id" class="oe_inline" attrs="{'invisible': [('state', '=', 'new')]}" />
+										<field name="lectoring" />
+									</form>
+									<tree
+										colors="blue:state == 'new';
+                                                black:state in ('translation','lectoring');
+                                                gray:state in ('cancel','pause');
+                                                green:state == 'finished'"
+										string="Evidention line">
+										<field name="name" />
+										<field name="language_id" />
+										<field name="employee_id" />
+										<field name="lectoring" />
+										<field name="state" />
+									</tree>
+								</field>
 							</page>
 							<page string="Note">
 								<field name="note" colspan="4" />
@@ -68,7 +92,12 @@
 			<field name="name">"lingua_evidencija_line_tree_view"</field>
 			<field name="model">lingua.evidencija.line</field>
 			<field name="arch" type="xml">
-				<tree colors="blue:state == 'new';black:state in ('translation','lectoring');gray:state in ('cancel','pause');green:state == 'finished'" string="Evidention line">
+				<tree
+					colors="blue:state == 'new';
+				black:state in ('translation','lectoring');
+				gray:state in ('cancel','pause');
+				green:state == 'finished'"
+					string="Evidention line">
 					<field name="name" />
 					<field name="evidencija_id" invisible="1" />
 					<field name="language_id" />
@@ -84,16 +113,18 @@
 			<field name="arch" type="xml">
 				<form string="Evidention line" version="7.0">
 					<header>
-						<button name="button_translation_start" type="object" states="asigned"
-							string="Start translating" />
-						<button name="button_translation_finish" type="object" states="translation"
-                            string="Finish translating" />
-                        <button name="button_translation2product" type="object" string="Prebaci u proizvod"/>
-						<field name="state" widget="statusbar" />
+						<button name="button_translation_start" type="object" states="asigned,paused" string="Start translating" />
+						<button name="button_translation_finish" type="object" states="translation" string="Finish translating" />
+						<button name="button_lectoring_start" type="object" states="lectoring,paused" string="Start lecture" />
+						<button name="button_lectoring_finish" type="object" states="lectoring" string="Finish lecture" />
+						<button name="button_translation2product" type="object"
+							string="Prebaci u proizvod" />
+						<button name="button_pause" type="object" string="Pause" />
+						<field name="state" widget="statusbar" statusbar_colors='{"paused":"red","cancel":"red"}' />
 					</header>
 					<sheet>
 						<h1>
-							<field name="name" />
+							<field name="name" readonly="1"/>
 						</h1>
 						<group>
 							<field name="evidencija_id" readonly="1" />
