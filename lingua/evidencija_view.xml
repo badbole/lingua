@@ -7,12 +7,13 @@
 			<field name="name">"lingua_evidencija_tree_view"</field>
 			<field name="model">lingua.evidencija</field>
 			<field name="arch" type="xml">
-				<tree colors="black:state =='draft';
+				<tree
+					colors="black:state =='draft';
 				              blue:state in ('open','process');
                               green:state == 'finished';
                               gray:state =='delivered'
                               red:state == 'canceled'"
-                string="Evidention">
+					string="Evidention">
 					<field name="name" />
 					<field name="broj_evidencije" />
 					<field name="fiskal_prostor_id" />
@@ -39,9 +40,9 @@
 					</header>
 					<sheet>
 						<h1>
-							<field name="seq_no" class="oe_inline" />
+							<field name="seq_no" class="oe_inline" readonly="1" />
 						</h1>
-						<group string="Evidention of translations" colspan="4">
+						<group colspan="4">
 							<field name="name" />
 							<field name="broj_evidencije" />
 							<field name="fiskal_prostor_id" />
@@ -59,9 +60,10 @@
 								<newline />
 								<field name="evidencija_line_ids" colspan="4" nolabel="1">
 									<form>
-									    <field name="state" invisible="1" />
+										<field name="state" invisible="1" />
 										<field name="language_id" />
-										<field name="employee_id" class="oe_inline" attrs="{'invisible': [('state', '=', 'new')]}" />
+										<field name="employee_id" class="oe_inline"
+											attrs="{'invisible': [('state', '=', 'new')]}" />
 										<field name="lectoring" />
 									</form>
 									<tree
@@ -86,6 +88,27 @@
 				</form>
 			</field>
 		</record>
+		<record id="lingua_evidencija__filter" model="ir.ui.view">
+			<field name="name">lingua.evidencija.select</field>
+			<field name="model">lingua.evidencija</field>
+			<field name="arch" type="xml">
+				<search string="Search translation evidention">
+
+					<field name="name"
+						filter_domain="['|','|',('name','ilike',self),('parent_id','ilike',self),('ref','=',self)]" />
+
+					<filter name="state" string="Finished" domain="[('state','=','finished')]" />
+					<filter name="state" string="Processing" domain="[('state','=','process')]" />
+
+					<group expand="0" string="Group By...">
+						<filter string="Chapter" context="{'group_by' : 'fiskal_prostor_id'}" />
+						<separator />
+						<filter string="Company" context="{'group_by': 'partner_id'}" />
+						<filter string="Status" context="{'group_by': 'state'}" />
+					</group>
+				</search>
+			</field>
+		</record>
 
 		<!-- Evidencija Line -->
 		<record id="lingua_evidencija_line_tree_view" model="ir.ui.view">
@@ -97,13 +120,16 @@
 				black:state in ('translation','lectoring');
 				gray:state in ('cancel','pause');
 				green:state == 'finished'"
-					string="Evidention line">
-					<field name="name" />
+					string="Evidention line">  <!-- editable="bottom"  -->
+					<field name="name" readonly="1" />
 					<field name="evidencija_id" invisible="1" />
+					<field name="partner_id" invisible="1" />
 					<field name="language_id" />
-					<field name="employee_id" />
+					<field name="employee_id" on_change="onchange_employee_id(employee_id)"
+						domain="[('language_ids','=',language_id)]" />
 					<field name="lectoring" />
-					<field name="state" />
+					<field name="product_id" readonly="1" />
+					<field name="state" readonly="1" />
 				</tree>
 			</field>
 		</record>
@@ -113,18 +139,21 @@
 			<field name="arch" type="xml">
 				<form string="Evidention line" version="7.0">
 					<header>
-						<button name="button_translation_start" type="object" states="asigned,paused" string="Start translating" />
-						<button name="button_translation_finish" type="object" states="translation" string="Finish translating" />
-						<button name="button_lectoring_start" type="object" states="lectoring,paused" string="Start lecture" />
-						<button name="button_lectoring_finish" type="object" states="lectoring" string="Finish lecture" />
-						<button name="button_translation2product" type="object"
-							string="Prebaci u proizvod" />
+						<button name="button_translation_start" type="object"
+							states="asigned,paused" string="Start translating" />
+						<button name="button_translation_finish" type="object"
+							states="translation" string="Finish translating" />
+						<button name="button_lectoring_start" type="object"
+							states="lectoring,paused" string="Start lecture" />
+						<button name="button_lectoring_finish" type="object"
+							states="lectoring" string="Finish lecture" />
+						
 						<button name="button_pause" type="object" string="Pause" />
 						<field name="state" widget="statusbar" statusbar_colors='{"paused":"red","cancel":"red"}' />
 					</header>
 					<sheet>
 						<h1>
-							<field name="name" readonly="1"/>
+							<field name="name" readonly="1" />
 						</h1>
 						<group>
 							<field name="evidencija_id" readonly="1" />
@@ -132,16 +161,57 @@
 							<field name="employee_id" on_change="onchange_employee_id(employee_id)"
 								domain="[('language_ids','=',language_id)]" />
 							<field name="lectoring" />
-							<field name="translated_cards" />
+
 						</group>
-						<group colspan="4" col="4">
-							<field name="translation_start" />
-							<field name="translation_finish" />
-							<field name="lectoring_start" />
-							<field name="lectoring_finish" />
-						</group>
+						<notebook colspan="4">
+							<page string="Time evidention" col="4">
+								<group>
+									<field name="translation_start" />
+									<field name="translation_finish" />
+									<field name="lectoring_start" />
+									<field name="lectoring_finish" />
+								</group>
+							</page>
+							<page string="Accounting">
+								<group>
+									<field name="product_type" />
+									<field name="product_id" />
+									<field name="translated_cards" />
+									<button name="button_translation2product" type="object"
+                                                string="Convert to product" />
+                                    <button name="button_create_so" type="object"
+                                                string="Sales order" />
+								</group>
+							</page>
+						</notebook>
 					</sheet>
 				</form>
+			</field>
+		</record>
+
+		<record id="lingua_evidencija_line_filter" model="ir.ui.view">
+			<field name="name">lingua.evidencija.line.select</field>
+			<field name="model">lingua.evidencija.line</field>
+			<field name="arch" type="xml">
+				<search string="Search translation task">
+
+					<field name="name"
+						filter_domain="['|','|',('name','ilike',self),('parent_id','ilike',self),('ref','=',self)]" />
+					<!-- Filteri -->
+					<filter name="state" string="Not started" domain="[('state','=','asigned')]" />
+					<filter name="state" string="In translation" domain="[('state','=','translation')]" />
+					<filter name="state" string="Lectoring" domain="[('state','=','lectoring')]" />
+					<filter name="state" string="Finished" domain="[('state','=','finished')]" />
+					<!-- Grupiranje -->
+					<group expand="0" string="Group By...">
+						<filter string="Language" domain="[]"
+							context="{'group_by' : 'language_id'}" />
+						<filter string="Translator" context="{'group_by': 'employee_id'}" />
+						<separator />
+						<filter string="Company" context="{'group_by': 'partner_id'}" />
+						<filter string="Status" context="{'group_by': 'state'}" />
+					</group>
+				</search>
 			</field>
 		</record>
 
@@ -150,10 +220,6 @@
 			<field name="name">Translation Evidention</field>
 			<field name="res_model">lingua.evidencija</field>
 			<field name="view_mode">tree,form</field>
-			<!-- field name="help" type="html"> <p class="oe_view_nocontent_create"> 
-				Click to create a vehicule status. </p><p> You can customize available status 
-				to track the evolution of each vehicule. Example: Active, Being Repaired, 
-				Sold. </p> </field> -->
 		</record>
 		<record model='ir.actions.act_window' id='lingua_translations_evidention_line'>
 			<field name="name">Translation tasks</field>
