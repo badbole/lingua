@@ -50,21 +50,27 @@
 							<field name="partner_id" />
 							<field name="date_recived" />
 							<field name="date_due" />
+							<field name="marketing_id" />
 						</group>
 						<notebook colspan="4">
 							<page string="Translations">
 								<group>
-									<field name="lang_origin" string="Origin language"
-										on_change="onchange_lang_origin(lang_origin)" />
+								    <field name="lang_origin" string="Origin language" on_change="onchange_lang_origin(lang_origin)" />
+								    <field name="trans_card" />
+                                    <field name="price_id" />
 								</group>
 								<newline />
-								<field name="evidencija_line_ids" colspan="4" nolabel="1">
+								<field name="evidencija_line_ids" colspan="4" nolabel="1" 
+								        attrs="{'invisible': [('lang_origin', '=', False)]}">
 									<form>
 										<field name="state" invisible="1" />
-										<field name="language_id" />
-										<field name="employee_id" class="oe_inline"
-											attrs="{'invisible': [('state', '=', 'new')]}" />
+										<!-- <field name="evidencija_origin" /> -->
+										<field name="language_id"  />  
 										<field name="lectoring" />
+										<field name="employee_id" class="oe_inline"
+										      domain="[('language_ids','=',language_id)]" 
+											attrs="{'invisible': [('language_id', '=', False)]}" />
+											<!-- Dodati još jedan filter po origin jeziku -->
 									</form>
 									<tree
 										colors="blue:state == 'new';
@@ -115,7 +121,7 @@
 			<field name="name">"lingua_evidencija_line_tree_view"</field>
 			<field name="model">lingua.evidencija.line</field>
 			<field name="arch" type="xml">
-				<tree
+				<tree create="false" delete="false"
 					colors="blue:state == 'new';
 				black:state in ('translation','lectoring');
 				gray:state in ('cancel','pause');
@@ -130,6 +136,7 @@
 					<field name="lectoring" />
 					<field name="product_id" readonly="1" />
 					<field name="state" readonly="1" />
+					<field name="finish_due" />
 				</tree>
 			</field>
 		</record>

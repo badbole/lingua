@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record id="lingua_price_tree_view" model="ir.ui.view" >
+            <field name="name">"lingua_price_tree_view"</field>
+            <field name="model">lingua.price</field>
+            <field name="arch" type="xml">
+                <tree string="Prices">
+                    <field name="name" />
+                    <field name="price" />
+                </tree>
+            </field>
+        </record>
+        <record id="lingua_price_form_view" model="ir.ui.view" >
+            <field name="name">"lingua_price_form_view"</field>
+            <field name="model">lingua.price</field>
+            <field name="arch" type="xml">
+                <form string="Prices">
+                    <field name="name" />
+                    <field name="price" />
+                    <field name="parent_id" />
+                    <newline/>
+                    <field name="child_ids" readonly="1" />
+                    <field name="discount_name" />
+                    <field name="discount" />
+                </form>
+            </field>
+        </record>
+        <record model='ir.actions.act_window' id='lingua_price'>
+            <field name="name">Price setup</field>
+            <field name="res_model">lingua.price</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem name="Setup" id="translations_setup" parent="menu_translations" />
+        <menuitem action="lingua_price" parent="translations_setup"
+            id="translations_price_menu" />
+    </data>
+</openerp>

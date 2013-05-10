@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data >
+        <record model="decimal.precision" id="lingua_text_card_dp" >
+            <field name="name">Translated text card</field>
+            <field name="digits">1</field>
+        </record>
+        <record model="lingua.price" id="lingua_kartica_1" >
+            <field name="name">Kartica</field>
+            <field name="price">150.00</field>
+        </record>
+    </data>
+</openerp>

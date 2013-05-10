@@ -46,12 +46,14 @@ Authors: Davor Bojkić - Bole @ DAJ MI 5     www.dajmi5.com
                 ],
     
     'update_xml': [
+                   'evidencija_view.xml',
+                   'config_view.xml',
                    'data/lingua.language.csv',
                    'languages_view.xml',
-                   #'data/project.task.type.csv',
-                   'evidencija_view.xml',
+                   'lingua_data.xml',
                    #'product_view.xml'
-                   'lingua_sequence.xml'
+                   'lingua_sequence.xml',
+                   
                    ],
     "active": False,
     "installable": True,

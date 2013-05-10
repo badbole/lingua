@@ -38,7 +38,8 @@
                 <notebook position="inside">
                     <page string="Languages">
                         <group>
-                        <field name="primary_lang" string="Primary language" on_change="onchange_primary_lang(primary_lang)"/>
+                        <field name="primary_lang" string="Primary language" 
+                            on_change="onchange_primary_lang(primary_lang)" widget="selection" />
                         <newline/>
                         <field name="language_ids" colspan="4" nolabel="1"/>
                         </group>
@@ -64,6 +65,6 @@
         </record>
         
         <!-- MENU ITEMS -->
-        <menuitem action="lingua_language_action" parent="hr.menu_hr_configuration" id="lingua_languages_menu" />
+        <menuitem action="lingua_language_action" parent="translations_setup" id="lingua_languages_menu" />
     </data>
 </openerp>

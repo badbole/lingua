@@ -24,8 +24,24 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-import languages
-import evidencija
-import config
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+from osv import osv, fields
+from openerp.tools.translate import _
+import openerp.addons.decimal_precision as dp
+
+
+class lingua_price(osv.osv):
+    _name="lingua.price"
+    _description = "Prices forming"
+    
+    _columns = {
+                'name':fields.char('Price', size=64),
+                'parent_id':fields.many2one('lingua.price','Parent'),
+                'child_ids':fields.one2many('lingua.price','parent_id', string="Child product price"),
+                'price':fields.float('Price', digits_compute=dp.get_precision('Product Price'), help="Base price for main product"),
+                'discount_name':fields.char('Discount name', size=128),
+                'discount':fields.integer('Discount %'),
+                
+                }
+    
+    

@@ -51,10 +51,10 @@ class hr_employee(osv.osv):
                 for language_id in employee.language_ids:
                     if language_id.id==primary_lang:
                         return True
-            self.write(cr,uid,employee.id,{'language_ids':[(4,primary_lang)]})
+            return self.write(cr,uid,employee.id,{'language_ids':[(4,primary_lang)]})
             
         return True            
-               
+              
     _columns = {
                 'language_ids':fields.many2many('lingua.language','lingua_employee_language_res','hr_employee_id','lingua_language_id'),
                 'primary_lang':fields.many2one('lingua.language','Primary language'),
