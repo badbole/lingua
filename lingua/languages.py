@@ -33,6 +33,8 @@ class lingua_languages (osv.Model):
     
     _columns = {
                 'name':fields.char('Language name', size=64),
+                'trans_from':fields.char('Translate from', size=64),
+                'trans_to':fields.char('Translate to', size=64),
                 'iso_code1':fields.char('ISO 1', size=3),
                 'iso_code2':fields.char('ISO 2', size=3),
                 'iso_code3':fields.char('ISO 3', size=2),
@@ -43,7 +45,39 @@ class hr_employee(osv.osv):
     _inherit = "hr.employee"
 
 
+    """  
+        def onchange_journal_id(self, cr, uid, ids, journal_id=False, context=None):
+            result = super(account_invoice,self).onchange_journal_id(cr, uid, ids, journal_id=journal_id, context=context)
+            if journal_id:
+                journal = self.pool.get('account.journal').browse(cr, uid, journal_id, context=context)
+                prostor_id = journal.prostor_id and journal.prostor_id.id or False
+                nac_plac = journal.nac_plac or False
+                uredjaj_id = journal.fiskal_uredjaj_ids and journal.fiskal_uredjaj_ids[0].id or False
+                result['value'].update({'nac_plac' : nac_plac,
+                                        'uredjaj_id' : uredjaj_id,
+                                       })
+                result['domain']= result.get('domain',{})
+                result['domain'].update({'uredjaj_id':[('prostor_id','=',prostor_id )]})
+            return result
+      
     
+    def onchange_primary_lang(self, cr, uid, ids, primary_lang=False, language_ids=False context=None):
+        result = super(hr_employee,self).onchange_primary_lang(cr, uid, ids, primary_lang=primary_lang, context=None)
+        if primary_lang:
+            employee=self.pool.get('hr.employee').browse(cr,uid,ids)[0]
+            if employee.language_ids:
+                for language_id in employee.language_ids:
+                    if language_id.id==primary_lang:
+                        return True
+            
+            values ={
+                     'language_ids':[(4,primary_lang)]
+                     }
+            self.pool.get('hr.employee').write(cr,uid,employee.id,values)
+        pass  
+        return True      
+
+    """ 
     def onchange_primary_lang(self, cr, uid, ids, primary_lang):
         if primary_lang:
             employee=self.pool.get('hr.employee').browse(cr,uid,ids)[0]

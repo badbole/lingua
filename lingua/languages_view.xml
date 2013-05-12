@@ -1,70 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
-    <data>
-    <!-- Languages view -->
-        <record id="lingua_language_tree_view" model="ir.ui.view" >
-            <field name="name">"lingua_language_tree_view"</field>
-            <field name="model">lingua.language</field>
-            <field name="arch" type="xml">
-                <tree string="Languages">
-                    <field name="name" />
-                    <field name="iso_code1" />
-                    <field name="iso_code2" />
-                    <field name="iso_code3" />
-                </tree>
-            </field>
-        </record>
-        <record id="lingua_language_form_view" model="ir.ui.view" >
-            <field name="name">lingua_language_form_view</field>
-            <field name="model">lingua.language</field>
-            <field name="arch" type="xml">
-                <form string="Languages">
-                    <field name="name"/>
-                    <field name="iso_code1" />
-                    <field name="iso_code2" />
-                    <field name="iso_code3" />
-                    <newline/>
-                    <field name="employee_ids" colspan ="4" nolabel="1"/>
-                </form>
-            </field>
-        </record>
-        
-        <!-- Employee - Lang add -->
-        <record id="lingua_hr_employee_form_view" model="ir.ui.view">
-            <field name="name">lingua.hr.employee.form.view</field>
-            <field name="model">hr.employee</field>
-            <field name="inherit_id" ref="hr.view_employee_form"/>
-            <field name="arch" type="xml">
-                <notebook position="inside">
-                    <page string="Languages">
-                        <group>
-                        <field name="primary_lang" string="Primary language" 
-                            on_change="onchange_primary_lang(primary_lang)" widget="selection" />
-                        <newline/>
-                        <field name="language_ids" colspan="4" nolabel="1"/>
-                        </group>
-                     </page>
-                </notebook>
-            </field>
-        </record>   
-        
-        
-        <record id='lingua_language_action' model='ir.actions.act_window' >
-            <field name="name">Languages</field>
-            <field name="res_model">lingua.language</field>
-            <field name="view_mode">tree,form</field>
-            <!-- field name="help" type="html">
-              <p class="oe_view_nocontent_create">
-                Click to create a vehicule status.
-              </p><p>
-                You can customize available status to track the evolution of
-                each vehicule. Example: Active, Being Repaired, Sold.
-              </p>
-            </field> 
-             -->
-        </record>
-        
-        <!-- MENU ITEMS -->
-        <menuitem action="lingua_language_action" parent="translations_setup" id="lingua_languages_menu" />
-    </data>
+	<data>
+		<!-- Languages view -->
+		<record id="lingua_language_tree_view" model="ir.ui.view">
+			<field name="name">"lingua_language_tree_view"</field>
+			<field name="model">lingua.language</field>
+			<field name="arch" type="xml">
+				<tree string="Languages">
+					<field name="name" />
+					<field name="iso_code1" />
+					<field name="iso_code2" />
+					<field name="iso_code3" />
+				</tree>
+			</field>
+		</record>
+		<record id="lingua_language_form_view" model="ir.ui.view">
+			<field name="name">lingua_language_form_view</field>
+			<field name="model">lingua.language</field>
+			<field name="arch" type="xml">
+				<form string="Languages" version="7.0">
+					<sheet>
+						<h1>
+							<field name="name" class="oe_inline" />
+						</h1>
+						<group colspan="4">
+							<group col="2" string="Grammar">
+								<field name="trans_from" />
+								<field name="trans_to" />
+							</group>
+							<group col="2" string="ISO 639-3 codes">
+								<field name="iso_code1" />
+								<field name="iso_code2" />
+								<field name="iso_code3" />
+							</group>
+						</group>
+						<separator string="Translators availble" />
+						<field name="employee_ids" colspan="4" nolabel="1" />
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<!-- Employee - Lang add -->
+		<record id="lingua_hr_employee_form_view" model="ir.ui.view">
+			<field name="name">lingua.hr.employee.form.view</field>
+			<field name="model">hr.employee</field>
+			<field name="inherit_id" ref="hr.view_employee_form" />
+			<field name="arch" type="xml">
+				<notebook position="inside">
+					<page string="Languages">
+						<group>
+							<field name="primary_lang" string="Primary language"
+								on_change="onchange_primary_lang(primary_lang)" widget="selection" />
+							<newline />
+							<field name="language_ids" colspan="4" nolabel="1" />
+						</group>
+					</page>
+				</notebook>
+			</field>
+		</record>
+
+
+		<record id='lingua_language_action' model='ir.actions.act_window'>
+			<field name="name">Languages</field>
+			<field name="res_model">lingua.language</field>
+			<field name="view_mode">tree,form</field>
+			<!-- field name="help" type="html"> <p class="oe_view_nocontent_create"> 
+				Click to create a vehicule status. </p><p> You can customize available status 
+				to track the evolution of each vehicule. Example: Active, Being Repaired, 
+				Sold. </p> </field> -->
+		</record>
+
+		<!-- MENU ITEMS -->
+		<menuitem action="lingua_language_action" parent="translations_setup"
+			id="lingua_languages_menu" />
+	</data>
 </openerp>

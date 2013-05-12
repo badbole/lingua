@@ -34,9 +34,10 @@
 					<header>
 						<!-- button name="button_recive" type="object" string="Zaprimi prijevod" 
 							attrs="{'invisible':[('state', '!=', 'draft')]}" class="oe_highlight" /> -->
-						<button name="button_recive" type="object" string="Zaprimi prijevod"
-							class="oe_highlight" />
-						<field name="state" widget="statusbar" />
+						<button name="button_recive" type="object" string="Recive translation"/>
+						<button name="button_evid_2_saleorder" type="object" string="Make Quotation" />
+                        <field name="state" widget="statusbar" />
+						
 					</header>
 					<sheet>
 						<h1>
@@ -51,6 +52,7 @@
 							<field name="date_recived" />
 							<field name="date_due" />
 							<field name="marketing_id" />
+							<field name="sale_order" />
 						</group>
 						<notebook colspan="4">
 							<page string="Translations">
@@ -68,8 +70,7 @@
 										<field name="language_id"  />  
 										<field name="lectoring" />
 										<field name="employee_id" class="oe_inline"
-										      domain="[('language_ids','=',language_id)]" 
-											attrs="{'invisible': [('language_id', '=', False)]}" />
+										     	attrs="{'invisible': [('language_id', '=', False)]}" />
 											<!-- Dodati još jedan filter po origin jeziku -->
 									</form>
 									<tree
@@ -147,16 +148,16 @@
 				<form string="Evidention line" version="7.0">
 					<header>
 						<button name="button_translation_start" type="object"
-							states="asigned,paused" string="Start translating" />
+							states="asign,pause" string="Start translating" />
 						<button name="button_translation_finish" type="object"
-							states="translation" string="Finish translating" />
+							states="translate" string="Finish translating" />
 						<button name="button_lectoring_start" type="object"
-							states="lectoring,paused" string="Start lecture" />
+							states="lecture,pause" string="Start lecture" />
 						<button name="button_lectoring_finish" type="object"
-							states="lectoring" string="Finish lecture" />
+							states="lecture" string="Finish lecture" />
 						
 						<button name="button_pause" type="object" string="Pause" />
-						<field name="state" widget="statusbar" statusbar_colors='{"paused":"red","cancel":"red"}' />
+						<field name="state" widget="statusbar" statusbar_colors='{"pause":"red","cancel":"red"}' />
 					</header>
 					<sheet>
 						<h1>
@@ -165,8 +166,7 @@
 						<group>
 							<field name="evidencija_id" readonly="1" />
 							<field name="language_id" />
-							<field name="employee_id" on_change="onchange_employee_id(employee_id)"
-								domain="[('language_ids','=',language_id)]" />
+							<field name="employee_id" on_change="onchange_employee_id(employee_id)" />
 							<field name="lectoring" />
 
 						</group>
@@ -181,11 +181,12 @@
 							</page>
 							<page string="Accounting">
 								<group>
-									<field name="product_type" />
-									<field name="product_id" />
-									<field name="translated_cards" />
+									<field name="product_type" readonly="1"/>
+									<field name="product_id" readonly="1"/>
+									
 									<button name="button_translation2product" type="object"
-                                                string="Convert to product" />
+                                                string="Convert to product" 
+                                                attrs="{'invisible': [('product_id', '!=', False)]}" />
                                     <button name="button_create_so" type="object"
                                                 string="Sales order" />
 								</group>

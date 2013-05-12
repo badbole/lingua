@@ -54,9 +54,8 @@ class lingua_evidencija(osv.osv):
     _translation_status = [('draft','Draft')
                    ,('open','Open')
                    ,('process','In process')
-                   ,('finished','Finished')
-                   ,('delivered','Delivered')
-                   ,('canceled','Canceled')
+                   ,('finish','Finished')
+                   ,('cancel','Canceled')
                    ]
     
     def onchange_lang_origin(self, cr, uid, ids, lang_origin, context=None):
@@ -85,7 +84,8 @@ class lingua_evidencija(osv.osv):
         'fiskal_prostor_id':fields.many2one('fiskal.prostor','Chapter name', required=1),
         'broj_evidencija_pod': fields.char('Chapter evidention number', size=32),
         'partner_id':fields.many2one('res.partner', 'Partner', required=1),
-        'lang_origin':fields.many2one('lingua.language','language_id','Origin language'),
+        'lang_origin':fields.many2one('lingua.language','Origin language', required=1,
+                                domain="[('employee_ids', '!=', 'None' )]"), #uzimam samo jezike koji imaju dodijeljenog prevoditelja
         'lang_translate':fields.many2many('lingua.language','lingua_tranlslate_to_res','lingua_languages_id','lingua_evidencija_id'),
         'date_recived':fields.datetime('Recived', help="Date and time of recieving, leave empty for current date/time"),
         'date_due':fields.datetime('Deadline'),
@@ -95,10 +95,10 @@ class lingua_evidencija(osv.osv):
         #'hrs_remain':fields.function(),
         'state':fields.selection (_translation_status,'Evidention status'),
         'evidencija_line_ids':fields.one2many('lingua.evidencija.line','evidencija_id','Translations'),
-        'marketing_id':fields.many2one('lingua.marketing','marketing_id','Marketing'),
+        'marketing_id':fields.many2one('lingua.marketing','Marketing'),
         'trans_card':fields.float('Text cards', help="Estimated number of cards for translating"),
-        'price_id':fields.many2one('lingua.price','price_id','Price definition'),
-        
+        'price_id':fields.many2one('lingua.price','Price definition'),
+        'sale_order':fields.many2one('sale.order','Sale order')
                 }
 
     _defaults = {
@@ -114,17 +114,45 @@ class lingua_evidencija(osv.osv):
         except Exception, e:
             raise orm.except_orm(_('Unknown Error!'), str(e))
 
-    
+    def button_evid_2_saleorder(self, cr, uid, ids, context=None):
+        
+        evidention = self.pool.get('lingua.evidencija').browse(cr, uid, ids)[0]
+        evidention_line=self.pool.get('lingua.evidencija.line')
+        #pricelist_id odredi po partneru
+        values = {
+                  'partner_id':evidention.partner_id.id,
+                  'partner_invoice_id':evidention.partner_id.id,
+                  'partner_shipping_id':evidention.partner_id.id,
+                  'pricelist_id':1,
+                  'origin':evidention.name
+                  }
+        so = self.pool.get('sale.order').create(cr, uid, values)
+        product_template= self.pool.get('product.template')
+        for line in evidention_line.search(cr, uid, [('evidencija_id', '=', evidention.id)]): 
+            task_line = evidention_line.browse(cr, uid, line)
+            if not task_line.product_id.id:
+                #napravi proizvod za svaki
+                raise osv.except_osv(_('BUUU !'), _('Nemam proizvod!'))
+            template = product_template.browse(cr,uid,task_line.product_id.id )
+            values = {
+                      'name':task_line.name,
+                      'order_id':so,
+                      'product_id':task_line.product_id.id,
+                      'price_unit':template.list_price, # ili cijenu koja je izračunata i količine 1!
+                      'product_uom_qty':evidention.trans_card,
+                      }
+            self.pool.get('sale.order.line').create(cr, uid, values)
+        return self.pool.get('lingua.evidencija').write(cr, uid, evidention.id, {'sale_order':so}) 
+            
     def button_recive(self, cr, uid, ids, context=None):
         evidention=self.pool.get('lingua.evidencija').browse(cr, uid, ids)[0]
-        evidention_line=self.pool.get('lingua.evidencija.line').search(cr, uid, [('evidencija_id', '=', evidention.id)])
-        langs=self.pool.get('lingua.languages')
-        
         if not evidention.evidencija_line_ids:
             raise osv.except_osv(_('Error !'), _('No chosen languages for translation!'))
-        
-        vals={}
+        evidention_line=self.pool.get('lingua.evidencija.line').search(cr, uid, [('evidencija_id', '=', evidention.id)])
+        langs=self.pool.get('lingua.languages')
         seq_no=self.pool.get('ir.sequence').get(cr,uid,'lingua_order')
+        vals={}
+        
         if not evidention.date_recived:
             time=zagreb_now()
             self.pool.get('lingua.evidencija').write(cr, uid, evidention.id, {'date_recived':time})
@@ -150,11 +178,11 @@ class lingua_evidencija_line (osv.Model):
     _name = 'lingua.evidencija.line'
     _description = 'Signle langugae for translations'
     
-    _translation_line_status =[('new',"New")
-                               ,('asigned',"Asigned")
-                               ,('translation',"Translation in progress")
-                               ,('lectoring',"Lectoring in progress")
-                               ,('finished',"Finished")
+    _translation_line_status =[('draft',"Draft")
+                               ,('asign',"Asigned")
+                               ,('translate',"Translation in progress")
+                               ,('lecture',"Lectoring in progress")
+                               ,('finish',"Finished")
                                ,('pause',"Paused")
                                ,('cancel',"Canceled")
                                ]
@@ -163,16 +191,19 @@ class lingua_evidencija_line (osv.Model):
                              ,('combo','Multi-Line Product')
                              ]
     
+    
+    
     _columns = {
                 'name':fields.char('Name',size=64),
                 'evidencija_id':fields.many2one('lingua.evidencija','Evidevtion reference'),
                 'evidencija_origin':fields.related('evidencija_id','lang_origin', type='many2one', relation="lingua.language", string="Original language"),
                 'language_id':fields.many2one('lingua.language','Translated language', required=True),
-                'employee_id':fields.many2one('hr.employee','Translator'),
+                'employee_id':fields.many2one('hr.employee','Translator', 
+                                              domain="[('language_ids', 'in', language_id )]"),
                 'partner_id':fields.many2one('res.partner','Partner'),
                 'lectoring':fields.boolean ('Mandatory lectoring'),
                 'state':fields.selection (_translation_line_status,'Translation status'),
-                'translated_cards':fields.integer('Cards translated'),  #broj prevedenih kartica .. jel mozda treba gledati na decimalu?
+                #'translated_cards':fields.integer('Cards translated'),  #broj prevedenih kartica .. jel mozda treba gledati na decimalu?
                 'translation_start':fields.datetime('Translation start'),
                 'translation_finish':fields.datetime('Translation finished'),
                 'lectoring_start':fields.datetime('Lectoring start'),
@@ -183,7 +214,7 @@ class lingua_evidencija_line (osv.Model):
                 }
     
     _defaults = {
-                 'state':"new",
+                 'state':"draft",
                  'product_type':'single'
                  }
     
@@ -196,20 +227,20 @@ class lingua_evidencija_line (osv.Model):
         if evidention.state=='open':
             self.pool.get('lingua.evidencija').write(cr, uid, evidention.id, {'state':'process'})
         
-        if evid_line.state=='new':
-            res = self.pool.get('lingua.evidencija.line').write(cr, uid, evid_line.id, {'state':'asigned'})
+        if evid_line.state=='draft':
+            res = self.pool.get('lingua.evidencija.line').write(cr, uid, evid_line.id, {'state':'asign'})
         return True
     
     def button_translation_start(self, cr, uid, ids, context=None):
         evid_line=self.pool.get('lingua.evidencija.line').browse(cr, uid, ids)[0]
         if evid_line.translation_start:
             values = {
-                      'state':'translation'
+                      'state':'translate'
                       }
         else:
             time=zagreb_now()
             values = {'translation_start':time,
-                      'state':'translation'
+                      'state':'translate'
                       }
         return self.pool.get('lingua.evidencija.line').write(cr, uid, evid_line.id, values)
     
@@ -222,10 +253,10 @@ class lingua_evidencija_line (osv.Model):
         time=zagreb_now()
         if evid_line.lectoring:
             values = {'translation_finish':time,
-                      'state':'lectoring'}
+                      'state':'lecture'}
         else:
             values = {'translation_finish':time,
-                      'state':'finished'}
+                      'state':'finish'}
         self.pool.get('lingua.evidencija.line').write(cr, uid, evid_line.id, values )
         self.check_evidencija_state(cr, uid, evid_line.evidencija_id.id)
         return True
@@ -234,12 +265,12 @@ class lingua_evidencija_line (osv.Model):
         evid_line=self.pool.get('lingua.evidencija.line').browse(cr, uid, ids)[0]
         if evid_line.lectoring_start:
             values = {
-                      'state':'lectoring'
+                      'state':'lecture'
                       }
         else:
             time=zagreb_now()
             values = {'lectoring_start':time,
-                      'state':'lectoring'
+                      'state':'lecture'
                       }
         return self.pool.get('lingua.evidencija.line').write(cr, uid, evid_line.id, values)
     
@@ -258,12 +289,13 @@ class lingua_evidencija_line (osv.Model):
     def check_evidencija_state(self, cr, uid, evidencija_id, context=None):
         gotovo = True
         for id in self.pool.get('lingua.evidencija').browse(cr, uid, evidencija_id).evidencija_line_ids:
-            if not (id.state == "finished") :
-                gotovo=False
-                break
-        if gotovo :     
-            return self.pool.get('lingua.evidencija').write(cr, uid, evidencija_id, {'state':'finished'})
-        return True
+            if not (id.state == "finish") :
+                return False
+                #gotovo=False
+                #break
+        #if gotovo :     
+        return self.pool.get('lingua.evidencija').write(cr, uid, evidencija_id, {'state':'finish'})
+        #"return True
     
     def create_product_template(self, cr, uid, name, description, price, context=None ):
         prod_temp = {
@@ -287,11 +319,11 @@ class lingua_evidencija_line (osv.Model):
         return self.pool.get('product.product').create(cr, uid, prod)
     
     def generate_product_name(self, evidencija, evid_line):
-        return ("Prijevod sa %s na %s jezik" % (evidencija.lang_origin.name, evid_line.language_id.name))
+        return ("Prijevod sa %s na %s jezik" % (evidencija.lang_origin.trans_from, evid_line.language_id.trans_to))
     
     def generate_product_desc(self, evidencija, evid_line):
         #prevoditelja mozda nema
-        return ("%s prevedeno na %s " % (evidencija.name, evid_line.language_id.name))
+        return ("%s prevedeno na %s " % (evidencija.name, evid_line.language_id.trans_to))
     
     def get_translation_price(self, evidencija, evid_line):
         if evidencija.trans_card==0:
@@ -319,7 +351,8 @@ class lingua_evidencija_line (osv.Model):
         evid_line=self.pool.get('lingua.evidencija.line').browse(cr, uid, ids)[0]
         evidencija = self.pool.get('lingua.evidencija').browse(cr, uid, evid_line.evidencija_id.id)
         pricelist=self.pool.get('product.pricelist').browse(cr, uid, ids)[0]
-        values = {'partner_id':evidencija.partner_id.id,
+        values = {
+                  'partner_id':evidencija.partner_id.id,
                   'origin':evidencija.name,
                   'date':fields.date.context_today,
                   'pricelist_id':pricelist.id,
