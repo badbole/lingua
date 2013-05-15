@@ -53,7 +53,7 @@ Authors: Davor Bojkić - Bole @ DAJ MI 5     www.dajmi5.com
                    'lingua_data.xml',
                    #'product_view.xml'
                    'lingua_sequence.xml',
-                   
+                   'lingua_translations_workflow.xml',
                    ],
     "active": False,
     "installable": True,

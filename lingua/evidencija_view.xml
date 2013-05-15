@@ -7,6 +7,7 @@
 			<field name="name">"lingua_evidencija_tree_view"</field>
 			<field name="model">lingua.evidencija</field>
 			<field name="arch" type="xml">
+
 				<tree
 					colors="black:state =='draft';
 				              blue:state in ('open','process');
@@ -14,15 +15,16 @@
                               gray:state =='delivered'
                               red:state == 'canceled'"
 					string="Evidention">
+					<field name="partner_id" />
 					<field name="name" />
 					<field name="broj_evidencije" />
 					<field name="fiskal_prostor_id" />
-					<field name="broj_evidencija_pod" />
-					<field name="partner_id" />
+
+
 					<field name="date_recived" />
 					<field name="date_due" />
 					<field name="state" />
-
+					<field name="sale_order" readonly="1" />
 				</tree>
 			</field>
 		</record>
@@ -34,10 +36,11 @@
 					<header>
 						<!-- button name="button_recive" type="object" string="Zaprimi prijevod" 
 							attrs="{'invisible':[('state', '!=', 'draft')]}" class="oe_highlight" /> -->
-						<button name="button_recive" type="object" string="Recive translation"/>
-						<button name="button_evid_2_saleorder" type="object" string="Make Quotation" />
-                        <field name="state" widget="statusbar" />
-						
+						<button name="button_recive" type="object" string="Recive translation" />
+						<button name="button_evid_2_saleorder" type="object"
+							string="Make Quotation" attrs="{'invisible':[('state', '!=', 'draft')]}" />
+						<field name="state" widget="statusbar" />
+
 					</header>
 					<sheet>
 						<h1>
@@ -52,26 +55,27 @@
 							<field name="date_recived" />
 							<field name="date_due" />
 							<field name="marketing_id" />
-							<field name="sale_order" />
+
 						</group>
 						<notebook colspan="4">
 							<page string="Translations">
 								<group>
-								    <field name="lang_origin" string="Origin language" on_change="onchange_lang_origin(lang_origin)" />
-								    <field name="trans_card" />
-                                    <field name="price_id" />
+									<field name="lang_origin" string="Origin language"
+										on_change="onchange_lang_origin(lang_origin)" />
+									<field name="trans_card" />
+									<field name="price_id" />
 								</group>
 								<newline />
-								<field name="evidencija_line_ids" colspan="4" nolabel="1" 
-								        attrs="{'invisible': [('lang_origin', '=', False)]}">
+								<field name="evidencija_line_ids" colspan="4" nolabel="1"
+									attrs="{'invisible': [('lang_origin', '=', False)]}">
 									<form>
 										<field name="state" invisible="1" />
 										<!-- <field name="evidencija_origin" /> -->
-										<field name="language_id"  />  
+										<field name="language_id" />
 										<field name="lectoring" />
 										<field name="employee_id" class="oe_inline"
-										     	attrs="{'invisible': [('language_id', '=', False)]}" />
-											<!-- Dodati još jedan filter po origin jeziku -->
+											attrs="{'invisible': [('language_id', '=', False)]}" />
+										<!-- Dodati još jedan filter po origin jeziku -->
 									</form>
 									<tree
 										colors="blue:state == 'new';
@@ -89,6 +93,13 @@
 							</page>
 							<page string="Note">
 								<field name="note" colspan="4" />
+							</page>
+							<page string="Accounting">
+								<group>
+									<field name="sale_order" readonly="1" />
+									<field name="so_made" readonly="1" />
+									<field name="invoice" readonly="1" />
+								</group>
 							</page>
 						</notebook>
 					</sheet>
@@ -127,10 +138,10 @@
 				black:state in ('translation','lectoring');
 				gray:state in ('cancel','pause');
 				green:state == 'finished'"
-					string="Evidention line">  <!-- editable="bottom"  -->
+					string="Evidention line">  <!-- editable="bottom" -->
+                    <field name="partner_id" />
 					<field name="name" readonly="1" />
 					<field name="evidencija_id" invisible="1" />
-					<field name="partner_id" invisible="1" />
 					<field name="language_id" />
 					<field name="employee_id" on_change="onchange_employee_id(employee_id)"
 						domain="[('language_ids','=',language_id)]" />
@@ -151,17 +162,18 @@
 							states="asign,pause" string="Start translating" />
 						<button name="button_translation_finish" type="object"
 							states="translate" string="Finish translating" />
-						<button name="button_lectoring_start" type="object"
-							states="lecture,pause" string="Start lecture" />
+						<button name="button_lectoring_start" type="object" states="lecture,pause"
+							string="Start lecture" />
 						<button name="button_lectoring_finish" type="object"
 							states="lecture" string="Finish lecture" />
-						
-						<button name="button_pause" type="object" string="Pause" />
+						<button name="button_pause" type="object" states="lecture,translate"
+							string="Pause" />
 						<field name="state" widget="statusbar" statusbar_colors='{"pause":"red","cancel":"red"}' />
 					</header>
 					<sheet>
 						<h1>
-							<field name="name" readonly="1" />
+							<label string="Translation : " />
+							<field name="name" readonly="1" class="oe_inline" />
 						</h1>
 						<group>
 							<field name="evidencija_id" readonly="1" />
@@ -181,14 +193,12 @@
 							</page>
 							<page string="Accounting">
 								<group>
-									<field name="product_type" readonly="1"/>
-									<field name="product_id" readonly="1"/>
-									
+									<field name="product_type" readonly="1" />
+									<field name="product_id" readonly="1" />
+
 									<button name="button_translation2product" type="object"
-                                                string="Convert to product" 
-                                                attrs="{'invisible': [('product_id', '!=', False)]}" />
-                                    <button name="button_create_so" type="object"
-                                                string="Sales order" />
+										string="Convert to product" attrs="{'invisible': [('product_id', '!=', False)]}" />
+
 								</group>
 							</page>
 						</notebook>
@@ -223,16 +233,34 @@
 			</field>
 		</record>
 
-		<!-- Actions -->
-		<record model='ir.actions.act_window' id='lingua_translations_evidention'>
+		<!-- Menu Actions -->
+		<record id='lingua_translations_evidention' model='ir.actions.act_window'>
 			<field name="name">Translation Evidention</field>
 			<field name="res_model">lingua.evidencija</field>
 			<field name="view_mode">tree,form</field>
 		</record>
-		<record model='ir.actions.act_window' id='lingua_translations_evidention_line'>
+		<record id='lingua_translations_evidention_line' model='ir.actions.act_window'>
 			<field name="name">Translation tasks</field>
 			<field name="res_model">lingua.evidencija.line</field>
 			<field name="view_mode">tree,form</field>
+		</record>
+		
+		<!-- Server Actions -->
+		<record id="lingua_translation_lines_2_order" model="ir.actions.server">
+			<field name="name">Lines to order</field>
+			<field name="type">ir.actions.server</field>
+			<field name="model_id" ref="model_lingua_evidencija_line" />
+			<field name="state">code</field>
+			<field name="code">self.action_multiline_order(cr, uid, context.get('active_ids'), context=context)</field>
+		</record>
+		<record id="lingua_translation_lines_2_order_value" model="ir.values">
+			<field name="name">Lines to order</field>
+			<field name="action_id" ref="lingua_translation_lines_2_order" />
+			<field name="value"	eval="'ir.actions.server,' + str(ref('lingua_translation_lines_2_order'))" />
+			<field name="key">action</field>
+			<field name="model_id" ref="model_lingua_evidencija_line" />
+			<field name="model">lingua.evidencija.line</field>
+			<field name="key2">client_action_multi</field>
 		</record>
 
 		<!-- MENU ITEMS -->

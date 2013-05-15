@@ -16,7 +16,7 @@
             <field name="discount">50</field>
             <field name="discount_name">Jednostavnost</field>
         </record>
-        <record id="lingua_kartica_1_1" model="lingua.price"  >
+        <record id="lingua_kartica_1_2" model="lingua.price"  >
             <field name="name">Kartica - tehnički prijevod</field>
             <field name="price">100.00</field>
             <field name="parent_id" ref="lingua_kartica_1"/>

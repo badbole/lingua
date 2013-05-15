@@ -98,13 +98,20 @@ class lingua_evidencija(osv.osv):
         'marketing_id':fields.many2one('lingua.marketing','Marketing'),
         'trans_card':fields.float('Text cards', help="Estimated number of cards for translating"),
         'price_id':fields.many2one('lingua.price','Price definition'),
-        'sale_order':fields.many2one('sale.order','Sale order')
+        'sale_order':fields.many2one('sale.order','Sale order'),
+        'so_made':fields.boolean('Sales order made'),
+        'invoice':fields.many2one('account.invoice','Invoice'),
                 }
 
     _defaults = {
+                 'name':'Prijevod ',
                  'state':"draft",
                  'trans_card':1,
+                 'price_id':1
                  }
+    
+    _order = "id desc"
+    
     def create(self, cr, uid, vals, context=None):
         if context is None:
             context = {}
@@ -142,7 +149,8 @@ class lingua_evidencija(osv.osv):
                       'product_uom_qty':evidention.trans_card,
                       }
             self.pool.get('sale.order.line').create(cr, uid, values)
-        return self.pool.get('lingua.evidencija').write(cr, uid, evidention.id, {'sale_order':so}) 
+        return self.pool.get('lingua.evidencija').write(cr, uid, evidention.id, {'sale_order':so,
+                                                                                 'so_made':True}) 
             
     def button_recive(self, cr, uid, ids, context=None):
         evidention=self.pool.get('lingua.evidencija').browse(cr, uid, ids)[0]
@@ -217,7 +225,73 @@ class lingua_evidencija_line (osv.Model):
                  'state':"draft",
                  'product_type':'single'
                  }
+    _order = "id desc"
+
+    def action_multiline_order(self, cr, uid, ids, context=None):
+        lines = self.pool.get('lingua.evidencija.line').browse(cr,uid,ids)
+        partner=lines[0].partner_id.id
+        for line in lines:
+            if line.partner_id.id != partner:
+                raise osv.except_osv(_('Error !'), _('Invoicing multi line is possible only for unique partner!'))
+            if not line.product_id.id:
+                evidencija = self.pool.get('lingua.evidencija').browse(cr, uid, line.evidencija_id.id)
+                self.make_product_from_line(cr, uid, evidencija, line)
+             #generate sales order from selected lines
+                
+        return True
     
+    def button_translation2product(self, cr, uid, ids, context=None):
+        evidencija_line=self.pool.get('lingua.evidencija.line').browse(cr, uid, ids)[0]
+        if evidencija_line.product_id:
+            #TODO: update proizvoda isl.. 
+            return True
+        else:
+            evidencija = self.pool.get('lingua.evidencija').browse(cr, uid, evidencija_line.evidencija_id.id)
+            return self.make_product_from_line(cr, uid, evidencija, evidencija_line)
+        
+    def make_product_from_line(self,cr, uid, evidencija, evidencija_line):
+        product_name = self.generate_product_name(evidencija, evidencija_line)
+        product_desc = self.generate_product_desc(evidencija, evidencija_line)
+        price = self.get_translation_price(evidencija, evidencija_line)
+        template = self.create_product_template(cr, uid, product_name, product_desc, price )
+        product = self.create_product_product(cr, uid, template, product_name, evidencija_line.name)
+        return self.pool.get('lingua.evidencija.line').write(cr, uid, evidencija_line.id, {'product_id':product})
+    
+    def create_product_template(self, cr, uid, name, description, price, context=None ):
+        prod_temp = {
+                    'name':name,
+                    'description': description,
+                    #'uom_id':jedinica_mjere,  #otvori novu!
+                    #'cost_method':cost, #
+                    #'category_id': kategorija,
+                    #'description_sale':"Prodajni opis",
+                    'taxes_id':[4,2], # umjesto 2 - uzmi ispravni id za pdv 25%!!!
+                    'list_price':price,
+                    'type':'service'
+                    }
+        return self.pool.get('product.template').create(cr, uid, prod_temp)
+    
+    def create_product_product(self, cr, uid, template, name, code, context=None):
+        prod = {
+                'product_tmpl_id':template,
+                'name_template':name,
+                'default_code':code,
+                }
+        return self.pool.get('product.product').create(cr, uid, prod)
+    
+    def generate_product_name(self, evidencija, evid_line):
+        return ("Prijevod sa %s na %s jezik" % (evidencija.lang_origin.trans_from, evid_line.language_id.trans_to))
+    
+    def generate_product_desc(self, evidencija, evid_line):
+        #prevoditelja mozda nema
+        return ("%s prevedeno na %s " % (evidencija.name, evid_line.language_id.trans_to))
+    
+    def get_translation_price(self, evidencija, evid_line):
+        
+        if not evidencija.price_id:
+            evidencija.price_id.price=150
+        return evidencija.trans_card * evidencija.price_id.price
+
     def onchange_employee_id(self, cr, uid, ids, employee_id):
         evid_line = self.pool.get('lingua.evidencija.line').browse(cr,uid,ids)[0]
         
@@ -297,71 +371,7 @@ class lingua_evidencija_line (osv.Model):
         return self.pool.get('lingua.evidencija').write(cr, uid, evidencija_id, {'state':'finish'})
         #"return True
     
-    def create_product_template(self, cr, uid, name, description, price, context=None ):
-        prod_temp = {
-                    'name':name,
-                    'description': description,
-                    #'uom_id':jedinica_mjere,  #otvori novu!
-                    #'cost_method':cost, #
-                    #'category_id': kategorija,
-                    #'description_sale':"Prodajni opis",
-                    'list_price':price,
-                    'type':'service'
-                    }
-        return self.pool.get('product.template').create(cr, uid, prod_temp)
-    
-    def create_product_product(self, cr, uid, template, name, code, context=None):
-        prod = {
-                'product_tmpl_id':template,
-                'name_template':name,
-                'default_code':code,
-                }
-        return self.pool.get('product.product').create(cr, uid, prod)
-    
-    def generate_product_name(self, evidencija, evid_line):
-        return ("Prijevod sa %s na %s jezik" % (evidencija.lang_origin.trans_from, evid_line.language_id.trans_to))
-    
-    def generate_product_desc(self, evidencija, evid_line):
-        #prevoditelja mozda nema
-        return ("%s prevedeno na %s " % (evidencija.name, evid_line.language_id.trans_to))
-    
-    def get_translation_price(self, evidencija, evid_line):
-        if evidencija.trans_card==0:
-            evidencija.trans_card=1
-        if not evidencija.price_id:
-            evidencija.price_id.price=150
-        return evidencija.trans_card * evidencija.price_id.price
-    
-    def button_translation2product(self, cr, uid, ids, context=None):
-        evid_line=self.pool.get('lingua.evidencija.line').browse(cr, uid, ids)[0]
-        if evid_line.product_id:
-            #update proizvoda isl.. 
-            return True
-        else:
-            evidencija = self.pool.get('lingua.evidencija').browse(cr, uid, evid_line.evidencija_id.id)
-            
-            product_name = self.generate_product_name(evidencija, evid_line)
-            product_desc = self.generate_product_desc(evidencija, evid_line)
-            price = self.get_translation_price(evidencija, evid_line)
-            template = self.create_product_template(cr, uid, product_name, product_desc, price )
-            product = self.create_product_product(cr, uid, template, product_name, evid_line.name)
-            return self.pool.get('lingua.evidencija.line').write(cr, uid, evid_line.id, {'product_id':product})
-        
-    def button_create_so(self, cr, uid, ids,  context=None):
-        evid_line=self.pool.get('lingua.evidencija.line').browse(cr, uid, ids)[0]
-        evidencija = self.pool.get('lingua.evidencija').browse(cr, uid, evid_line.evidencija_id.id)
-        pricelist=self.pool.get('product.pricelist').browse(cr, uid, ids)[0]
-        values = {
-                  'partner_id':evidencija.partner_id.id,
-                  'origin':evidencija.name,
-                  'date':fields.date.context_today,
-                  'pricelist_id':pricelist.id,
-                  
-                  }
-        order=self.pool.get('sale.order').create(cr, uid, values)
-        
-        return True 
-            
+           
     def button_pause(self, cr, uid, ids, context=None):
         evid_line=self.pool.get('lingua.evidencija.line').browse(cr, uid, ids)[0]
         if evid_line.state in ('translation','lectoring'):
