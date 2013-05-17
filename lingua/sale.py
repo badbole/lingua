@@ -24,9 +24,12 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-import languages
-import sale
-import evidencija
-import config
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+from osv import osv, fields
+from openerp.tools.translate import _
+
+class sale_order(osv.osv):
+    _inherit = "sale.order"
+    _columns = {
+                'evidention_id':fields.many2many('lingua.evidencija','lingua_evidencjija_2_sale_ref', 'lingua_evidencija_id','sale_order_id')
+                }
