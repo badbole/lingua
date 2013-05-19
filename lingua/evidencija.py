@@ -33,10 +33,31 @@ import logging
 _logger = logging.getLogger(__name__)
 import openerp.addons.decimal_precision as dp
 
-
+def get_evidencija_objects(self, cr, uid):
+    evidencija_obj = self.pool.get('lingua.evidencija')
+    evidencija_line_obj = self.pool.get('lingua.evidencija.line')
+    return evidencija_obj, evidencija_line_obj
 
 def zagreb_now():
     return datetime.now(timezone('Europe/Zagreb'))
+
+def check_unique_partner(self, cr, uid, partner, object, context=None):
+    if object.partner_id.id != partner:
+        raise osv.except_osv(_('Error !'), _('Invoicing multi line is possible only for unique partner!'))
+    return True
+
+def check_evid_line_name(self, cr, uid, object, context=None):
+    if not object.name:
+        raise osv.except_osv(_('Error !'), _('Managing unrecived task not possible! Please recive task first'))
+    return True
+
+def check_sale_order_state(self, cr, uid, evidencija):
+    sale_order_obj = self.pool.get('sale.order')
+    for so in evidencija.sale_order:
+        if sale_order_obj.browse(cr, uid, so.id).state != 'draft':
+            
+            raise osv.except_osv(_('Error !'), _('No more quotations, status of sale order %s is: %s !') % (so.name, so.state))
+    return True
 
 def create_sale_order(self, cr, uid, partner, pricelist, origin):
     values = {
@@ -57,9 +78,10 @@ def create_sale_order_line(self, cr, uid, line_name, sale_order_id, product_id, 
               'price_unit':price, # ili cijenu koja je izračunata i količine 1!
               'product_uom':uom_id,
               'product_uos':uom_id,
-              'tax_id':[4,tax_id],
+              'tax_id':[(4,tax_id)],
               'product_uom_qty':uom_qty,
               }
+    
     return self.pool.get('sale.order.line').create(cr, uid, values)
             
             
@@ -88,7 +110,7 @@ def create_product_template(self, cr, uid, name, description, price, context=Non
                 #'cost_method':cost, #
                 #'category_id': kategorija,
                 #'description_sale':"Prodajni opis",
-                'taxes_id':[4,tax_id], # pdv 25%!!!
+                'taxes_id':[(4,tax_id)], # pdv 25%!!!
                 'list_price':price,
                 'type':'service'
                 }
@@ -166,8 +188,8 @@ class lingua_evidencija(osv.osv):
         'fiskal_prostor_id':fields.many2one('fiskal.prostor','Chapter name', required=1),
         'broj_evidencija_pod': fields.char('Chapter evidention number', size=32),
         'partner_id':fields.many2one('res.partner', 'Partner', required=1),
-        'lang_origin':fields.many2one('lingua.language','Origin language', required=1, domain="[('employee_ids', '!=', 'None' )]"), #uzimam samo jezike koji imaju dodijeljenog prevoditelja
-        'lang_translate':fields.many2many('lingua.language','lingua_tranlslate_to_res','lingua_languages_id','lingua_evidencija_id'),
+        'lang_origin':fields.many2one('lingua.language','Origin language', required=1, domain="[('translator_ids', '!=', False )]"), #uzimam samo jezike koji imaju dodijeljenog prevoditelja
+        'lang_translate':fields.many2many('lingua.language','lingua_tranlslate_to_res','lingua_languages_id','lingua_evidencija_id', domain="[('translator_ids', '!=', False )]"),
         'date_recived':fields.datetime('Recived', help="Date and time of recieving, leave empty for current date/time"),
         'date_due':fields.datetime('Deadline'),
         'note':fields.text('Note'),
@@ -179,10 +201,11 @@ class lingua_evidencija(osv.osv):
         'marketing_id':fields.many2one('lingua.marketing','Marketing'),
         'trans_card':fields.float('Text cards', help="Estimated number of cards for translating"),
         'price_id':fields.many2one('lingua.price','Price definition'),
-        'sale_order':fields.many2one('sale.order','Sale order'),
-        'sale_orders':fields.many2many('sale.order','lingua_evidencjija_2_sale_ref', 'sale_order_id','lingua_evidencija_id'),
-        'so_made':fields.boolean('Sales order made'),
+        'sale_order':fields.many2many('sale.order','lingua_evidencija_sale_order_rel', 'lingua_evidencija_id', 'sale_order_id'),
         'invoice':fields.many2one('account.invoice','Invoice'),
+        'type_id':fields.many2one('lingua.translation.type', 'Type of translation'),
+        #'time_remain':fields.function(_get_remain_time, string="Time remain", type='char', size=32),
+        
                 }
 
     _defaults = {
@@ -206,62 +229,86 @@ class lingua_evidencija(osv.osv):
 
     
     
-    # evidencija u SO
+    # jedna evidencija u SO
     def button_evid_2_saleorder(self, cr, uid, ids, context=None):
+        evidencija_obj, evidencija_line_obj = get_evidencija_objects(self, cr, uid)
+        evidencija = evidencija_obj.browse(cr, uid, ids)[0]
         
-        evidencija = self.pool.get('lingua.evidencija').browse(cr, uid, ids)[0]
-        evidencija_lines_obj=self.pool.get('lingua.evidencija.line')
+        if evidencija.sale_order:
+            check_sale_order_state(self, cr, uid, evidencija)
+        
         #TODO : get right pricelist for partner! for now i use 1
         so = create_sale_order(self, cr, uid, evidencija.partner_id.id, 1 , evidencija.name)
         
         product_template= self.pool.get('product.template')
-        for line in evidencija_lines_obj.search(cr, uid, [('evidencija_id', '=', evidencija.id)]): 
-            task_line = evidencija_lines_obj.browse(cr, uid, line)
+        
+        trans_price = self.pool.get('lingua.price').browse(cr, uid, evidencija.price_id.id)
+        for line in evidencija_line_obj.search(cr, uid, [('evidencija_id', '=', evidencija.id)]): 
+            task_line = evidencija_line_obj.browse(cr, uid, line)
             if not task_line.product_id.id:
                 make_product_from_line(self, cr, uid, evidencija, task_line)
-                task_line = evidencija_lines_obj.browse(cr, uid, line)
-                #raise osv.except_osv(_('BUUU !'), _('Nemam proizvod!'))
+                task_line = evidencija_line_obj.browse(cr, uid, line)
             template = product_template.browse(cr,uid,task_line.product_id.id )
             #TODO: price i qty refactor!
-            create_sale_order_line(self, cr, uid, task_line.name, so, task_line.product_id.id, template.list_price, evidencija.trans_card)
-        return self.pool.get('lingua.evidencija').write(cr, uid, evidencija.id, {'sale_order':so,
-                                                                                 'sale_orders':[4,so],
-                                                                                 'so_made':True}) 
-    #Više evidencija u jedna SO
-    def action_multi_evidention_2_order(self, cr, uid, ids, context):
+            create_sale_order_line(self, cr, uid, task_line.name, so, task_line.product_id.id, trans_price.price, evidencija.trans_card)  #template.list_price
         
+        return evidencija_obj.write(cr, uid, evidencija.id, {'sale_order':[(4,so)]}) 
+    
+    
+    #Više evidencija u jedna SO
+    def action_multi_evidention_2_order(self, cr, uid, ids, context=None):
+        evidencija_obj, evidencija_line_obj = get_evidencija_objects(self, cr, uid)
+        sel_evidencije=evidencija_obj.browse(cr, uid, ids)
+        partner=sel_evidencije[0].partner_id.id
+        
+        name='EVID : '
+        for evidencija in sel_evidencije:
+            check_unique_partner(self, cr, uid, partner, evidencija)
+            so_origin = ','.join([name,evidencija.name])
+        
+        so = create_sale_order(self, cr, uid, partner, 1 , so_origin)
+        product_template= self.pool.get('product.template')
+        trans_price_obj = self.pool.get('lingua.price')
+        for evidencija in sel_evidencije:
+            trans_price = self.pool.get('lingua.price').browse(cr, uid, evidencija.price_id.id)
+            for line in evidencija_line_obj.search(cr, uid, [('evidencija_id', '=', evidencija.id)]): 
+                task_line = evidencija_line_obj.browse(cr, uid, line)
+                if not task_line.product_id.id:
+                    make_product_from_line(self, cr, uid, evidencija, task_line)
+                    task_line = evidencija_line_obj.browse(cr, uid, line)
+                template = product_template.browse(cr,uid,task_line.product_id.id )
+                #TODO: price i qty refactor!
+                create_sale_order_line(self, cr, uid, task_line.name, so, task_line.product_id.id, trans_price.price, evidencija.trans_card)
+            evidencija_obj.write(cr, uid, evidencija.id, {'sale_order':[(4,so)]})
         return True
     
     
     def button_recive(self, cr, uid, ids, context=None):
-        evidention=self.pool.get('lingua.evidencija').browse(cr, uid, ids)[0]
+        evidencija_obj, evidencija_line_obj = get_evidencija_objects(self, cr, uid)
+        evidention = evidencija_obj.browse(cr, uid, ids)[0]
         if not evidention.evidencija_line_ids:
             raise osv.except_osv(_('Error !'), _('No chosen languages for translation!'))
-        evidention_line=self.pool.get('lingua.evidencija.line').search(cr, uid, [('evidencija_id', '=', evidention.id)])
-        langs=self.pool.get('lingua.languages')
-        seq_no=self.pool.get('ir.sequence').get(cr,uid,'lingua_order')
-        vals={}
-        
-        if not evidention.date_recived:
-            time=zagreb_now()
-            self.pool.get('lingua.evidencija').write(cr, uid, evidention.id, {'date_recived':time})
-        for line in evidention_line:
-            origin = evidention.lang_origin.iso_code2
-            trans = self.pool.get('lingua.evidencija.line').browse(cr, uid, line).language_id.iso_code2
-            line_name = '-'.join([seq_no, origin, trans]) 
-            line_vals={
-                       'name':line_name,
-                       'partner_id':evidention.partner_id.id
-                       }
-            self.pool.get('lingua.evidencija.line').write(cr, uid, line, line_vals)
-            
+        evidention_line = evidencija_line_obj.search(cr, uid, [('evidencija_id', '=', evidention.id)])
+        langs = self.pool.get('lingua.languages')
+        seq_no = self.pool.get('ir.sequence').get(cr,uid,'lingua_order')
         vals={
               'state':'open',
               'seq_no':seq_no
-              }
-                
-        result=self.pool.get('lingua.evidencija').write(cr, uid, evidention.id, vals)
-        return True
+              }        
+        if not evidention.date_recived:
+            vals['date_recived']=zagreb_now()
+        for line in evidention_line:
+            trans = evidencija_line_obj.browse(cr, uid, line).language_id.iso_code2
+            line_name = '-'.join([seq_no, evidention.lang_origin.iso_code2, trans]) 
+            line_vals={
+                       'name':line_name,
+                       'partner_id':evidention.partner_id.id,
+                       'language_origin':evidention.lang_origin.id
+                       }
+            evidencija_line_obj.write(cr, uid, line, line_vals)
+        return evidencija_obj.write(cr, uid, evidention.id, vals)
+    
+    
     
 class lingua_evidencija_line (osv.Model):
     _name = 'lingua.evidencija.line'
@@ -275,7 +322,7 @@ class lingua_evidencija_line (osv.Model):
                                ,('pause',"Paused")
                                ,('cancel',"Canceled")
                                ]
-    
+    #TODO Multiline!
     _created_product_type = [('single','One-Line product')
                              ,('combo','Multi-Line Product')
                              ]
@@ -286,9 +333,10 @@ class lingua_evidencija_line (osv.Model):
                 'name':fields.char('Name',size=64),
                 'evidencija_id':fields.many2one('lingua.evidencija','Evidevtion reference'),
                 'evidencija_origin':fields.related('evidencija_id','lang_origin', type='many2one', relation="lingua.language", string="Original language"),
+                'language_origin':fields.many2one('lingua.language','Origin language'),
                 'language_id':fields.many2one('lingua.language','Translated language', required=True),
-                'employee_id':fields.many2one('hr.employee','Translator', 
-                                              domain="[('language_ids', 'in', language_id )]"),
+                'translator_ids':fields.many2many('hr.employee','lingua_evidencija_line_translate_hr_employee_rel','lingua_evidencija_line_id','hr_employee_id', 'Translator'),
+                'lector_ids':fields.many2many('hr.employee','lingua_evidencija_line_lector_hr_employee_rel','lingua_evidencija_line_id','hr_employee_id', 'Lector'),
                 'partner_id':fields.many2one('res.partner','Partner'),
                 'lectoring':fields.boolean ('Mandatory lectoring'),
                 'state':fields.selection (_translation_line_status,'Translation status'),
@@ -299,7 +347,9 @@ class lingua_evidencija_line (osv.Model):
                 'lectoring_finish':fields.datetime('Lectoring finished'),
                 'product_type':fields.selection(_created_product_type,'Product type'),
                 'product_id':fields.many2one('product.product', 'Related product'),
-                'finish_due':fields.related('evidencija_id','date_due', type='datetime', string='Due date')
+                'finish_due':fields.related('evidencija_id','date_due', type='datetime', string='Due date'),
+                'sale_order':fields.many2many('sale.order','lingua_evidencija_line_sale_order_rel', 'lingua_evidencija_line_id', 'sale_order_id'),
+                'error':fields.many2many('lingua.error','lingua_evidencija_line_error_rel','lingua_evidencija_line_id','lingua_error_id','Error')
                 }
     
     _defaults = {
@@ -309,40 +359,54 @@ class lingua_evidencija_line (osv.Model):
     _order = "id desc"
 
     def action_multiline_order(self, cr, uid, ids, context=None):
-        lines = self.pool.get('lingua.evidencija.line').browse(cr,uid,ids)
+        evidencija_obj, evidencija_line_obj = get_evidencija_objects(self, cr, uid)
+        lines = evidencija_line_obj.browse(cr, uid, ids)
+        
         partner=lines[0].partner_id.id
+        name='TASK : '
         for line in lines:
-            if line.partner_id.id != partner:
-                raise osv.except_osv(_('Error !'), _('Invoicing multi line is possible only for unique partner!'))
+            check_unique_partner(self, cr, uid, partner, line)
+            check_evid_line_name(self, cr, uid, line)
+            name=','.join([name,line.name])
+            
+        so = create_sale_order(self, cr, uid, partner, 1 , name)
+        product_template= self.pool.get('product.template')
+        so_tran_line_rel=[]
+        for line in lines:
+            task_line = evidencija_line_obj.browse(cr, uid, line.id)
             if not line.product_id.id:
-                evidencija = self.pool.get('lingua.evidencija').browse(cr, uid, line.evidencija_id.id)
-                self.make_product_from_line(cr, uid, evidencija, line)
-             #TODO: generate sales order from selected lines
+                evidencija = evidencija_obj.browse(cr, uid, line.evidencija_id.id)
+                make_product_from_line(self, cr, uid, evidencija, line)
+                task_line = evidencija_line_obj.browse(cr, uid, line.id)
+            template = product_template.browse(cr, uid, task_line.product_id.id )
+            create_sale_order_line(self, cr, uid, task_line.name, so, task_line.product_id.id, template.list_price, evidencija.trans_card)
+            so_tran_line_rel.append(task_line.id)
+        evidencija_obj.write(cr, uid, evidencija.id, {'sale_order':[(4,so)]})
+        
                 
+                             
         return True
-    
+          
     def button_translation2product(self, cr, uid, ids, context=None):
-        evidencija_line=self.pool.get('lingua.evidencija.line').browse(cr, uid, ids)[0]
+        evidencija_obj, evidencija_line_obj = get_evidencija_objects(self, cr, uid)
+        evidencija_line=evidencija_line_obj.browse(cr, uid, ids)[0]
         if evidencija_line.product_id:
             #TODO: update proizvoda isl.. 
             return True
         else:
-            evidencija = self.pool.get('lingua.evidencija').browse(cr, uid, evidencija_line.evidencija_id.id)
+            evidencija = evidencija_obj.browse(cr, uid, evidencija_line.evidencija_id.id)
             return make_product_from_line(self, cr, uid, evidencija, evidencija_line)
         
     
 
-    def onchange_employee_id(self, cr, uid, ids, employee_id):
+    def onchange_employee_id(self, cr, uid, ids, employee_id , context=None):
         evid_line = self.pool.get('lingua.evidencija.line').browse(cr,uid,ids)[0]
-        
-        if not evid_line.name: #zasad bacim error ako nije zaprimljen bolja verzija je call super!!
-            raise osv.except_osv(_('Error !'), _('If translation is not recived, you cannot assign it!'))
         evidention = self.pool.get('lingua.evidencija').browse(cr, uid, evid_line.evidencija_id.id) 
-        if evidention.state=='open':
+        if evidention.state == 'open':
             self.pool.get('lingua.evidencija').write(cr, uid, evidention.id, {'state':'process'})
-        
-        if evid_line.state=='draft':
-            res = self.pool.get('lingua.evidencija.line').write(cr, uid, evid_line.id, {'state':'asign'})
+            
+        if evid_line.state == 'draft':
+            self.pool.get('lingua.evidencija.line').write(cr, uid, evid_line.id, {'state':'asign'})
         return True
     
     def button_translation_start(self, cr, uid, ids, context=None):
@@ -415,4 +479,25 @@ class lingua_evidencija_line (osv.Model):
             return self.pool.get('lingua.evidencija.line').write(cr, uid, evid_line.id, {'state':'paused'} )
 
 
+class lingua_error(osv.Model):
+    _name="lingua.error"
+    _description="Error handling"
+    
+    _columns={
+              'name':fields.char('Name', size=64),
+              'reported_by':fields.selection([('partner','Partner'),
+                                              ('employee','Employee')],'Error reported by', help = _("Who reported error")),
+              'reported_date':fields.datetime('Date reported'),
+              'description':fields.text('Description'),
+              'evidencija_line':fields.many2many('lingua.evidencija.line','lingua_evidencija_line_error_rel','lingua_error_id','lingua_evidencija_line_id','Tasks')
+              }
 
+
+class lingua_translation_type(osv.Model):
+    _name = "lingua.translation.type"
+    _decription = "Possible translation types"
+    _columns = {
+                'name':fields.char('Type', size=128),
+                'evidention_ids':fields.one2many('lingua.evidencija', 'type_id', 'Evidentions'),
+                #'employee_ids':fields.many2many('lingua.evidencija', 'lingua_evidencija_type_rel', 'lingua_translation_type_id', 'lingua_evidencija_id', 'Evidentions'),
+                }

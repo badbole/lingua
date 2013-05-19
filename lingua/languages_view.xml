@@ -34,8 +34,15 @@
 								<field name="iso_code3" />
 							</group>
 						</group>
-						<separator string="Translators availble" />
-						<field name="employee_ids" colspan="4" nolabel="1" />
+						<notebook>
+							<page string="Translators availble">
+								<field name="translator_ids" colspan="4" nolabel="1" />
+							</page>
+							<page string="Lectors available">
+								<field name="lector_ids" colspan="4" nolabel="1" />
+							</page>
+
+						</notebook>
 					</sheet>
 				</form>
 			</field>
@@ -48,14 +55,17 @@
 			<field name="inherit_id" ref="hr.view_employee_form" />
 			<field name="arch" type="xml">
 				<notebook position="inside">
-					<page string="Languages">
-						<group>
-							<field name="primary_lang" string="Primary language"
-								on_change="onchange_primary_lang(primary_lang)" widget="selection" />
-							<newline />
-							<field name="language_ids" colspan="4" nolabel="1" />
+					<page string="Translations">
+						<group colspan="4" cols="4">
+							<field name="primary_lang" string="Primary language" widget="selection" />
+							<field name="is_lector" />
 						</group>
+						<group colspan="4" cols="4">
+							<field name="translate_ids" colspan="2" />
+							<field name="lector_ids" colspan="2" attrs="{'invisible': [('is_lector', '==', False)]}" />
+                        </group>
 					</page>
+
 				</notebook>
 			</field>
 		</record>

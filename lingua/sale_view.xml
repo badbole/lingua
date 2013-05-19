@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <record id="view_lingua_evidencija_sale_odrder" model="ir.ui.view">
+            <field name="name">view.lingua.evidencija.sale.odrder</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="Evidention origin">
+                        <group string="Evidentions">
+                        <field name="evidention" nolabel="1"/>
+                        </group>
+                        <!-- 
+                        <group string="Evidention tasks">
+                        <field name="evidention_line" nolabel="1" />
+                        </group>
+                         -->
+                    </page>
+                    
+                </notebook>
+            </field>
+        </record>   
+    </data>
+</openerp>

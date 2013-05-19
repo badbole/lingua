@@ -7,7 +7,6 @@
 			<field name="name">"lingua_evidencija_tree_view"</field>
 			<field name="model">lingua.evidencija</field>
 			<field name="arch" type="xml">
-
 				<tree
 					colors="black:state =='draft';
 				              blue:state in ('open','process');
@@ -23,11 +22,13 @@
 
 					<field name="date_recived" />
 					<field name="date_due" />
+					<!-- field name="time_remain" /> -->
 					<field name="state" />
-					<field name="sale_order" readonly="1" />
+
 				</tree>
 			</field>
 		</record>
+
 		<record id="lingua_evidencija_form_view" model="ir.ui.view">
 			<field name="name">lingua_evidencija_form_view</field>
 			<field name="model">lingua.evidencija</field>
@@ -48,34 +49,34 @@
 						</h1>
 						<group colspan="4">
 							<field name="name" />
-							<field name="broj_evidencije" />
+							
 							<field name="fiskal_prostor_id" />
-							<field name="broj_evidencija_pod" />
+							
 							<field name="partner_id" />
-							<field name="date_recived" />
+							<field name="date_recived" help="Leave blank to autofill with current date/time on save"/>
 							<field name="date_due" />
 							<field name="marketing_id" />
-
+                            
 						</group>
 						<notebook colspan="4">
 							<page string="Translations">
 								<group>
-									<field name="lang_origin" string="Origin language"
-										on_change="onchange_lang_origin(lang_origin)" />
+									<field name="lang_origin" string="Origin language" />
+									<field name="type_id" />
 									<field name="trans_card" />
-									<field name="price_id" />
+									
 								</group>
 								<newline />
 								<field name="evidencija_line_ids" colspan="4" nolabel="1"
-									attrs="{'invisible': [('lang_origin', '=', False)]}">
+									attrs="{'invisible': [('lang_origin', '=', False)]}" >
 									<form>
 										<field name="state" invisible="1" />
 										<!-- <field name="evidencija_origin" /> -->
-										<field name="language_id" />
+										<field name="language_id" domain="[('translator_ids', '!=', False )]"/>
 										<field name="lectoring" />
-										<field name="employee_id" class="oe_inline"
-											attrs="{'invisible': [('language_id', '=', False)]}" />
-										<!-- Dodati još jedan filter po origin jeziku -->
+										<!-- field name="translator_id" class="oe_inline" attrs="{'invisible': 
+											[('language_id', '=', False)]}" /!> -->
+
 									</form>
 									<tree
 										colors="blue:state == 'new';
@@ -85,20 +86,23 @@
 										string="Evidention line">
 										<field name="name" />
 										<field name="language_id" />
-										<field name="employee_id" />
 										<field name="lectoring" />
 										<field name="state" />
 									</tree>
 								</field>
 							</page>
 							<page string="Note">
+							     <group>
+							     <field name="broj_evidencije" />
+							    <field name="broj_evidencija_pod" />
 								<field name="note" colspan="4" />
+								</group>
 							</page>
 							<page string="Accounting">
 								<group>
-									<field name="sale_order" readonly="1" />
-									<field name="sale_orders" />
-									<field name="so_made" readonly="1" />
+                                    <field name="price_id" />
+									<field name="sale_order" nolabel="1" colspan="4" />
+									<newline />
 									<field name="invoice" readonly="1" />
 								</group>
 							</page>
@@ -112,13 +116,10 @@
 			<field name="model">lingua.evidencija</field>
 			<field name="arch" type="xml">
 				<search string="Search translation evidention">
-
 					<field name="name"
 						filter_domain="['|','|',('name','ilike',self),('parent_id','ilike',self),('ref','=',self)]" />
-
 					<filter name="state" string="Finished" domain="[('state','=','finished')]" />
 					<filter name="state" string="Processing" domain="[('state','=','process')]" />
-
 					<group expand="0" string="Group By...">
 						<filter string="Chapter" context="{'group_by' : 'fiskal_prostor_id'}" />
 						<separator />
@@ -134,22 +135,23 @@
 			<field name="name">"lingua_evidencija_line_tree_view"</field>
 			<field name="model">lingua.evidencija.line</field>
 			<field name="arch" type="xml">
-				<tree create="false" delete="false"
+				<tree create="false" delete="false" 
 					colors="blue:state == 'new';
 				black:state in ('translation','lectoring');
 				gray:state in ('cancel','pause');
 				green:state == 'finished'"
-					string="Evidention line">  <!-- editable="bottom" -->
-                    <field name="partner_id" />
+					string="Evidention line" >  <!-- editable="bottom" -->
+					<field name="partner_id" />
 					<field name="name" readonly="1" />
 					<field name="evidencija_id" invisible="1" />
 					<field name="language_id" />
-					<field name="employee_id" on_change="onchange_employee_id(employee_id)"
-						domain="[('language_ids','=',language_id)]" />
-					<field name="lectoring" />
+					<!-- field name="employee_id" on_change="onchange_employee_id(employee_id)" 
+						domain="[('language_ids','=',language_id)]" /> -->
+
+					<field name="finish_due" />
 					<field name="product_id" readonly="1" />
 					<field name="state" readonly="1" />
-					<field name="finish_due" />
+					<field name="error" />
 				</tree>
 			</field>
 		</record>
@@ -173,23 +175,32 @@
 					</header>
 					<sheet>
 						<h1>
-							<label string="Translation : " />
+							<label string="Task " />
 							<field name="name" readonly="1" class="oe_inline" />
 						</h1>
 						<group>
 							<field name="evidencija_id" readonly="1" />
-							<field name="language_id" />
-							<field name="employee_id" on_change="onchange_employee_id(employee_id)" />
+							<field name="language_origin" readonly="1" />
+							<field name="language_id" readonly="1"/>
+							<!-- field name="employee_id" on_change="onchange_employee_id(employee_id)" 
+								/> -->
 							<field name="lectoring" />
 
 						</group>
 						<notebook colspan="4">
+							<page string="Assigned translators">
+								<field name="translator_ids" nolabel="1" on_change="onchange_employee_id(translator_ids)" />
+							</page>
+							<page string="Assigned lectors" 
+                                    attrs="{'invisible': [('lectoring', '==', False)]}">
+								<field name="lector_ids" nolabel="1" on_change="onchange_employee_id(lector_ids)"/>
+							</page>
 							<page string="Time evidention" col="4">
 								<group>
 									<field name="translation_start" />
 									<field name="translation_finish" />
-									<field name="lectoring_start" />
-									<field name="lectoring_finish" />
+									<field name="lectoring_start" attrs="{'invisible': [('lectoring', '==', False)]}" />
+									<field name="lectoring_finish" attrs="{'invisible': [('lectoring', '==', False)]}"/>
 								</group>
 							</page>
 							<page string="Accounting">
@@ -201,6 +212,9 @@
 										string="Convert to product" attrs="{'invisible': [('product_id', '!=', False)]}" />
 
 								</group>
+							</page>
+							<page string="Error evidention">
+								<field name="error" colspan="4" nolabel="1" />
 							</page>
 						</notebook>
 					</sheet>
@@ -234,6 +248,69 @@
 			</field>
 		</record>
 
+		<!-- Evidencija ERROR -->
+		<record id="lingua_error_tree_view" model="ir.ui.view">
+			<field name="name">"lingua_error_tree_view"</field>
+			<field name="model">lingua.error</field>
+			<field name="arch" type="xml">
+				<tree string="Error Evidention">
+					<field name="name" />
+					<field name="reported_by" />
+					<field name="reported_date" />
+					<field name="description" />
+					<field name="evidencija_line" />
+
+				</tree>
+			</field>
+		</record>
+
+		<record id="lingua_error_form_view" model="ir.ui.view">
+			<field name="name">lingua_error_form_view</field>
+			<field name="model">lingua.error</field>
+			<field name="arch" type="xml">
+				<form string="Error Evidention" version="7.0">
+					<sheet>
+						<group>
+							<field name="name" />
+							<field name="reported_by" />
+							<field name="reported_date" />
+							<field name="description" />
+							<field name="evidencija_line" />
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<!-- Evidencija TYPE -->
+		<record id="lingua_translation_type_tree_view" model="ir.ui.view">
+			<field name="name">"lingua_translation_type_tree_view"</field>
+			<field name="model">lingua.translation.type</field>
+			<field name="arch" type="xml">
+				<tree string="Translation type">
+					<field name="name" />
+					
+				</tree>
+			</field>
+		</record>
+
+		<record id="lingua_translation_type_form_view" model="ir.ui.view">
+			<field name="name">lingua_translation_type_form_view</field>
+			<field name="model">lingua.translation.type</field>
+			<field name="arch" type="xml">
+				<form string="Translation type" version="7.0">
+					<sheet>
+						<group>
+							<field name="name" />
+							<field name="evidention_ids" readonly="1"/>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+
+
 		<!-- Menu Actions -->
 		<record id='lingua_translations_evidention' model='ir.actions.act_window'>
 			<field name="name">Translation Evidention</field>
@@ -244,38 +321,55 @@
 			<field name="name">Translation tasks</field>
 			<field name="res_model">lingua.evidencija.line</field>
 			<field name="view_mode">tree,form</field>
+			<field name="domain">[('name','!=', False)]</field>
 		</record>
-		
+		<record id='lingua_error_evidention' model='ir.actions.act_window'>
+			<field name="name">Error evidention</field>
+			<field name="res_model">lingua.error</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+		<record id='lingua_translation_type' model='ir.actions.act_window'>
+            <field name="name">Translation types</field>
+            <field name="res_model">lingua.translation.type</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
 		<!-- Server Actions -->
-		<!--  Evidention action -->
+		<!-- Evidention action -->
 		<record id="lingua_evidention_2_order" model="ir.actions.server">
-            <field name="name">Evidentions to order</field>
-            <field name="type">ir.actions.server</field>
-            <field name="model_id" ref="model_lingua_evidencija" />
-            <field name="state">code</field>
-            <field name="code">self.action_multi_evidention_2_order(cr, uid, context.get('active_ids'), context=context)</field>
-        </record>
-        <record id="lingua_evidention_2_order_value" model="ir.values">
-            <field name="name">Lines to order</field>
-            <field name="action_id" ref="lingua_evidention_2_order" />
-            <field name="value" eval="'ir.actions.server,' + str(ref('lingua_evidention_2_order'))" />
-            <field name="key">action</field>
-            <field name="model_id" ref="model_lingua_evidencija" />
-            <field name="model">lingua.evidencija</field>
-            <field name="key2">client_action_multi</field>
-        </record>
+			<field name="name">Evidentions to order</field>
+			<field name="type">ir.actions.server</field>
+			<field name="model_id" ref="model_lingua_evidencija" />
+			<field name="state">code</field>
+			<field name="code">self.action_multi_evidention_2_order(cr, uid,
+				context.get('active_ids'), context=context)
+			</field>
+		</record>
+		<record id="lingua_evidention_2_order_value" model="ir.values">
+			<field name="name">Lines to order</field>
+			<field name="action_id" ref="lingua_evidention_2_order" />
+			<field name="value"
+				eval="'ir.actions.server,' + str(ref('lingua_evidention_2_order'))" />
+			<field name="key">action</field>
+			<field name="model_id" ref="model_lingua_evidencija" />
+			<field name="model">lingua.evidencija</field>
+			<field name="key2">client_action_multi</field>
+		</record>
 		<!-- Translation LINE action -->
 		<record id="lingua_translation_lines_2_order" model="ir.actions.server">
 			<field name="name">Lines to order</field>
 			<field name="type">ir.actions.server</field>
 			<field name="model_id" ref="model_lingua_evidencija_line" />
 			<field name="state">code</field>
-			<field name="code">self.action_multiline_order(cr, uid, context.get('active_ids'), context=context)</field>
+			<field name="code">self.action_multiline_order(cr, uid,
+				context.get('active_ids'), context=context)
+			</field>
 		</record>
 		<record id="lingua_translation_lines_2_order_value" model="ir.values">
 			<field name="name">Lines to order</field>
 			<field name="action_id" ref="lingua_translation_lines_2_order" />
-			<field name="value"	eval="'ir.actions.server,' + str(ref('lingua_translation_lines_2_order'))" />
+			<field name="value"
+				eval="'ir.actions.server,' + str(ref('lingua_translation_lines_2_order'))" />
 			<field name="key">action</field>
 			<field name="model_id" ref="model_lingua_evidencija_line" />
 			<field name="model">lingua.evidencija.line</field>
@@ -286,12 +380,16 @@
 		<menuitem name="Translations" id="menu_translations"
 			sequence="10" />
 		<menuitem name="Overwiev" id="translations_overview" parent="menu_translations" />
-
 		<menuitem action="lingua_translations_evidention" parent="translations_overview"
-			id="translations_evidention_menu" />
-		<menuitem action="lingua_translations_evidention_line"
-			parent="translations_overview" id="translations_evidention_line_menu" />
+			id="translations_evidention_menu" sequence="10" />
 
+		<menuitem action="lingua_translations_evidention_line"
+			parent="translations_overview" id="translations_evidention_line_menu"
+			sequence="20" />
+		<menuitem action="lingua_error_evidention" parent="translations_overview"
+			id="translation_errors_evidention_menu" sequence="30" />
+		<menuitem action="lingua_translation_type" parent="translations_setup"
+            id="translation_types_menu"  />
 	</data>
 </openerp>
  

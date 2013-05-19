@@ -28,10 +28,22 @@
 {
     "name" : "LINGUA PRIJEVODI",
     "description" : """
-EVIDENCIJA PRIJEVODA - LINGUA
-=============================
+Evidention of translations
+==========================
 
-Authors: Davor Bojkić - Bole @ DAJ MI 5     www.dajmi5.com
+Author: Davor Bojkić - bole @ DAJ MI 5     www.dajmi5.com
+
+Contributions: Borko Augustin - borko @ abs95.com
+               Vlado Jerbic   - vlado @ abs95.com
+
+Summary: 
+
+Functionality for testing
+   - evidention of translations and tasks ,
+       - generates saleorder from single evidention
+       - generate saleorder from selected evidentions
+       
+    - 
 
 """,
     "version" : "1.00",
@@ -46,14 +58,15 @@ Authors: Davor Bojkić - Bole @ DAJ MI 5     www.dajmi5.com
                 ],
     
     'update_xml': [
-                   'evidencija_view.xml',
                    'config_view.xml',
+                   'evidencija_view.xml',
                    'data/lingua.language.csv',
                    'languages_view.xml',
                    'lingua_data.xml',
                    #'product_view.xml'
                    'lingua_sequence.xml',
                    'lingua_translations_workflow.xml',
+                   'sale_view.xml',
                    ],
     "active": False,
     "installable": True,

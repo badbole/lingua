@@ -31,5 +31,6 @@ from openerp.tools.translate import _
 class sale_order(osv.osv):
     _inherit = "sale.order"
     _columns = {
-                'evidention_id':fields.many2many('lingua.evidencija','lingua_evidencjija_2_sale_ref', 'lingua_evidencija_id','sale_order_id')
+                'evidention':fields.many2many('lingua.evidencija','lingua_evidencija_sale_order_rel', 'sale_order_id','lingua_evidencija_id'),
+                'evidention_line':fields.many2many('lingua.evidencija.line','lingua_evidencija_line_sale_order_rel', 'sale_order_id','lingua_evidencija_line_id'),
                 }
