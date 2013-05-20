@@ -47,10 +47,19 @@
 				</form>
 			</field>
 		</record>
+		<record id='lingua_language_action' model='ir.actions.act_window'>
+            <field name="name">Languages</field>
+            <field name="res_model">lingua.language</field>
+            <field name="view_mode">tree,form</field>
+            <!-- field name="help" type="html"> <p class="oe_view_nocontent_create"> 
+                Click to create a vehicule status. </p><p> You can customize available status 
+                to track the evolution of each vehicule. Example: Active, Being Repaired, 
+                Sold. </p> </field> -->
+        </record>
 
 		<!-- Employee - Lang add -->
-		<record id="lingua_hr_employee_form_view" model="ir.ui.view">
-			<field name="name">lingua.hr.employee.form.view</field>
+		<record id="lingua_hr_employee_form_inherit_view" model="ir.ui.view">
+			<field name="name">lingua.hr.employee.form.inherit.view</field>
 			<field name="model">hr.employee</field>
 			<field name="inherit_id" ref="hr.view_employee_form" />
 			<field name="arch" type="xml">
@@ -59,6 +68,7 @@
 						<group colspan="4" cols="4">
 							<field name="primary_lang" string="Primary language" widget="selection" />
 							<field name="is_lector" />
+							<field name="trans_type_ids" nolabel="1" widget="many2many"  />
 						</group>
 						<group colspan="4" cols="4">
 							<field name="translate_ids" colspan="2" />
@@ -69,20 +79,79 @@
 				</notebook>
 			</field>
 		</record>
+        
+        <!-- Translators ovewrview for lingua -->
+        <record id="lingua_employee_translator_tree_view" model="ir.ui.view">
+            <field name="name">lingua.employee.translator.tree.view</field>
+            <field name="model">hr.employee</field>
+            <field name="priority" eval="20"/>
+            <field name="arch" type="xml">
+                <tree string="Translators" delete="false">
+                    <field name="name" />
+                    <field name="translate_ids"/>
+                    <field name="is_lector" />
+                </tree>
+            </field>
+        </record>
+        <record id="lingua_employee_translator_form_view" model="ir.ui.view">
+            <field name="name">lingua.employee.translator.form.view</field>
+            <field name="model">hr.employee</field>
+            <field name="priority" eval="20"/>
+            <field name="arch" type="xml">
+                <form string="Translators" delete="false">
+                    <field name="name" />
+                    <field name="translate_ids"/>
+                    <field name="is_lector" />
+                    <field name="trans_type_ids" nolabel="1" />
+                </form>
+            </field>
+        </record>
 
+		<record id="lingua_translators_1_action" model="ir.actions.act_window">
+            <field name="name">Translators</field>
+            <field name="res_model">hr.employee</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="lingua_employee_translator_tree_view" />
+        </record>
+        
+        <!-- Lectors ovewrview for lingua -->
+        <record id="lingua_employee_lector_tree_view" model="ir.ui.view">
+            <field name="name">lingua.employee.lector.tree.view</field>
+            <field name="model">hr.employee</field>
+            <field name="priority" eval="20"/>
+            <field name="arch" type="xml">
+                <tree string="Lectors" delete="false" >
+                    <field name="name"  />
+                    <field name="lector_ids"/>
+                </tree>
+            </field>
+        </record>
+        <record id="lingua_employee_lector_form_view" model="ir.ui.view">
+            <field name="name">lingua.employee.lector.form.view</field>
+            <field name="model">hr.employee</field>
+            <field name="priority" eval="20"/>
+            <field name="arch" type="xml">
+                <form string="Lectors" delete="false">
+                    <field name="name" />
+                    <field name="lector_ids"/>
+                </form>
+            </field>
+        </record>
 
-		<record id='lingua_language_action' model='ir.actions.act_window'>
-			<field name="name">Languages</field>
-			<field name="res_model">lingua.language</field>
-			<field name="view_mode">tree,form</field>
-			<!-- field name="help" type="html"> <p class="oe_view_nocontent_create"> 
-				Click to create a vehicule status. </p><p> You can customize available status 
-				to track the evolution of each vehicule. Example: Active, Being Repaired, 
-				Sold. </p> </field> -->
-		</record>
+        <record id="lingua_lectors_1_action" model="ir.actions.act_window">
+            <field name="name">Lectors</field>
+            <field name="res_model">hr.employee</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="lingua_employee_lector_tree_view" />
+            <field name="domain">[('is_lector','=',True)]</field>
+        </record>
 
 		<!-- MENU ITEMS -->
 		<menuitem action="lingua_language_action" parent="translations_setup"
 			id="lingua_languages_menu" />
+		<menuitem action="lingua_translators_1_action" parent="translations_overview"
+		      id="lingua_translators_1_menu" sequence="40"/>
+		<menuitem action="lingua_lectors_1_action" parent="translations_overview"
+              id="lingua_lectors_1_menu" sequence="50"/>
 	</data>
 </openerp>

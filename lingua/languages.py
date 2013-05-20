@@ -46,26 +46,13 @@ class lingua_language (osv.Model):
 class hr_employee(osv.osv):
     _inherit = "hr.employee"
 
-
-    """
-    def onchange_primary_lang(self, cr, uid, ids, primary_lang):
-        if primary_lang:
-            employee=self.pool.get('hr.employee').browse(cr,uid,ids)[0]
-            if employee.language_ids:
-                for language_id in employee.language_ids:
-                    if language_id.id==primary_lang:
-                        return True
-            return self.write(cr,uid,employee.id,{'language_ids':[(4,primary_lang)]})
-            
-        return True            
-    """          
     _columns = {
                 'translate_ids':fields.many2many('lingua.language','lingua_language_translate_employee_rel','hr_employee_id','lingua_language_id','Spoken languages'),
                 'is_lector':fields.boolean('Aprooved lector'),
                 'lector_ids':fields.many2many('lingua.language','lingua_language_lector_employee_rel','hr_employee_id','lingua_language_id','Lector for languages'),
                 'primary_lang':fields.many2one('lingua.language','Primary language'),
                 'translation_lines':fields.many2many('lingua.evidencija.line','lingua_evidencija_line_translate_hr_employee_rel','hr_employee_id','lingua_evidencija_line_id', 'Evidention of translations'), 
-                #'lector':fields.boolean('Lector'),  -> user rola! 
+                'trans_type_ids':fields.many2many('lingua.translation.type', 'lingua_translation_type_hr_employee_rel', 'hr_employee_id', 'lingua_translation_type_id', 'Types specialized'), 
                 
                 }
     _defaults = {

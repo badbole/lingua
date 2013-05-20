@@ -147,7 +147,7 @@
 					<field name="language_id" />
 					<!-- field name="employee_id" on_change="onchange_employee_id(employee_id)" 
 						domain="[('language_ids','=',language_id)]" /> -->
-
+                    <field name="translator_ids" />
 					<field name="finish_due" />
 					<field name="product_id" readonly="1" />
 					<field name="state" readonly="1" />
@@ -184,16 +184,19 @@
 							<field name="language_id" readonly="1"/>
 							<!-- field name="employee_id" on_change="onchange_employee_id(employee_id)" 
 								/> -->
-							<field name="lectoring" />
+							<field name="lectoring"  />
 
 						</group>
 						<notebook colspan="4">
 							<page string="Assigned translators">
-								<field name="translator_ids" nolabel="1" on_change="onchange_employee_id(translator_ids)" />
+								<field name="translator_ids" nolabel="1" on_change="onchange_employee_id(translator_ids)" 
+								domain="[('translate_ids', '=', language_id)]" />
+								<!-- domain="['&',('translate_ids', 'in', language_origin), ('translate_ids', 'in', language_id ]" /-->
 							</page>
 							<page string="Assigned lectors" 
                                     attrs="{'invisible': [('lectoring', '==', False)]}">
-								<field name="lector_ids" nolabel="1" on_change="onchange_employee_id(lector_ids)"/>
+								<field name="lector_ids" nolabel="1" on_change="onchange_employee_id(lector_ids)"
+								    domain="[('lector_id', '=',language_id)]"/>
 							</page>
 							<page string="Time evidention" col="4">
 								<group>

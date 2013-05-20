@@ -35,13 +35,29 @@ class lingua_price(osv.osv):
     _description = "Prices forming"
     
     _columns = {
-                'name':fields.char('Price', size=64),
-                'parent_id':fields.many2one('lingua.price','Parent'),
+                'name':fields.char('Price name', size=64),
+                'parent_id':fields.many2one('lingua.price','Price base', 'Base price used for calculating actual price'),
                 'child_ids':fields.one2many('lingua.price','parent_id', string="Child product price"),
-                'price':fields.float('Price', digits_compute=dp.get_precision('Product Price'), help="Base price for main product"),
+                'price':fields.float('Price', digits_compute=dp.get_precision('Product Price'), help="Price of product"),
                 'discount_name':fields.char('Discount name', size=128),
-                'discount':fields.integer('Discount %'),
+                'discount':fields.float('Discount %' ,digits_compute=dp.get_precision('Product Price'), help="Percentage as number (20)% (not decimal 0,2)!"),
                 
-                }
+                                }
     
-    
+    def digitron(self, cr, uid, id, origin, parent=None, discount=None, price=None, context=None):
+        if not parent: return True
+        base=self.pool.get('lingua.price').browse(cr, uid, parent).price
+        
+        res={}
+        if origin =='price':
+            if (base*(100-discount)/100) == price:
+                return True
+            else :
+                res['discount'] = 100-(price*100/base)
+        elif origin == 'discount':
+            if 100-(price*100/base) == discount:
+                return True
+            else : 
+                res['price'] = base*(100-discount)/100
+        
+        return self.pool.get('lingua.price').write(cr, uid, id, res)

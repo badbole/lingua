@@ -499,5 +499,5 @@ class lingua_translation_type(osv.Model):
     _columns = {
                 'name':fields.char('Type', size=128),
                 'evidention_ids':fields.one2many('lingua.evidencija', 'type_id', 'Evidentions'),
-                #'employee_ids':fields.many2many('lingua.evidencija', 'lingua_evidencija_type_rel', 'lingua_translation_type_id', 'lingua_evidencija_id', 'Evidentions'),
+                'employee_ids':fields.many2many('hr.employee', 'lingua_translation_type_hr_employee_rel', 'lingua_translation_type_id', 'hr_employee_id', 'Specialized translators'),
                 }
