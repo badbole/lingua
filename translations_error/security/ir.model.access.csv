@@ -1,0 +1,4 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+"access_translation_error_manager","translation_error_manager","model_translation_error","translations.group_translations_manager",1,1,1,0
+"access_translation_error_office","translation_error_office","model_translation_error","translations.group_translations_office",1,1,0,0
+"access_translation_error_translator","translation_error_translator","model_translation_error","translations.group_translations_translator",1,0,0,0

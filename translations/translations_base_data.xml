@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
-    <data>
-    <!-- BASIC MENU ITEMS -->
-    <!--  -->
-       <menuitem name="Translation" id="menu_translation" sequence="10" />
-       <menuitem name="Translation" id="translation_overview" parent="menu_translation" />
-       <menuitem name="Setup" id="translation_setup" parent="menu_translation" sequence="100" />
-    
-    
-    </data>
+	<data>
+		<!-- BASIC MENU ITEMS -->
+		<!-- -->
+		<menuitem name="Translation" id="menu_translation" sequence="10"
+			groups="group_translations_manager,group_translations_office,group_translations_translator,base.group_user" />
+		<menuitem name="Translation" id="translation_overview"
+			parent="menu_translation" />
+		<menuitem name="Setup" id="translation_setup" parent="menu_translation"
+			sequence="100" groups="group_translations_manager" />
+	</data>
 </openerp>

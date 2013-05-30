@@ -56,12 +56,15 @@ Summary:
                 ],
     
     'update_xml': [
+                   'security/translations_security.xml',
                    'translations_base_data.xml',
                    'languages_view.xml',
                    'evidention_view.xml',
                    'translation_sequence.xml',
+                   
+                   'security/ir.model.access.csv',
                    ],
-    "active": False,
+    "active": True,
     "installable": True,
 }
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -59,7 +59,7 @@ class translation_error(osv.Model):
                 raise osv.except_osv(_('Error!'), _('No related documet task found!'\
                                                     '\nIt is not possible to validate error if it is not related to some document or task!'))
             name = self.pool.get('ir.sequence').get(cr,uid,'translation_error')
-            self.write(cr, uid, error.id, {'name':name})
+            self.write(cr, uid, error.id, {'name':name,'state':'confirmed'})
             self.action_error_validate_send_note(cr, uid, ids, error)
             
         return True

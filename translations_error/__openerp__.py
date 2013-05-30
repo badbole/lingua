@@ -55,7 +55,8 @@ Summary:
                 ],
     
     'update_xml': [
-                   'error_view.xml'
+                   'error_view.xml',
+                   'security/ir.model.access.csv',
                    ],
     "active": False,
     "installable": True,

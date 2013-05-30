@@ -55,6 +55,7 @@ of your employees    -
                    'hr_employee_view.xml',
                    'language_view.xml',
                    'hr_language_data.xml',
+                   'security/ir.model.access.csv',
                    ],
     "active": False,
     "installable": True,
