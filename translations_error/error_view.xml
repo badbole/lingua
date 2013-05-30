@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data noupdate="1">
+        <record id="sequence_type_translation_error" model="ir.sequence.type">
+            <field name="name">Translation Error</field>
+            <field name="code">translation_error</field>
+        </record>
+        <record id="sequence_translation_error" model="ir.sequence">
+            <field name="name">Translation Error</field>
+            <field name="code">translation_error</field>
+            <field name="prefix">Err-%(y)s-</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+    <data noupdate="0">
+    <menuitem name="Error" id="translation_error" parent="translations.menu_translation" />
+    <record id="translation_error_tree_view" model="ir.ui.view">
+            <field name="name">"translation_error_tree_view"</field>
+            <field name="model">translation.error</field>
+            <field name="arch" type="xml">
+                <tree string="Error Evidention">
+                    <field name="name" />
+                    <field name="reported_by" />
+                    <field name="reported_date" />
+                    <field name="description" />
+                    <field name="task_ids" />
+
+                </tree>
+            </field>
+        </record>
+
+        <record id="translation_error_form_view" model="ir.ui.view">
+            <field name="name">translation_error_form_view</field>
+            <field name="model">translation.error</field>
+            <field name="arch" type="xml">
+                <form string="Error Evidention" version="7.0">
+                    <header>
+                            <button string="Validate" name="action_error_validate" type="object" states="draft" class="oe_highlight"/>
+                            <field name="state" widget="statusbar" />
+                        </header>
+                    <sheet>
+                        
+                        <h1>
+                            <label string="Error"/>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                        <group>
+                            
+                            <field name="reported_by" />
+                            <field name="reported_date" />
+                            <field name="description" />
+                            <field name="task_ids" />
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"
+                            groups="base.group_user" />
+                        <field name="message_ids" colspan="4" widget="mail_thread" />
+                    </div>
+
+                </form>
+            </field>
+        </record>
+        <record id='translation_error_evidention_action' model='ir.actions.act_window'>
+            <field name="name">Error evidention</field>
+            <field name="res_model">translation.error</field>
+            <field name="view_mode">form,tree</field>
+        </record>
+        <menuitem action="translation_error_evidention_action" parent="translation_error"
+            id="translation_errors_evidention_menu" sequence="30" />
+        
+    </data>
+</openerp>

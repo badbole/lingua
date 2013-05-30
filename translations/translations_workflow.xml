@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+        <record id="wkf_translation" model="workflow">
+            <field name="name">translation.evidention.basic</field>
+            <field name="osv">translation.evidention</field>
+            <field name="on_create">True</field>
+        </record>
+        <!-- Workflow Evidencija  -->
+        <record id="act_translation_draft" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_translation"/>
+            <field name="flow_start">True</field>
+            <field name="name">draft</field>
+        </record>
+        <record id="act_translation_finish" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_translation"/>
+            <field name="flow_stop">True</field>
+            <field name="name">finish</field>
+            <field name="kind">stopall</field>
+        </record>
+        <record id="act_translation_open" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_translation"/>
+            <field name="name">open</field>
+            <field name="kind">function</field>
+            <field name="action">action_recive_evidention()
+                                action_recive_evidention_lines()
+                                </field>
+        </record>
+        <record id="act_translation_proces" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_translation"/>
+            <field name="name">process</field>
+            <field name="kind">dummy</field>
+        </record>
+        <record id="act_translation_cancel" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_translation"/>
+            <field name="flow_stop">True</field>
+            <field name="name">cancel</field>
+            <field name="kind">dummy</field>
+        </record>
+        <!--  Transitions Evidencija -->
+        <record id="trans_draft_2_open" model="workflow.transition">
+            <field name="act_from" ref="act_translation_draft"/>
+            <field name="act_to" ref="act_translation_open"/>
+            <field name="signal">recive_translation</field>
+    
+        </record>
+        <record id="trans_open_2_process" model="workflow.transition">
+            <field name="act_from" ref="act_translation_open"/>
+            <field name="act_to" ref="act_translation_proces"/>
+        </record>
+        <record id="trans_draft_2_process" model="workflow.transition">
+            <field name="act_from" ref="act_translation_draft"/>
+            <field name="act_to" ref="act_translation_proces"/>
+        </record>
+        <record id="trans_process_2_finish" model="workflow.transition">
+            <field name="act_from" ref="act_translation_proces"/>
+            <field name="act_to" ref="act_translation_finish"/>
+        </record>
+        
+        
+        
+        
+        
+        <!-- Workflow EVIDENCIJA LINE -->
+        <record id="wkf_translation_line" model="workflow">
+            <field name="name">translation.evidention.line</field>
+            <field name="osv">translation.evidention.line</field>
+            <field name="on_create">True</field>
+        </record>
+        <!--  
+        <record id="act_translation_line_draft" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_translation_line"/>
+            <field name="flow_start">True</field>
+            <field name="name">draft</field>
+            <field name="kind">dummy</field>
+        </record>
+        <record id="act_translation_line_assign" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_translation_line"/>
+            <field name="name">assign</field>
+            <field name="kind">dummy</field>
+        </record>
+        <record id="act_translation_line_translate" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_translation_line"/>
+            <field name="name">translate</field>
+            <field name="kind">dummy</field>
+        </record>
+        <record id="act_translation_line_lecture" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_translation_line"/>
+            <field name="name">lecture</field>
+            <field name="kind">dummy</field>
+        </record>
+        <record id="act_translation_line_finish" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_translation_line"/>
+            <field name="flow_stop">True</field>
+            <field name="name">finish</field>
+            <field name="kind">dummy</field>
+        </record>
+        <record id="act_translation_line_pause" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_translation_line"/>
+            <field name="name">pause</field>
+            <field name="kind">dummy</field>
+        </record>
+        <record id="act_translation_line_cancel" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_translation_line"/>
+            <field name="flow_stop">True</field>
+            <field name="name">cancel</field>
+            <field name="kind">dummy</field>
+        </record>
+        -->
+        <!-- Evid LINE TRANSITIONS
+        <record id="line_trans_draft_2_assign" model="workflow.transition">
+            <field name="act_from" ref="act_translation_line_draft"/>
+            <field name="act_to" ref="act_translation_line_assign"/>
+            <field name="condition">('employee_id','!=','None')</field>
+        </record>
+        <record id="line_trans_assign_2_translate" model="workflow.transition">
+            <field name="act_from" ref="act_translation_line_assign"/>
+            <field name="act_to" ref="act_translation_line_translate"/>
+        </record>
+        <record id="line_trans_translate_2_lecture" model="workflow.transition">
+            <field name="act_from" ref="act_translation_line_translate"/>
+            <field name="act_to" ref="act_translation_line_lecture"/>
+            <field name="condition">True</field>
+        </record>
+        <record id="line_trans_translate_2_finish" model="workflow.transition">
+            <field name="act_from" ref="act_translation_line_translate"/>
+            <field name="act_to" ref="act_translation_line_finish"/>
+        </record>
+        <record id="line_trans_lecture_2_finish" model="workflow.transition">
+            <field name="act_from" ref="act_translation_line_lecture"/>
+            <field name="act_to" ref="act_translation_line_finish"/>
+        </record>
+         -->
+    </data>
+</openerp>

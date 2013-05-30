@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+		<!-- Languages view inherit-->
+
+		<record id="hr_language_form_view_inherit" model="ir.ui.view">
+			<field name="name">hr_language_form_view_inherit</field>
+			<field name="model">hr.language</field>
+			<field name="inherit_id" ref="hr_languages.hr_language_form_view" />
+			<field name="arch" type="xml">
+				
+				<notebook position="before">
+					<group string="Grammar">
+						<field name="trans_from" />
+						<field name="trans_to" />
+					</group>
+				</notebook>
+				 
+				<field name="speak" position="before">
+					<field name="lecture" />
+					<field name="translate" />
+					
+				</field>
+			</field>
+		</record>
+		
+		<record id="hr_language_competence_tree_view_inherit" model="ir.ui.view">
+            <field name="name">hr_language_competence_tree_view_inherit</field>
+            <field name="model">hr.language.competence</field>
+            <field name="inherit_id" ref="hr_languages.hr_language_competence_tree_view" />
+            <field name="arch" type="xml">
+                <field name="speak" position="before">
+                    <field name="lecture" />
+                    <field name="translate" />
+                </field>
+               </field>
+               </record>
+              <record id="hr_language_competence_form_view_inherit" model="ir.ui.view">
+            <field name="name">hr_language_competence_form_view_inherit</field>
+            <field name="model">hr.language.competence</field>
+            <field name="inherit_id" ref="hr_languages.hr_language_competence_form_view" />
+            <field name="arch" type="xml">
+                <field name="write" position="after">
+                    <newline/>
+                    <field name="translate" />
+                    <field name="lecture" />
+                </field>
+               </field>
+               </record> 
+               
+              <!-- Language competence NEW view -->
+        <record id="translation_competence_tree_view" model="ir.ui.view">
+            <field name="name">"translation_competence_tree_view"</field>
+            <field name="model">hr.language.competence</field>
+            <field name="priority" eval="20" />
+            <field name="arch" type="xml">
+                <tree string="Language" editable="bottom">
+                    <field name="employee_id" readonly="1" />
+                    <field name="language_id" readonly="1" />
+                    <field name="translate" />
+                    <field name="lecture" />
+                    <field name="synchro_trans" />
+                </tree>
+            </field>
+        </record>
+        <record id="translation_competence_form_view" model="ir.ui.view">
+            <field name="name">translation_competence_form_view</field>
+            <field name="model">hr.language.competence</field>
+            <field name="priority" eval="20" />
+            <field name="arch" type="xml">
+                <form string="Language competence" version="7.0">
+                    <sheet>
+                        <group>
+                            <field name="name" />
+                            <field name="employee_id" />
+                            <field name="language_id" />
+                        </group>
+                        <group colspan="4" col="6">
+                            <field name="translate" />
+                            <field name="lecture" />
+                            <field name="synchro_trans" />
+                        </group>
+                        <group>
+                            <field name="note" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="translation_competence_filter" model="ir.ui.view">
+            <field name="name">hr_translation_competence_filter</field>
+            <field name="model">hr.language.competence</field>
+            <field name="arch" type="xml">
+                <search string="Translation competence search">
+                    <field name="name" filter_domain="['|','|',('name','ilike',self),('employee_id','ilike',self),('language_id','=',self)]" />
+                    <!-- Filteri -->
+                    <filter name="state" string="Not started" domain="[('state','=','asigned')]" />
+                    <filter name="state" string="In translation" domain="[('state','=','translation')]" />
+                    <filter name="state" string="Lectoring" domain="[('state','=','lectoring')]" />
+                    <filter name="state" string="Finished" domain="[('state','=','finished')]" />
+                    <!-- GROUPING -->
+                    <group expand="0" string="Group By...">
+                        <filter string="Language" domain="[]"
+                            context="{'group_by' : 'language_id'}" />
+                        <filter string="Translator" context="{'group_by': 'employee_id'}" />
+                        <separator />
+                        <!-- <filter string="Company" context="{'group_by': 'partner_id'}" 
+                            /> -->
+                        <filter string="Status" context="{'group_by': 'state'}" />
+                    </group>
+
+                </search>
+            </field>
+        </record>
+
+
+        <record id='translation_competence_action_menu' model='ir.actions.act_window'>
+            <field name="name">Language competencies</field>
+            <field name="res_model">hr.language.competence</field>
+            <field name="view_mode">tree,form</field>
+            <!-- 
+            <field name="view_id" ref="translation_competence_tree_view" />
+             -->
+        </record>
+        <menuitem action="translation_competence_action_menu" parent="translation_setup"
+            id="translations_competence_menu" />
+               
+	</data>
+</openerp>

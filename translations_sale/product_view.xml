@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+		<!-- Translation PRICE -->
+		<record id="translation_price_tree_view" model="ir.ui.view">
+			<field name="name">"translation_price_tree_view"</field>
+			<field name="model">translation.price</field>
+			<field name="arch" type="xml">
+				<tree string="Prices">
+					<field name="name" />
+					<field name="discount" />
+					<field name="price" />
+				</tree>
+			</field>
+		</record>
+		<record id="translation_price_form_view" model="ir.ui.view">
+			<field name="name">"translation_price_form_view"</field>
+			<field name="model">translation.price</field>
+			<field name="arch" type="xml">
+				<form string="Prices" version="7.0">
+					<sheet>
+						<h1>
+							<field name="name" />
+						</h1>
+						<group>
+							<field name="parent_id" />
+							<field name="price" on_change="digitron('price', parent_id, discount, price)" />
+
+							<newline />
+							<field name="child_ids" readonly="1"
+								attrs="{'invisible': [('parent_id', '!=', False)]}" />
+							<field name="discount_name" attrs="{'invisible': [('parent_id', '==', False)]}" />
+							<field name="discount"
+								on_change="digitron('discount', parent_id, discount, price)"
+								attrs="{'invisible': [('parent_id', '==', False)]}" />
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		<record model='ir.actions.act_window' id='translation_price_menu_action'>
+			<field name="name">Price setup</field>
+			<field name="res_model">translation.price</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<menuitem action="translation_price_menu_action" parent="translations.translation_setup"
+			id="translation_price_menu" />
+
+		<!-- Product SALE -->
+		
+		<record id="tranlsation_sale_product_form_view" model="ir.ui.view">
+			<field name="name">tranlsation_sale_product_form_view</field>
+			<field name="model">translation.product</field>
+			<field name="arch" type="xml">
+				<form string="Translation product" version="7.0">
+					<group>
+						<field name="evidention_id" readonly="1" />
+						<field name="document_id" readonly="1" />
+						<field name="task_id" readonly="1" />
+
+					</group>
+					<group>
+						<field name="name" />
+						<field name="description" />
+						<field name="price_id" />
+						<field name="units" />
+						<field name="discount" />
+					</group>
+				</form>
+			</field>
+		</record>
+		<record id="tranlsation_sale_product_tree_view" model="ir.ui.view">
+			<field name="name">tranlsation_sale_product_tree_view</field>
+			<field name="model">translation.product</field>
+			<field name="arch" type="xml">
+				<tree string="Translation product">
+                    <field name="partner_id" />
+                    <field name="evidention_id" />
+					<field name="name" />
+					<field name="description" />
+					<field name="price_id" />
+					<field name="units" />
+					<field name="discount" />
+					<field name="price_amount" />
+                    <field name="product_type" />
+                    
+				</tree>
+			</field>
+		</record>
+		<record id="translation_sale_product_filter" model="ir.ui.view">
+		  <field name="name">translation_sale_product_filter</field>
+		  <field name="model">translation.product</field>
+		  <field name="arch" type="xml">
+		      <search string="Search">
+		          <field name="name" filter_domain="['|','|',('name','ilike',self),('description','ilike',self)]" />
+		          <group expand="0" string="Group By...">
+                        <filter string="Partner" domain="[]" context="{'group_by' : 'partner_id'}" />
+                        <filter string="Evidention" context="{'group_by': 'evidention_id'}" />
+                        <filter string="Type" context="{'group_by': 'price_id'}" />
+                    </group>
+		     
+		      </search>
+		  </field>
+		</record>	
+		
+		
+		
+		<record id="translation_sale_product_action_menu" model="ir.actions.act_window">
+			<field name="name">Translated products</field>
+			<field name="res_model">translation.product</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<menuitem name="Sales" id="translation_sales" parent="translations.menu_translation" />
+
+		<menuitem action="translation_sale_product_action_menu"
+			parent="translation_sales" id="translation_sale_product_menu" />
+
+
+		<!-- INHERITS -->
+		<record id="translation_evidention_form_view_inherit" model="ir.ui.view">
+			<field name="name">translation_evidention_form_view_inherit</field>
+			<field name="model">translation.evidention</field>
+			<field name="inherit_id" ref="translations.translation_evidention_form_view" />
+			<field name="arch" type="xml">
+				<notebook position="inside">
+					<page string="Price">
+					       <div class="oe_button_box oe_right">
+					       <button string="Generate products" name="action_product_preview_generate" type="object" />
+					       <button string="Generate Sale Order" name="action_sale_order_generate" type="object" />
+                        </div>
+						<group string="Price ">
+							<field name="product_type" />
+							<field name="price_id" />
+							
+						</group>
+						<field name="product_id" colspan="4" nolabel="1" />
+					</page>
+				</notebook>
+			</field>
+		</record>
+		<record id="translation_document_form_view_inherit" model="ir.ui.view">
+			<field name="name">translation_document_orm_view_inherit</field>
+			<field name="model">translation.document</field>
+			<field name="inherit_id" ref="translations.translation_document_form_view" />
+			<field name="arch" type="xml">
+				<field name="date_due" position="after">
+					<field name="price_id" />
+				</field>
+			</field>
+		</record>
+		<record id="translation_document_task_form_view_inherit" model="ir.ui.view">
+			<field name="name">translation_document_task_form_view_inherit
+			</field>
+			<field name="model">translation.document.task</field>
+			<field name="inherit_id" ref="translations.translation_document_task_form_view" />
+			<field name="arch" type="xml">
+				<notebook position="inside">
+					<page string="Price">
+						<label string="Price " />
+						<field name="price_id" class="oe_inline" />
+					</page>
+				</notebook>
+			</field>
+		</record>
+
+
+
+	</data>
+</openerp>

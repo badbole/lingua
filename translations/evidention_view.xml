@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+		<!-- Translation TYPES -->
+		<record id="translation_type_tree_view" model="ir.ui.view">
+			<field name="name">"translation_type_tree_view"</field>
+			<field name="model">translation.type</field>
+			<field name="arch" type="xml">
+				<tree string="Type">
+					<field name="name" />
+					<field name="description" />
+				</tree>
+			</field>
+		</record>
+		<record id="translation_type_form_view" model="ir.ui.view">
+			<field name="name">"translation_type_form_view"</field>
+			<field name="model">translation.type</field>
+			<field name="arch" type="xml">
+				<form string="Type">
+					<field name="name" />
+					<field name="description" />
+				</form>
+			</field>
+		</record>
+		<record id='translation_type_menu_action' model='ir.actions.act_window'>
+			<field name="name">Translation types</field>
+			<field name="res_model">translation.type</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+		<menuitem action="translation_type_menu_action" parent="translation_setup"
+			id="translation_type_menu" />
+
+
+
+		<!-- Evidencija prijevoda -->
+		<record id="translation_evidention_tree_view" model="ir.ui.view">
+			<field name="name">"translation_evidention_tree_view"</field>
+			<field name="model">translation.evidention</field>
+			<field name="arch" type="xml">
+				<tree string="Evidention"
+					colors="black:state =='draft';
+				            blue:state in ('open','process');
+                            green:state == 'finished';
+                            gray:state =='delivered'
+                            red:state == 'canceled'">
+					<field name="sequence" />
+					<field name="name" />
+					<field name="partner_id" />
+					<field name="date_recived" />
+					<field name="date_due" />
+					<!-- field name="time_remain" /> -->
+					<field name="total_cards" />
+					<field name="state" />
+
+				</tree>
+			</field>
+		</record>
+
+		<record id="translation_evidention_form_view" model="ir.ui.view">
+			<field name="name">translation_evidention_form_view</field>
+			<field name="model">translation.evidention</field>
+			<field name="arch" type="xml">
+				<form string="Evidention" version="7.0">
+					<header>
+						<field name="state" widget="statusbar" states="draft,open,process,finish" />
+					</header>
+					<sheet>
+						<h1>
+							<label string="Evidention " />
+							<field name="sequence" class="oe_inline" readonly="1" />
+						</h1>
+						<div class="oe_button_box oe_right">
+							<button string="Recive" name="action_evidention_recive"	type="object" class="oe_highlight" />
+						</div>
+						<group colspan="4">
+							<field name="name" />
+							<field name="partner_id" />
+							<field name="date_recived"
+								help="Leave blank to autofill with current date/time on save" />
+							<field name="date_due" />
+						</group>
+						<notebook colspan="4">
+							<page string="Documents">
+								<field name="document_ids" colspan="4" nolabel="1" />
+							</page>
+							<page string="Note">
+								<field name="note" colspan="4" />
+							</page>
+						</notebook>
+					</sheet>
+					<div class="oe_chatter">
+						<field name="message_follower_ids" widget="mail_followers"
+							groups="base.group_user" />
+						<field name="message_ids" colspan="4" widget="mail_thread" />
+					</div>
+				</form>
+			</field>
+		</record>
+		<!-- <record id="translation_evidention_filter" model="ir.ui.view"> <field 
+			name="name">translation_evidention_filter</field> <field name="model">translation.evidention</field> 
+			<field name="arch" type="xml"> <search string="Search translation evidention"> 
+			<field name="name" filter_domain="['|','|',('name','ilike',self),('parent_id','ilike',self),('ref','=',self)]" 
+			/> <filter name="state" string="Finished" domain="[('state','=','finished')]" 
+			/> <filter name="state" string="Processing" domain="[('state','=','process')]" 
+			/> <group expand="0" string="Group By..."> <separator /> <filter string="Company" 
+			context="{'group_by':'partner_id'}" /> <filter string="Status" context="{'group_by': 
+			'state'}" /> </group> </search> </field> </record> -->
+		<record id='translation_evidention_menu_action' model='ir.actions.act_window'>
+			<field name="name">Translations Evidention</field>
+			<field name="res_model">translation.evidention</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+		<menuitem action="translation_evidention_menu_action" parent="translation_overview"
+			id="translation_evidention_menu" sequence="10" />
+
+		<!-- Translated DOCUMENT -->
+		<record id="translation_document_tree_view" model="ir.ui.view">
+			<field name="name">translation_document_tree_view</field>
+			<field name="model">translation.document</field>
+			<field name="arch" type="xml">
+				<tree string="Document">
+					<field name="partner_id" />
+					<field name="sequence" />
+					<field name="name" />
+					<field name="language_id" />
+					<field name="task_ids" />
+				</tree>
+			</field>
+		</record>
+		<record id="translation_document_form_view" model="ir.ui.view">
+			<field name="name">translation_document_form_view</field>
+			<field name="model">translation.document</field>
+			<field name="arch" type="xml">
+				<form string="Document" version="7.0">
+					<header>
+						<field name="state" widget="statusbar" states="draft,open,proces,finish" />
+					</header>
+					<sheet>
+						<h1>
+							<label string="Document" />
+							<field name="sequence" readonly="1" class="oe_inline" />
+						</h1>
+						<group>
+							<field name="name" />
+							<field name="language_id" />
+							<field name="type_id" />
+							<field name="cards_estm" />
+							<field name="date_due" />
+							<field name="partner_id" invisible="1" />
+						</group>
+						<field name="task_ids" />
+					</sheet>
+					<div class="oe_chatter">
+						<field name="message_follower_ids" widget="mail_followers"
+							groups="base.group_user" />
+						<field name="message_ids" colspan="4" widget="mail_thread" />
+					</div>
+				</form>
+			</field>
+		</record>
+		<record id='translation_document_menu_action' model='ir.actions.act_window'>
+			<field name="name">Documents</field>
+			<field name="res_model">translation.document</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+		<menuitem action="translation_document_menu_action" parent="translation_overview"
+			id="translation_document_menu" sequence="20" />
+
+
+		<!-- Document TASK -->
+		<record id="translation_document_task_tree_view" model="ir.ui.view">
+			<field name="name">"translation_document_task_tree_view"</field>
+			<field name="model">translation.document.task</field>
+			<field name="arch" type="xml">
+				<tree string="Translation task">
+					<!-- editable="bottom" -->
+					<field name="name" readonly="1" />
+					<field name="document_id" invisible="1" />
+					<field name="partner_id" invisible="1" />
+					<field name="language_id" />
+					<field name="lectoring" />
+					<field name="translate_ids" widget="many2many_tags" />
+					<field name="state" readonly="1" />
+				</tree>
+			</field>
+		</record>
+		<record id="translation_document_task_form_view" model="ir.ui.view">
+			<field name="name">translation_document_task_form_view</field>
+			<field name="model">translation.document.task</field>
+			<field name="arch" type="xml">
+				<form string="Evidention line" version="7.0">
+					<header>
+						<field name="state" widget="statusbar" statusbar_visible="draft,assign,finish"
+							statusbar_colors='{"trans_p":"green","lect_p":"green","finish":"red","cancel":"red"}' />
+					</header>
+					<sheet>
+						<h1>
+							<label string="Translation task " />
+							<field name="name" readonly="1" class="oe_inline" />
+						</h1>
+						<div class="oe_button_box oe_right">
+							<button string="Start translation" name="button_translate_start"
+								type="object" states="draft,assign" class="oe_highlight" />
+							<button string="Start lecturing" name="button_lecture_start"
+								type="object" states="lect_w" />
+							<button string="Finish" name="button_task_finish" type="object"
+								states="trans,trans_p,lect,lect_p" />
+							<button string="Pause" name="button_pause" type="object"
+								states="lect,trans" />
+							<button string="Resume" name="button_resume" type="object"
+								states="trans_p,lect_p" class="oe_highlight" />
+
+						</div>
+						<group>
+							<!-- field name="language_origin" inivisble="1" /> -->
+							<field name="document_id" readonly="1" />
+							<field name="language_id" />
+							<field name="lectoring" />
+						</group>
+						<notebook colspan="4">
+							<page string="Translators">
+								<field name="translate_ids" nolabel="1">
+									<tree string="translators">
+										<field name="name" />
+										<field name="competence" />
+
+									</tree>
+								</field>
+							</page>
+							<page string="Log" colspan="4">
+								<group string="Translation" colspan="2">
+									<field name="trans_start" />
+									<field name="trans_finish" />
+								</group>
+								<group string="Lectoring" colspan="2">
+									<field name="lect_start" />
+									<field name="lect_finish" />
+								</group>
+							</page>
+						</notebook>
+					</sheet>
+
+					<div class="oe_chatter">
+						<field name="message_follower_ids" widget="mail_followers"
+							groups="base.group_user" />
+						<field name="message_ids" colspan="4" widget="mail_thread" />
+					</div>
+
+				</form>
+			</field>
+		</record>
+
+		<record id="translation_document_task_filter" model="ir.ui.view">
+			<field name="name">translation_document_task_filter</field>
+			<field name="model">translation.document.task</field>
+			<field name="arch" type="xml">
+				<search string="Search translation task">
+
+					<field name="name"
+						filter_domain="['|',('name','ilike',self),('partner_id','ilike',self)]" />
+
+					<filter name="state" string="Not started" domain="[('state','=','asigned')]" />
+					<filter name="state" string="In translation" domain="[('state','=','translation')]" />
+					<filter name="state" string="Lectoring" domain="[('state','=','lectoring')]" />
+					<filter name="state" string="Finished" domain="[('state','=','finished')]" />
+
+					<group expand="0" string="Group By...">
+						<filter string="Language" domain="[]"
+							context="{'group_by' : 'language_id'}" />
+						<filter string="Translator" context="{'group_by': 'translate_ids'}" />
+						<separator />
+						<filter string="Company" context="{'group_by': 'partner_id'}" />
+						<filter string="Status" context="{'group_by': 'state'}" />
+					</group>
+				</search>
+			</field>
+		</record>
+
+		<record id='translation_document_task_menu_action' model='ir.actions.act_window'>
+			<field name="name">Translation tasks</field>
+			<field name="res_model">translation.document.task</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain">[('name','!=', False)]</field>
+		</record>
+
+		<menuitem action="translation_document_task_menu_action"
+			parent="translation_overview" id="translation_document_task_menu"
+			sequence="20" />
+
+
+
+	</data>
+</openerp>
+ 

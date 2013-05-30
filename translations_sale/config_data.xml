@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data >
+        <record id="translation_text_card_dp" model="decimal.precision" >
+            <field name="name">Translated text card</field>
+            <field name="digits">1</field>
+        </record>
+        <record id="translation_kartica_1" model="translation.price"  >
+            <field name="name">Translated card</field>
+            <field name="price">150.00</field>
+        </record>
+        <record id="translation_kartica_1_1" model="translation.price"  >
+            <field name="name">Card - 50% -simple</field>
+            <field name="price">75.00</field>
+            <field name="parent_id" ref="translation_kartica_1"/>
+            <field name="discount">50</field>
+            <field name="discount_name">Simplicity</field>
+        </record>
+        <record id="translation_kartica_1_2" model="translation.price"  >
+            <field name="name">Card - PRIORITY</field>
+            <field name="price">300.00</field>
+            <field name="parent_id" ref="translation_kartica_1"/>
+            <field name="discount">-100</field>
+            <field name="discount_name">Double for high priority</field>
+        </record>
+        <record id="translation_uom_category" model="product.uom.categ">
+            <field name="name">Text</field>
+        </record>
+        <record id="translation_uom_kartica" model="product.uom">
+            <field name="uom_type">reference</field>
+            <field name="name">card</field>
+            <field name="rounding">1.00</field>
+            <field name="factor">1</field>
+            <field name="category_id" ref="translation_uom_category" />
+        </record>
+    </data>
+</openerp>

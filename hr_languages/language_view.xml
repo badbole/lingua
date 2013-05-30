@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+		<!-- Languages view -->
+		<record id="hr_language_tree_view" model="ir.ui.view">
+			<field name="name">"hr_language_tree_view"</field>
+			<field name="model">hr.language</field>
+			<field name="arch" type="xml">
+				<tree string="Language">
+					<field name="name" />
+					<field name="iso_code1" />
+					<field name="iso_code2" />
+					<field name="iso_code3" />
+				
+				</tree>
+			</field>
+		</record>
+		<record id="hr_language_form_view" model="ir.ui.view">
+			<field name="name">hr_language_form_view</field>
+			<field name="model">hr.language</field>
+			<field name="arch" type="xml">
+				<form string="Language" version="7.0">
+					<sheet>
+						<h1>
+						      <label string="Language" />
+							<field name="name" class="oe_inline" />
+						</h1>
+						<group col="2" string="ISO 639-3 codes">
+							<field name="iso_code1" />
+							<field name="iso_code2" />
+							<field name="iso_code3" />
+						</group>
+						<notebook>
+						<page string="Employees">
+						<field name="competence_ids" >
+						      <tree string="Employee language competence">
+						            <field name="employee_id" />
+                                    <field name="speak" />
+                                    <field name="read" />
+                                    <field name="write" />
+						      </tree>
+						</field>
+						</page>
+						</notebook>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		<record id='hr_language_action' model='ir.actions.act_window'>
+			<field name="name">Languages</field>
+			<field name="res_model">hr.language</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<menuitem action="hr_language_action" parent="hr.menu_hr_configuration"
+			id="menu_hr_languages" />
+
+        <!-- Language competence  -->		
+		<record id="hr_language_competence_tree_view" model="ir.ui.view">
+			<field name="name">"hr_language_competence_tree_view"</field>
+			<field name="model">hr.language.competence</field>
+			<field name="arch" type="xml">
+				<tree string="Language" create="false" delete="false">
+				    <field name="name" invisible="1"/>
+					<field name="employee_id" />
+					<field name="language_id" />
+					<field name="speak" />
+					<field name="read" />
+					<field name="write" />
+					<field name="lang_avg" />
+				</tree>
+			</field>
+		</record>
+		<record id="hr_language_competence_form_view" model="ir.ui.view">
+			<field name="name">hr_language_competence_form_view</field>
+			<field name="model">hr.language.competence</field>
+			<field name="arch" type="xml">
+				<form string="Language competence" version="7.0" create="false" delete="false">
+					<sheet>
+						<group>
+							<field name="name" />
+							<field name="employee_id" />
+							<field name="language_id" />
+							<button string="TEST" type="object" name="latest_name_check"/>
+						</group>
+						<group colspan="4" col="6">
+						<field name="speak" />
+						<field name="read" />
+						<field name="write" />
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+        <record id='hr_language_competence_action' model='ir.actions.act_window'>
+            <field name="name">Language competencies</field>
+            <field name="res_model">hr.language.competence</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        
+        
+        
+        <menuitem action="hr_language_competence_action" parent="hr.menu_open_view_employee_list_my" id="menu_hr_languages_competence" />
+	</data>
+</openerp>

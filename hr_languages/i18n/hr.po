@@ -1,0 +1,166 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+#	* hr_languages
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 7.0-20130515-231043-DAJMI5-SMOP-TYPE\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-05-22 21:27+0000\n"
+"PO-Revision-Date: 2013-05-22 23:32+0100\n"
+"Last-Translator: Davor Bojkić <bole@dajmi5.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+
+#. module: hr_languages
+#: field:hr.language.competence,read:0
+msgid "Read"
+msgstr "Čitanje"
+
+#. module: hr_languages
+#: view:hr.employee:0
+#: field:hr.employee,language_competence:0
+#: view:hr.language.competence:0
+msgid "Language competence"
+msgstr "Znanje jezika"
+
+#. module: hr_languages
+#: model:ir.actions.act_window,name:hr_languages.hr_language_action
+#: model:ir.ui.menu,name:hr_languages.menu_hr_languages
+msgid "Languages"
+msgstr "Jezici"
+
+#. module: hr_languages
+#: field:hr.language,name:0
+msgid "Language name"
+msgstr "Naziv jezika"
+
+#. module: hr_languages
+#: view:hr.language:0
+msgid "Employee language competence"
+msgstr "Djelatnik - poznavanje jezika"
+
+#. module: hr_languages
+#: field:hr.language.competence,employee_id:0
+#: model:ir.model,name:hr_languages.model_hr_employee
+msgid "Employee"
+msgstr "Djelatnik"
+
+#. module: hr_languages
+#: field:hr.language,competence_ids:0
+msgid "Resources"
+msgstr "Resursi"
+
+#. module: hr_languages
+#: model:ir.actions.act_window,name:hr_languages.hr_language_competence_action
+#: model:ir.ui.menu,name:hr_languages.menu_hr_languages_competence
+msgid "Language competencies"
+msgstr "Poznavanje jezika"
+
+#. module: hr_languages
+#: selection:hr.language.competence,read:0
+#: selection:hr.language.competence,speak:0
+#: selection:hr.language.competence,write:0
+msgid "2 - Poor"
+msgstr "2 - Poor"
+
+#. module: hr_languages
+#: selection:hr.language.competence,read:0
+#: selection:hr.language.competence,speak:0
+#: selection:hr.language.competence,write:0
+msgid "1 - Bad"
+msgstr "1 - Loše"
+
+#. module: hr_languages
+#: model:ir.model,name:hr_languages.model_hr_language_competence
+msgid "Employee competence by language"
+msgstr "Poznavanje jezika po djelatniku"
+
+#. module: hr_languages
+#: field:hr.language,iso_code1:0
+msgid "ISO1"
+msgstr "ISO1"
+
+#. module: hr_languages
+#: field:hr.language,iso_code3:0
+msgid "ISO3"
+msgstr "ISO3"
+
+#. module: hr_languages
+#: field:hr.language,iso_code2:0
+msgid "ISO2"
+msgstr "ISO2"
+
+#. module: hr_languages
+#: view:hr.employee:0
+#: view:hr.language:0
+#: view:hr.language.competence:0
+#: field:hr.language.competence,language_id:0
+msgid "Language"
+msgstr "Jezik"
+
+#. module: hr_languages
+#: model:ir.model,name:hr_languages.model_hr_language
+msgid "Languages - employee related"
+msgstr "Jezici - povezano sa djelatnicima"
+
+#. module: hr_languages
+#: view:hr.language:0
+msgid "Employees"
+msgstr "Djelatnici"
+
+#. module: hr_languages
+#: selection:hr.language.competence,read:0
+#: selection:hr.language.competence,speak:0
+#: selection:hr.language.competence,write:0
+msgid "3 - Average"
+msgstr "3 - Srednje"
+
+#. module: hr_languages
+#: view:hr.language:0
+msgid "ISO 639-3 codes"
+msgstr "ISO 639-3 oznake"
+
+#. module: hr_languages
+#: field:hr.language.competence,name:0
+msgid "Employee competence"
+msgstr "Poznavanje jezika "
+
+#. module: hr_languages
+#: field:hr.language.competence,write:0
+msgid "Write"
+msgstr "Pisanje"
+
+#. module: hr_languages
+#: selection:hr.language.competence,read:0
+#: selection:hr.language.competence,speak:0
+#: selection:hr.language.competence,write:0
+msgid "4 - Good"
+msgstr "4 - Dobro"
+
+#. module: hr_languages
+#: view:hr.employee:0
+#: field:hr.employee,primary_lang:0
+msgid "Primary language"
+msgstr "Materinji jezik"
+
+#. module: hr_languages
+#: selection:hr.language.competence,read:0
+#: selection:hr.language.competence,speak:0
+#: selection:hr.language.competence,write:0
+msgid "5 - Excelent"
+msgstr "5 - Odlično"
+
+#. module: hr_languages
+#: field:hr.language.competence,lang_avg:0
+msgid "Average competence"
+msgstr "Prosječno poznavanje"
+
+#. module: hr_languages
+#: field:hr.language.competence,speak:0
+msgid "Speak"
+msgstr "Govor"
+

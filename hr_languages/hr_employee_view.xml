@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+		<!-- Employee - Lang add -->
+		<record id="hr_employee_form_inherit_language_view" model="ir.ui.view">
+			<field name="name">lingua.hr.employee.form.inherit.language.view
+			</field>
+			<field name="model">hr.employee</field>
+			<field name="inherit_id" ref="hr.view_employee_form" />
+			<field name="arch" type="xml">
+				<notebook position="inside">
+					<page string="Language">
+						<group colspan="4" cols="4">
+							<field name="primary_lang" string="Primary language"
+								on_change="onchange_primary_lang(primary_lang)" />
+							<field name="competence" />
+							<field name="competence_ids">
+								<tree string="Language competence"> 
+								    <field name="employee_id" invisible="1" /> 
+								    <field name="language_id" /> 
+								    <field name="lang_avg"/>
+								    <field name="speak" /> 
+								    <field name="read" /> 
+								    <field name="write" /> 
+								    
+								</tree> 
+								<form string="Language competence" col="2"> 
+									<field name="employee_id" invisible="1" /> 
+									<field name="language_id" /> 
+									<field name="speak" /> 
+									<field name="read" /> 
+									<field name="write" /> 
+								</form> 
+							</field>
+						</group>
+					</page>
+				</notebook>
+			</field>
+		</record>
+	</data>
+</openerp>

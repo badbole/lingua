@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data >
+        
+        <record model="hr.language" id="hr_language_eng">
+            <field name="name">English</field>
+            <field name="iso_code1">eng</field>
+            <field name="iso_code2">eng</field>
+            <field name="iso_code3">en</field>
+        </record>
+        <record model="hr.language" id="hr_language_fra">
+            <field name="name">French</field>
+            <field name="iso_code1">fre</field>
+            <field name="iso_code2">fre</field>
+            <field name="iso_code3">fr</field>
+        </record>
+        <record model="hr.language" id="hr_language_ger">
+            <field name="name">German</field>
+            <field name="iso_code1">ger</field>
+            <field name="iso_code2">deu</field>
+            <field name="iso_code3">de</field>
+        </record>
+        <record model="hr.language" id="hr_language_ita">
+            <field name="name">Italian</field>
+            <field name="iso_code1">ita</field>
+            <field name="iso_code2">ita</field>
+            <field name="iso_code3">it</field>
+        </record>
+        <record model="hr.language" id="hr_language_hrv">
+            <field name="name">Croatian</field>
+            <field name="iso_code1">hrv</field>
+            <field name="iso_code2">hrv</field>
+            <field name="iso_code3">hr</field>
+        </record>
+        
+    </data>
+</openerp>
