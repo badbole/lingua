@@ -90,9 +90,8 @@ class hr_language (osv.Model):
                 'iso_code1':fields.char('ISO1', size=3),
                 'iso_code2':fields.char('ISO2', size=3),
                 'iso_code3':fields.char('ISO3', size=2),
-                #'translator_ids':fields.many2many('hr.employee','lingua_language_translate_employee_rel','lingua_language_id','hr_employee_id','Translators'),
-                #'lector_ids':fields.many2many('hr.employee','lingua_language_lector_employee_rel','lingua_language_id','hr_employee_id')
-                'competence_ids':fields.one2many('hr.language.competence', 'language_id', 'Resources')
+                'competence_ids':fields.one2many('hr.language.competence', 'language_id', 'Resources'),
+                'employee_ids':fields.many2many('hr.employee','hr_employee_language_rel','hr_language_employee_ids','hr_employee_language_ids','Employees')
                 }
     
     

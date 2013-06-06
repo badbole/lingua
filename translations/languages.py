@@ -57,8 +57,13 @@ class hr_employee(osv.Model):
     _inherit = 'hr.employee'
     _columns = {
                 'translate_task_ids':fields.many2many('translation.document.task',
-                                                      'translate_task_employee_rel',
-                                                      'hr_employee_translate_taks_ids', 
+                                                      'translate_task_translate_employee_rel',
+                                                      'hr_employee_translate_task_ids', 
                                                       'translation_document_task_translate_ids',
-                                                      'Translated')
+                                                      'Translated'),
+                'lecture_task_ids':fields.many2many('translation.document.task',
+                                                    'translate_task_lecture_employee_rel',
+                                                    'hr_employee_lecture_task_ids', 
+                                                    'translation_document_task_lecture_ids',
+                                                    'Lectured' )
                 }

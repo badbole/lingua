@@ -32,6 +32,7 @@
 						</group>
 						<notebook>
 						<page string="Employees">
+						<field name="employee_ids" />
 						<field name="competence_ids" >
 						      <tree string="Employee language competence">
 						            <field name="employee_id" />
@@ -81,7 +82,7 @@
 							<field name="name" />
 							<field name="employee_id" />
 							<field name="language_id" />
-							<button string="TEST" type="object" name="latest_name_check"/>
+							<!-- button string="TEST" type="object" name="latest_name_check"/> -->
 						</group>
 						<group colspan="4" col="6">
 						<field name="speak" />

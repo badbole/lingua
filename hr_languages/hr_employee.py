@@ -49,15 +49,43 @@ class hr_employee(osv.osv):
             
         return res
     
+    def onchange_language_ids(self, cr, uid, ids, language_ids, context=None):
+  #      res = super(hr_employee, self).onchange_language_ids(cr, uid, ids, language_ids, context=None)
+        #return True
+        emp_obj = self.browse(cr, uid, ids[0])
+        comp_obj = self.pool.get('hr.language.competence')
+        values=[]
+        if len(emp_obj.competence_ids) == 0 :
+            lang_list = language_ids[0][2]
+            for l in lang_list:
+                vals = {
+                        'employee_id':emp_obj.id,
+                        'language_id':l,
+                        'speak':'5', 'read':'5', 'write':'5'
+                        }
+                values.append((0,0,vals))
+            emp_obj.write( {'competence_ids':values})
+            #comp_obj.create(cr, uid, vals)
+        else:
+            #provjeri pa dodja po potrebi
+            pass
+        return True    
+    
+    
     _columns = {
                 'primary_lang':fields.many2one('hr.language', 'Primary language'),
                 'competence':fields.function(_competence_name, type="char", size=128, method=True, string="Competence"),
-                'competence_ids':fields.one2many('hr.language.competence', 'employee_id', 'Language competence')
+                'competence_ids':fields.one2many('hr.language.competence', 'employee_id', 'Language competence'),
+                'language_ids':fields.many2many('hr.language','hr_employee_language_rel','hr_employee_language_ids','hr_language_employee_ids','Languages')
                 }
+    
+   
     
     def onchange_primary_lang(self, cr, uid, ids, primary_lang, context=None):
         if context == None: 
             Context={}
+            
+        langs = self.resolve_2many_commands(cr, uid,'language_ids', language_ids_langs,['language_id','employee_id'])
         return True
         res={}
         if primary_lang: 

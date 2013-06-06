@@ -70,17 +70,30 @@
 							<field name="sequence" class="oe_inline" readonly="1" />
 						</h1>
 						<div class="oe_button_box oe_right">
-							<button string="Recive" name="action_evidention_recive"	type="object" class="oe_highlight" />
+							<button string="Recive" name="action_evidention_recive"
+								type="object" class="oe_highlight" states="draft" />
+							<button name="return_action_to_open" type="object"
+								context="{'xml_id':'translation_document_task_menu_action'}"
+								string="Zadaci " help="show all translation task for this evidemtion" />
+
 						</div>
-						<group colspan="4">
-							<field name="name" />
-							<field name="partner_id" />
+						<!-- field name="name" /> -->
+						<h2>
+							<label string="Partner" />
+							<field name="partner_id" class="oe_inline" />
+						</h2>
+						<group colspan="4" col="4">
+
+
 							<field name="date_recived"
 								help="Leave blank to autofill with current date/time on save" />
 							<field name="date_due" />
 						</group>
 						<notebook colspan="4">
 							<page string="Documents">
+								<h3>
+									<label string="Documents in this evidention" />
+								</h3>
 								<field name="document_ids" colspan="4" nolabel="1" />
 							</page>
 							<page string="Note">
@@ -119,11 +132,13 @@
 			<field name="model">translation.document</field>
 			<field name="arch" type="xml">
 				<tree string="Document">
-					<field name="partner_id" />
 					<field name="sequence" />
+					<field name="partner_id" />
 					<field name="name" />
 					<field name="language_id" />
+					<field name="certified" />
 					<field name="task_ids" />
+					<field name="state" />
 				</tree>
 			</field>
 		</record>
@@ -133,7 +148,7 @@
 			<field name="arch" type="xml">
 				<form string="Document" version="7.0">
 					<header>
-						<field name="state" widget="statusbar" states="draft,open,proces,finish" />
+						<field name="state" widget="statusbar" states="draft,open,process,finish" />
 					</header>
 					<sheet>
 						<h1>
@@ -147,6 +162,8 @@
 							<field name="cards_estm" />
 							<field name="date_due" />
 							<field name="partner_id" invisible="1" />
+							<field name="merge_with" />
+							<field name="certified" />
 						</group>
 						<field name="task_ids" />
 					</sheet>
@@ -179,7 +196,7 @@
 					<field name="partner_id" invisible="1" />
 					<field name="language_id" />
 					<field name="lectoring" />
-					<field name="translate_ids" widget="many2many_tags" />
+					<field name="translate_ids" />
 					<field name="state" readonly="1" />
 				</tree>
 			</field>
@@ -190,6 +207,7 @@
 			<field name="arch" type="xml">
 				<form string="Evidention line" version="7.0">
 					<header>
+						
 						<field name="state" widget="statusbar" statusbar_visible="draft,assign,finish"
 							statusbar_colors='{"trans_p":"green","lect_p":"green","finish":"red","cancel":"red"}' />
 					</header>
@@ -204,7 +222,7 @@
 							<button string="Start lecturing" name="button_lecture_start"
 								type="object" states="lect_w" />
 							<button string="Finish" name="button_task_finish" type="object"
-								states="trans,trans_p,lect,lect_p" />
+								states="trans,lect" />
 							<button string="Pause" name="button_pause" type="object"
 								states="lect,trans" />
 							<button string="Resume" name="button_resume" type="object"
@@ -219,23 +237,52 @@
 						</group>
 						<notebook colspan="4">
 							<page string="Translators">
+								<h3>
+									<label string="Translation start : " />
+									<field name="trans_start" class="oe_inline" readonly="1" />
+									<label string=", finish : " />
+									<field name="trans_finish" class="oe_inline" readonly="1" />
+									<label string=", total translated cards :" />
+									<field name="trans_cards" class="oe_inline" />
+								</h3>
 								<field name="translate_ids" nolabel="1">
 									<tree string="translators">
 										<field name="name" />
 										<field name="competence" />
+										<field name="language_ids" />
 
 									</tree>
 								</field>
 							</page>
+							<page string="Lectors">
+								<h3>
+									<label string="Lectoring start : " />
+									<field name="lect_start" class="oe_inline" readonly="1" />
+									<label string=", finish : " class="oe_inline" />
+									<field name="lect_finish" class="oe_inline" readonly="1" />
+								</h3>
+								<field name="lecture_ids" nolabel="1">
+									<tree string="lectors">
+										<field name="name" />
+										<field name="competence" />
+										<field name="language_ids" />
+									</tree>
+								</field>
+							</page>
 							<page string="Log" colspan="4">
-								<group string="Translation" colspan="2">
-									<field name="trans_start" />
-									<field name="trans_finish" />
-								</group>
-								<group string="Lectoring" colspan="2">
-									<field name="lect_start" />
-									<field name="lect_finish" />
-								</group>
+
+								<field name="work_ids" readonly="1" nolabel="1" colspan="4">
+									<tree string="Work">
+										<field name="work_type" />
+										<field name="job_start" />
+										<field name="job_stop" />
+										<field name="employee_id" />
+										<!-- 
+										<field name="time_spent" />
+										 -->
+									</tree>
+								</field>
+
 							</page>
 						</notebook>
 					</sheet>

@@ -85,6 +85,7 @@ class translation_evidention(osv.Model):
                 'price_id':fields.many2one('translation.price','Price template'),
                 'product_id':fields.one2many('translation.product','evidention_id','Translations'),
                 'product_type':fields.selection(_get_product_type, 'Product type', help="Rules for generating and invoicing translation", required=1),
+                'avans':fields.float('Advace ammount',digits_compute=dp.get_precision('Product Price'))
                 #'so_ids':fields.many2many('sale.order','translation_evidention_so_rel','translation_evidention_id','sale_order_id','Sale orders')
                 }
     
@@ -170,11 +171,20 @@ class translation_product(osv.Model):
     _name = "translation.product"
     _description = "Translation products - pre sale"
     
+    def onchange_product_price(self, cr, uid, ids, price_id, context=None):
+        res={}
+        price=self.pool.get('translation.price').browse(cr, uid, price_id).price
+        prod = self.browse(cr, uid, ids[0])
+        units = prod.units
+        discount = prod.discount
+        res['price_amount'] = price * units * (100.00-discount)/100
+        return {'value':res}
+    
     _columns = {
                 'name':fields.char('Code', size=128),
                 'description':fields.text('Product description'),
                 'price_id':fields.many2one('translation.price','Price'),
-                'price_amount':fields.float('Amount', digits_compute=dp.get_precision('Account') ),
+                'price_amount':fields.float('Amount' ),# dodati float na dvije decimale!
                 'units':fields.float('Units'),
                 'discount':fields.float('Discount'),
                 'evidention_id':fields.many2one('translation.evidention','Evidention'),

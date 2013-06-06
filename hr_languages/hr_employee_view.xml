@@ -11,10 +11,15 @@
 				<notebook position="inside">
 					<page string="Language">
 						<group colspan="4" cols="4">
+						<!-- 
 							<field name="primary_lang" string="Primary language"
-								on_change="onchange_primary_lang(primary_lang)" />
+								on_change="onchange_primary_lang(primary_lang)" /> 
+						 -->
+							<field name="language_ids" on_change="onchange_language_ids(language_ids)"/>
+						
 							<field name="competence" />
-							<field name="competence_ids">
+						
+							<field name="competence_ids" ">
 								<tree string="Language competence"> 
 								    <field name="employee_id" invisible="1" /> 
 								    <field name="language_id" /> 
