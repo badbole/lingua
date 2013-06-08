@@ -218,7 +218,9 @@
 			<field name="domain">[('sequence','!=', False)]</field>
 			<field name="view_id" ref="translation_document_tree_view" />
 			<field name="search_view_id" ref="translation_document_filter" />
+			<!-- 
 			<field name="context">{"search_default_state_notfin":1}</field>
+			 -->
 		</record>
 		<menuitem action="translation_document_menu_action" parent="translation_overview"
 			id="translation_document_menu" sequence="20" />
@@ -445,7 +447,9 @@
 			<field name="domain">[('name','!=', False)]</field>
 			<field name="view_id" ref="translation_document_task_tree_view" />
 			<field name="search_view_id" ref="translation_document_task_filter" />
+			<!-- 
 			<field name="context">{"search_default_state_notfin":1}</field>
+			 -->
 		</record>
 
 		<menuitem action="translation_document_task_menu_action"
