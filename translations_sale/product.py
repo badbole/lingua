@@ -82,6 +82,7 @@ class translation_evidention(osv.Model):
                          (4,'(Document=Product Translate, Product Lector)'),
                          (5,'(Single product, all tasks in description)')]
     _columns = {
+                'marketing_id':fields.many2one('translation.marketing','Marketing'),
                 'price_id':fields.many2one('translation.price','Price template'),
                 'product_id':fields.one2many('translation.product','evidention_id','Translations'),
                 'product_type':fields.selection(_get_product_type, 'Product type', help="Rules for generating and invoicing translation", required=1),
@@ -94,14 +95,19 @@ class translation_evidention(osv.Model):
                  'product_type' :1,
                  }
     def action_avans_invoice(self, cr, uid, id, context=None):
-        if avans == 0 : return False
+        
         evid_obj = self.browse(cr, uid, id )
+        if evid_obj.avans == 0 : return False
+        
         
         return True
     
     def action_sale_order_generate(self, cr, uid, ids, context=None):
         t_prod=self.pool.get('translation.product')
         for evidention in self.browse(cr, uid, ids):
+            for so in evidention.so_ids:
+                if so.state != 'draft':
+                    raise osv.except_osv(_('Error!'), _('No more Quotations, Sale order %s is confirmed!' % (so.name)))
             so = create_sale_order(self, cr, uid, evidention.partner_id.id, 1 , evidention.sequence)
             products = []
             for product in evidention.product_id:

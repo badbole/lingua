@@ -1,7 +1,0 @@
-"id","fold","name","case_default","description","state","sequence"
-"lingua.gotovo","False","Završeno","True",,"Done",99
-"lingua.new","False","Zaprimljeno","True","Zaprimljeni materijali za prijevod","New",1
-"lingua.progress","False","Prijevod u tijeku","True","Prijevod je u tijeku","In Progress",2
-"lingua.canceled","False","Otkazano","True",,"Cancelled",300
-"lingua.pending","False","Za isporuku","True","Prijevod je gotov (i lekturiran ukoliko je potrebno)  Čeka se pruzimanje","Pending",100
-"lingua.progress2","False","Na Lekturiranju","True","Lekturiranje gotovog prijevoda","In Progress",3

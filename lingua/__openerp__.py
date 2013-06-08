@@ -28,7 +28,7 @@
 {
     "name" : "LINGUA PRIJEVODI",
     "description" : """
-Evidention of translations
+Lingua localizaton pack
 ==========================
 
 Author: Davor Bojkić - bole @ DAJ MI 5     www.dajmi5.com
@@ -38,11 +38,7 @@ Contributions: Borko Augustin - borko @ abs95.com
 
 Summary: 
 
-Functionality for testing
-   - evidention of translations and tasks ,
-       - generates saleorder from single evidention
-       - generate saleorder from selected evidentions
-       
+
     - 
 
 """,
@@ -52,21 +48,11 @@ Functionality for testing
     "website": "http://www.dajmi5.com",
 
     'depends': [
-                #'project',
-                'hr',
-                'l10n_hr_fiskal'
+                
                 ],
     
     'update_xml': [
-                   'config_view.xml',
-                   'evidencija_view.xml',
-                   'data/lingua.language.csv',
-                   'languages_view.xml',
-                   'lingua_data.xml',
-                   #'product_view.xml'
-                   'lingua_sequence.xml',
-                   'lingua_translations_workflow.xml',
-                   'sale_view.xml',
+                   
                    ],
     "active": False,
     "installable": True,

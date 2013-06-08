@@ -128,6 +128,10 @@
 			<field name="model">translation.evidention</field>
 			<field name="inherit_id" ref="translations.translation_evidention_form_view" />
 			<field name="arch" type="xml">
+			     <field name="date_due" position="after">
+			         
+			         <field name="marketing_id" groups="translations.group_translations_manager,translations.group_translations_office"/>
+			     </field>
 				<notebook position="inside">
 					<page string="Price" groups="translations.group_translations_manager,translations.group_translations_office">
 						<!-- <div class="oe_button_box oe_right"> -->
@@ -158,7 +162,7 @@
 
 						</field>
 					</page>
-					<page string="Sales Orders">
+					<page string="Sales Orders" groups="translations.group_translations_manager,translations.group_translations_office">
 					   <field name="so_ids" nolabel="1" colspan="4">
 					   
 					   </field>

@@ -266,7 +266,7 @@ class translation_document_task (osv.Model):
                 'name':fields.char('Name',size=64),
                 'document_id':fields.many2one('translation.document','Document'),
                 'language_origin':fields.many2one('hr.language','Translate from'),
-                'language_id':fields.many2one('hr.language','Translate to', required=True),
+                'language_id':fields.many2one('hr.language','Translate to', required=True, domain="[('employee_ids','!=',False)]"),
                 'type_id':fields.many2one('translation.type','Type'),
                 'partner_id':fields.many2one('res.partner','Partner'),
                 'lectoring':fields.boolean ('Mandatory lectoring'),
