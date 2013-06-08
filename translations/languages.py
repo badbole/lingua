@@ -34,23 +34,16 @@ class hr_language (osv.Model):
     _columns = {
                 'trans_from':fields.char('Translate from', size=64),
                 'trans_to':fields.char('Translate to', size=64),
-                
                 }
     
 class hr_language_competence (osv.Model):
     _inherit = 'hr.language.competence'
-    
         
     _columns = {
                 'translate':fields.boolean('Translate'),
                 'lecture':fields.boolean('Lecture'),
                 'synchro_trans':fields.boolean('Synchro trans'),
                 'note':fields.text('Note'),
-                #'translate_line_ids':fields.many2many('translation.evidention.line',
-                #                                 'translate_evidention_line_employee_rel', 
-                #                                 'hr_language_competence_translate_line_ids',
-                #                                 'translation_evidention_line_translate_ids', 
-                #                                 'Translated work' )
                 }   
     
 class hr_employee(osv.Model):

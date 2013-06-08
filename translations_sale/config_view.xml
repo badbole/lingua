@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
 	<data>
-	
-    <!--Translation PRICE  -->   
-    
-
-		
 		<!--Marketing view -->
 		<record id="translation_marketing_tree_view" model="ir.ui.view">
             <field name="name">"translation_marketing_tree_view"</field>
@@ -33,7 +28,5 @@
             <field name="view_mode">tree,form</field>
         </record>
         <menuitem action="translation_marketing_menu_action" parent="translations.translation_setup" id="translation_marketing_menu" />
-        
-       
 	</data>
 </openerp>

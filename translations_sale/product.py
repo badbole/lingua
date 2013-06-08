@@ -29,7 +29,7 @@ from osv import osv, fields
 from openerp.tools.translate import _
 import openerp.addons.decimal_precision as dp
 import psycopg2
-from openerp.tools.translate import _
+
 
 class translation_price(osv.osv):
     _name="translation.price"
@@ -85,26 +85,31 @@ class translation_evidention(osv.Model):
                 'price_id':fields.many2one('translation.price','Price template'),
                 'product_id':fields.one2many('translation.product','evidention_id','Translations'),
                 'product_type':fields.selection(_get_product_type, 'Product type', help="Rules for generating and invoicing translation", required=1),
-                'avans':fields.float('Advace ammount',digits_compute=dp.get_precision('Product Price'))
-                #'so_ids':fields.many2many('sale.order','translation_evidention_so_rel','translation_evidention_id','sale_order_id','Sale orders')
+                'avans':fields.float('Advace ammount',digits_compute=dp.get_precision('Product Price')),
+                'so_ids':fields.many2many('sale.order','translation_evidention_so_rel','translation_evidention_id','sale_order_id','Sale orders')
+                #'so_ids':fields.one2many('sale.order','order_id','Sales orders'),
                 }
     
     _defaults = {
                  'product_type' :1,
                  }
-
+    def action_avans_invoice(self, cr, uid, id, context=None):
+        if avans == 0 : return False
+        evid_obj = self.browse(cr, uid, id )
+        
+        return True
     
     def action_sale_order_generate(self, cr, uid, ids, context=None):
-        
-        for evidencija in self.browse(cr, uid, ids):
-            so = create_sale_order(self, cr, uid, evidencija.partner_id.id, 1 , evidencija.sequence)
+        t_prod=self.pool.get('translation.product')
+        for evidention in self.browse(cr, uid, ids):
+            so = create_sale_order(self, cr, uid, evidention.partner_id.id, 1 , evidention.sequence)
             products = []
-            for product in evidencija.product_id:
+            for product in evidention.product_id:
                 if not product.product_id:
-                    create_product_product(self, cr, uid, product)
+                    prod_id = create_product_product(self, cr, uid, product)
+                    t_prod.write(cr, uid, product.id,{'product_id':prod_id})
                 create_sale_order_line(self, cr, uid, so, product)
-                pass
-            pass
+            self.write(cr, uid, evidention.id,{'so_ids':[(4,so)]})
         return True
     
     def action_product_preview_generate(self, cr, uid, ids, context=None):
@@ -127,8 +132,6 @@ class translation_evidention(osv.Model):
                         prepare_translation_product_type_1(self, cr, uid, evidention, document, task, product_list)
                 if evidention.product_type == 3:
                     pass
-        
-        
         #create all
         prod = self.pool.get('translation.product')
         
@@ -137,8 +140,7 @@ class translation_evidention(osv.Model):
         exist = prod.search(cr, uid, [('evidention_id','=',evid),('product_type','=',type)])
         if len(exist) == 0:
             for line in product_list:
-                sale = [prod.create(cr, uid, line)]
-                
+                p_in = [prod.create(cr, uid, line)]
         elif len(exist) > 0:
             # update values, write chatter
             pass
@@ -157,16 +159,20 @@ class translation_document_task(osv.Model):
     _inherit = 'translation.document.task'
     _columns = {
                 'price_id':fields.many2one('translation.price','Price template'),
-                'product_id':fields.one2many('translation.product','task_id','Products')
+                'product_id':fields.one2many('translation.product','task_id','Products'),
+                
                 }
-"""
+
+
 class sale_order(osv.osv):
-    _inherit = "sale.order"
+    _name= 'sale.order'
+    _inherit = ['mail.thread', 'ir.needaction_mixin']
     _columns = {
-                'trans_product_ids':fields.many2many('translation.product','translation_product_so_rel','sale_order_id', 'translation_product_id','Translations'),
-                'trans_evidention_ids':fields.many2many('translation.evidention','translation_evidention_so_rel','sale_order_id','translation_evidention_id','Evidentions')
+                #'trans_product_ids':fields.many2many('translation.product','translation_product_so_rel','sale_order_id', 'translation_product_id','Translations'),
+                'trans_evid_ids':fields.many2many('translation.evidention','translation_evidention_so_rel','sale_order_id','translation_evidention_id','Evidentions')
                 }
-"""
+
+
 class translation_product(osv.Model):
     _name = "translation.product"
     _description = "Translation products - pre sale"
@@ -263,10 +269,10 @@ def create_sale_order(self, cr, uid, partner, pricelist, origin):
 def create_sale_order_line(self, cr, uid, so, product, context=None ):
     uom_id= get_uos(self, cr, uid)
     tax_id= get_default_tax(self, cr, uid)
-    values = {'name':product.name,
+    values = {'name':product.description,
               'order_id':so,
               'product_id':product.product_id.id,
-              'price_unit':product.price_amount, # ili cijenu koja je izračunata i količine 1!
+              'price_unit':product.price_id.price, # ili cijenu koja je izračunata i količine 1!
               'product_uom':uom_id,
               'product_uos':uom_id,
               'tax_id':[(4,tax_id)],

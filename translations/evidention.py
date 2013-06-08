@@ -51,6 +51,7 @@ class translation_evidention(osv.osv):
     _translation_status = [('draft','Draft')
                    ,('open','Open')
                    ,('process','In process')
+                   ,('deliver','For delivery')
                    ,('finish','Finished')
                    ,('cancel','Canceled')
                    ]
@@ -287,7 +288,8 @@ class translation_document_task (osv.Model):
                 'lect_start':fields.datetime('Date/time start'),
                 'lect_finish':fields.datetime('Date/time finish'),
                 'lect_cards':fields.float('Cards lectured'),
-                'work_ids':fields.one2many('translation.work','task_id','Work log')
+                'certified':fields.boolean('Certified'),
+                'work_ids':fields.one2many('translation.work','task_id','Work log'),
                 }
     
     _defaults = {
@@ -339,15 +341,15 @@ class translation_document_task (osv.Model):
                 self.write(cr,uid,ids[0],{'state':'lect_w','trans_finish':time})
             else:
                 
-                self.write(cr,uid,ids[0],{'state':'finish','trans_stop':time})
+                self.write(cr,uid,ids[0],{'state':'finish','trans_finish':time})
         elif task_obj.state == 'lect':
             work_id =translation_work_select(self, cr, uid, ids)
             self.pool.get('translation.work').write(cr, uid, work_id[0],{'job_stop':time})
-            self.write(cr,uid,ids[0],{'state':'finish','lect_stop':time})
+            self.write(cr,uid,ids[0],{'state':'finish','lect_finish':time})
         if check_document_finish(self, cr, uid, task_obj.document_id.id):
             self.pool.get('translation.document').write(cr, uid, task_obj.document_id.id, {'state':'finish'})
             if check_evidention_finish(self, cr, uid, task_obj.document_id.evidention_id.id):
-                self.pool.get('translation.evidention').write(cr, uid, task_obj.document_id.evidention_id.id, {'state':'finish'} )
+                self.pool.get('translation.evidention').write(cr, uid, task_obj.document_id.evidention_id.id, {'state':'deliver'} )
             pass
         return True
     

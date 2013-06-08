@@ -30,8 +30,6 @@
 		<menuitem action="translation_type_menu_action" parent="translation_setup"
 			id="translation_type_menu" />
 
-
-
 		<!-- Evidencija prijevoda -->
 		<record id="translation_evidention_tree_view" model="ir.ui.view">
 			<field name="name">"translation_evidention_tree_view"</field>
@@ -40,9 +38,8 @@
 				<tree string="Evidention"
 					colors="black:state =='draft';
 				            blue:state in ('open','process');
-                            green:state == 'finished';
-                            gray:state =='delivered'
-                            red:state == 'canceled'">
+                            green:state =='deliver'
+                            grey:state == 'cancel'">
 					<field name="sequence" />
 					<field name="name" />
 					<field name="partner_id" />
@@ -55,14 +52,13 @@
 				</tree>
 			</field>
 		</record>
-
 		<record id="translation_evidention_form_view" model="ir.ui.view">
 			<field name="name">translation_evidention_form_view</field>
 			<field name="model">translation.evidention</field>
 			<field name="arch" type="xml">
 				<form string="Evidention" version="7.0">
 					<header>
-						<field name="state" widget="statusbar" states="draft,open,process,finish" />
+						<field name="state" widget="statusbar" statusbar_visible="open,process,deliver,finish" />
 					</header>
 					<sheet>
 						<h1>
@@ -94,7 +90,9 @@
 								<h3>
 									<label string="Documents in this evidention" />
 								</h3>
-								<field name="document_ids" colspan="4" nolabel="1" />
+								<field name="document_ids" colspan="4" nolabel="1"
+									context="{'tree_view_ref':'translations.translation_document_tree_view_enter',
+								              'form_view_ref':'translations.translation_document_form_view_enter'}" />
 							</page>
 							<page string="Note">
 								<field name="note" colspan="4" />
@@ -109,19 +107,32 @@
 				</form>
 			</field>
 		</record>
-		<!-- <record id="translation_evidention_filter" model="ir.ui.view"> <field 
-			name="name">translation_evidention_filter</field> <field name="model">translation.evidention</field> 
-			<field name="arch" type="xml"> <search string="Search translation evidention"> 
-			<field name="name" filter_domain="['|','|',('name','ilike',self),('parent_id','ilike',self),('ref','=',self)]" 
-			/> <filter name="state" string="Finished" domain="[('state','=','finished')]" 
-			/> <filter name="state" string="Processing" domain="[('state','=','process')]" 
-			/> <group expand="0" string="Group By..."> <separator /> <filter string="Company" 
-			context="{'group_by':'partner_id'}" /> <filter string="Status" context="{'group_by': 
-			'state'}" /> </group> </search> </field> </record> -->
+		<record id="translation_evidention_filter" model="ir.ui.view">
+			<field name="name">translation_evidention_filter</field>
+			<field name="model">translation.evidention</field>
+			<field name="arch" type="xml">
+				<search string="Search translation evidention">
+					<field name="name" filter_domain="['|',('name','ilike',self),('partner_id','ilike',self)]" />
+					<filter name="state_notfin" string="Not finished" domain="[('state','!=','finish')]" />
+					<filter name="state_fin" string="Finished" domain="[('state','=','finish')]" />
+					<filter name="state_proc" string="Processing" domain="[('state','=','process')]" />
+					<group expand="0" string="Group By...">
+						<separator />
+						<filter string="Company" context="{'group_by':'partner_id'}" />
+						<filter string="Status" context="{'group_by':'state'}" />
+					</group>
+				</search>
+			</field>
+		</record>
+
+
 		<record id='translation_evidention_menu_action' model='ir.actions.act_window'>
 			<field name="name">Translations Evidention</field>
 			<field name="res_model">translation.evidention</field>
 			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="translation_evidention_tree_view" />
+            <field name="search_view_id" ref="translation_evidention_filter" />
+            <field name="context">{"search_default_state_notfin":1}</field>
 		</record>
 		<menuitem action="translation_evidention_menu_action" parent="translation_overview"
 			id="translation_evidention_menu" sequence="10" />
@@ -131,12 +142,11 @@
 			<field name="name">translation_document_tree_view</field>
 			<field name="model">translation.document</field>
 			<field name="arch" type="xml">
-				<tree string="Document">
+				<tree string="Document" version="7.0" create="false">
 					<field name="sequence" />
 					<field name="partner_id" />
 					<field name="name" />
 					<field name="language_id" />
-					<field name="certified" />
 					<field name="task_ids" />
 					<field name="state" />
 				</tree>
@@ -146,9 +156,9 @@
 			<field name="name">translation_document_form_view</field>
 			<field name="model">translation.document</field>
 			<field name="arch" type="xml">
-				<form string="Document" version="7.0">
+				<form string="Document" version="7.0" create="false">
 					<header>
-						<field name="state" widget="statusbar" states="draft,open,process,finish" />
+						<field name="state" widget="statusbar" statusbar_visible="draft,open,process,finish" />
 					</header>
 					<sheet>
 						<h1>
@@ -163,7 +173,7 @@
 							<field name="date_due" />
 							<field name="partner_id" invisible="1" />
 							<field name="merge_with" />
-							<field name="certified" />
+
 						</group>
 						<field name="task_ids" />
 					</sheet>
@@ -175,39 +185,108 @@
 				</form>
 			</field>
 		</record>
+		<record id="translation_document_filter" model="ir.ui.view">
+			<field name="name">translation_document_filter</field>
+			<field name="model">translation.document</field>
+			<field name="arch" type="xml">
+				<search string="Search translation documents">
+
+					<field name="name"
+						filter_domain="['|','|',('sequence','ilike',self),('partner_id','ilike',self),('name','ilike',self)]" />
+
+					<filter name="state_new" string="Not started" domain="[('state','=','open')]" />
+					<filter name="state_proc" string="In process" domain="[('state','=','process')]" />
+					<filter name="state_notfin" string="Not Finished"
+						domain="[('state','!=','finish')]" />
+					<filter name="state_fin" string="Finished" domain="[('state','=','finish')]" />
+
+					<group expand="0" string="Group By...">
+						<filter string="Language translated" domain="[]"
+							context="{'group_by':'language_id'}" />
+						<separator />
+						<filter string="Partner" context="{'group_by':'partner_id'}" />
+						<filter string="Status" context="{'group_by':'state'}" />
+					</group>
+				</search>
+			</field>
+		</record>
+
 		<record id='translation_document_menu_action' model='ir.actions.act_window'>
 			<field name="name">Documents</field>
 			<field name="res_model">translation.document</field>
 			<field name="view_mode">tree,form</field>
+			<field name="domain">[('sequence','!=', False)]</field>
+			<field name="view_id" ref="translation_document_tree_view" />
+			<field name="search_view_id" ref="translation_document_filter" />
+			<field name="context">{"search_default_state_notfin":1}</field>
 		</record>
 		<menuitem action="translation_document_menu_action" parent="translation_overview"
 			id="translation_document_menu" sequence="20" />
 
+		<record id="translation_document_tree_view_enter" model="ir.ui.view">
+			<field name="name">translation_document_tree_view_enter</field>
+			<field name="model">translation.document</field>
+			<field name="priority" eval="20" />
+			<field name="arch" type="xml">
+				<tree string="Document">
+					<field name="sequence" />
+					<field name="name" />
+					<field name="language_id" />
 
+					<field name="task_ids" />
+					<field name="state" />
+				</tree>
+			</field>
+		</record>
+		<record id="translation_document_form_view_enter" model="ir.ui.view">
+			<field name="name">translation_document_form_view_enter</field>
+			<field name="model">translation.document</field>
+			<field name="priority" eval="20" />
+			<field name="arch" type="xml">
+				<form string="Document">
+					<group colspan="4">
+						<field name="name" />
+						<field name="language_id" />
+						<field name="type_id" />
+						<field name="cards_estm" />
+						<field name="date_due" />
+						<field name="merge_with" />
+
+					</group>
+					<field name="task_ids" colspan="4" nolabel="1"
+						context="{'tree_view_ref':'translations.translation_document_task_tree_view_enter',
+                                  'form_view_ref':'translations.translation_document_task_form_view_enter'}" />
+				</form>
+			</field>
+		</record>
 		<!-- Document TASK -->
 		<record id="translation_document_task_tree_view" model="ir.ui.view">
 			<field name="name">"translation_document_task_tree_view"</field>
 			<field name="model">translation.document.task</field>
 			<field name="arch" type="xml">
-				<tree string="Translation task">
+				<tree string="Translation task" create="false">
 					<!-- editable="bottom" -->
 					<field name="name" readonly="1" />
 					<field name="document_id" invisible="1" />
 					<field name="partner_id" invisible="1" />
+					<field name="language_origin" invisible="1" />
 					<field name="language_id" />
 					<field name="lectoring" />
+					<field name="certified" />
 					<field name="translate_ids" />
 					<field name="state" readonly="1" />
 				</tree>
 			</field>
 		</record>
+
+
 		<record id="translation_document_task_form_view" model="ir.ui.view">
 			<field name="name">translation_document_task_form_view</field>
 			<field name="model">translation.document.task</field>
 			<field name="arch" type="xml">
-				<form string="Evidention line" version="7.0">
+				<form string="Evidention line" version="7.0" create="false">
 					<header>
-						
+
 						<field name="state" widget="statusbar" statusbar_visible="draft,assign,finish"
 							statusbar_colors='{"trans_p":"green","lect_p":"green","finish":"red","cancel":"red"}' />
 					</header>
@@ -232,33 +311,31 @@
 						<group>
 							<!-- field name="language_origin" inivisble="1" /> -->
 							<field name="document_id" readonly="1" />
+							<field name="language_origin" readonly="1" />
 							<field name="language_id" />
+							<field name="certified" />
 							<field name="lectoring" />
 						</group>
 						<notebook colspan="4">
 							<page string="Translators">
 								<h3>
-									<label string="Translation start : " />
+									<label string="Translation start : " /> <!-- invisible="[('trans_start','=','false')]" -->
 									<field name="trans_start" class="oe_inline" readonly="1" />
-									<label string=", finish : " />
+									<label string=", finish : " /> <!-- invisible="[('trans_stop','=',False)]" -->
 									<field name="trans_finish" class="oe_inline" readonly="1" />
 									<label string=", total translated cards :" />
 									<field name="trans_cards" class="oe_inline" />
 								</h3>
-								<field name="translate_ids" nolabel="1">
-									<tree string="translators">
-										<field name="name" />
-										<field name="competence" />
-										<field name="language_ids" />
-
-									</tree>
-								</field>
+								<field name="translate_ids" colspan="4" nolabel="1"
+									domain="[('language_ids','in',language_origin)]"
+									context="{'tree_view_ref':'translations.translation_employee_select_tree_view',
+                                                    'form_view_ref':'translations.translation_employee_select_form_view'}" />
 							</page>
 							<page string="Lectors">
 								<h3>
-									<label string="Lectoring start : " />
+									<label string="Lectoring start : " /><!-- invisible="[('lect_start','=',False)]" -->
 									<field name="lect_start" class="oe_inline" readonly="1" />
-									<label string=", finish : " class="oe_inline" />
+									<label string=", finish : " class="oe_inline" /> <!-- invisible="[('lect_stop','=',False)]" -->
 									<field name="lect_finish" class="oe_inline" readonly="1" />
 								</h3>
 								<field name="lecture_ids" nolabel="1">
@@ -270,19 +347,15 @@
 								</field>
 							</page>
 							<page string="Log" colspan="4">
-
 								<field name="work_ids" readonly="1" nolabel="1" colspan="4">
 									<tree string="Work">
 										<field name="work_type" />
 										<field name="job_start" />
 										<field name="job_stop" />
 										<field name="employee_id" />
-										<!-- 
-										<field name="time_spent" />
-										 -->
+										<!-- <field name="time_spent" /> -->
 									</tree>
 								</field>
-
 							</page>
 						</notebook>
 					</sheet>
@@ -297,6 +370,43 @@
 			</field>
 		</record>
 
+		<record id="translation_document_task_tree_view_enter" model="ir.ui.view">
+			<field name="name">"translation_document_task_tree_view_enter"</field>
+			<field name="model">translation.document.task</field>
+			<field name="priority" eval="20" />
+			<field name="arch" type="xml">
+				<tree string="Translation task">
+					<!-- editable="bottom" -->
+					<field name="name" readonly="1" />
+					<field name="document_id" invisible="1" />
+					<field name="partner_id" invisible="1" />
+					<field name="language_id" />
+					<field name="lectoring" />
+					<field name="certified" />
+					<field name="translate_ids" />
+					<field name="state" readonly="1" />
+				</tree>
+			</field>
+		</record>
+
+		<record id="translation_document_task_form_view_enter" model="ir.ui.view">
+			<field name="name">translation_document_task_form_view_enter</field>
+			<field name="model">translation.document.task</field>
+			<field name="priority" eval="20" />
+			<field name="arch" type="xml">
+				<form string="Evidention line">
+					<group colspan="4" col="4">
+						<field name="language_id" />
+						<field name="lectoring" />
+						<field name="certified" />
+					</group>
+					<field name="translate_ids" colspan="4" nolabel="1"
+
+						context="{'tree_view_ref':'translations.translation_employee_select_tree_view',
+						'form_view_ref':'translations.translation_employee_select_form_view'}" />
+				</form>
+			</field>
+		</record>
 		<record id="translation_document_task_filter" model="ir.ui.view">
 			<field name="name">translation_document_task_filter</field>
 			<field name="model">translation.document.task</field>
@@ -306,15 +416,20 @@
 					<field name="name"
 						filter_domain="['|',('name','ilike',self),('partner_id','ilike',self)]" />
 
-					<filter name="state" string="Not started" domain="[('state','=','asigned')]" />
-					<filter name="state" string="In translation" domain="[('state','=','translation')]" />
-					<filter name="state" string="Lectoring" domain="[('state','=','lectoring')]" />
-					<filter name="state" string="Finished" domain="[('state','=','finished')]" />
+					<filter name="state_nostart" string="Not started"
+						domain="[('state','in',('draft','asigned'))]" />
+					<filter name="state_tran" string="In translation"
+						domain="[('state','in',('trans','trans_p'))]" />
+					<filter name="state_lect" string="Lectoring"
+						domain="[('state','=',('lect','lect_p','lect_w'))]" />
+					<filter name="state_notfin" string="Not Finished" domain="[('state','!=','finish')]" />
+					<filter name="state_fin" string="Finished" domain="[('state','=','finish')]" />
 
 					<group expand="0" string="Group By...">
-						<filter string="Language" domain="[]"
+						<filter string="Language original" domain="[]"
+							context="{'group_by' : 'language_origin'}" />
+						<filter string="Language translation" domain="[]"
 							context="{'group_by' : 'language_id'}" />
-						<filter string="Translator" context="{'group_by': 'translate_ids'}" />
 						<separator />
 						<filter string="Company" context="{'group_by': 'partner_id'}" />
 						<filter string="Status" context="{'group_by': 'state'}" />
@@ -328,13 +443,42 @@
 			<field name="res_model">translation.document.task</field>
 			<field name="view_mode">tree,form</field>
 			<field name="domain">[('name','!=', False)]</field>
+			<field name="view_id" ref="translation_document_task_tree_view" />
+			<field name="search_view_id" ref="translation_document_task_filter" />
+			<field name="context">{"search_default_state_notfin":1}</field>
 		</record>
 
 		<menuitem action="translation_document_task_menu_action"
 			parent="translation_overview" id="translation_document_task_menu"
 			sequence="20" />
 
-
+		<record id="translation_employee_select_tree_view" model="ir.ui.view">
+			<field name="name">translation_employee_select_tree_view</field>
+			<field name="model">hr.employee</field>
+			<field name="priority" eval="20" />
+			<field name="arch" type="xml">
+				<tree string="Translators">
+					<field name="name" />
+					<field name="language_ids" />
+					<field name="mobile_phone" />
+					<field name="notes" />
+				</tree>
+			</field>
+		</record>
+		<record id="translation_employee_select_form_view" model="ir.ui.view">
+			<field name="name">translation_employee_select_form_view</field>
+			<field name="model">hr.employee</field>
+			<field name="priority" eval="20" />
+			<field name="arch" type="xml">
+				<form string="Translators">
+					<group colspan="4" col="4">
+						<field name="name" />
+						<field name="notes" />
+						<field name="language_ids" />
+					</group>
+				</form>
+			</field>
+		</record>
 
 	</data>
 </openerp>

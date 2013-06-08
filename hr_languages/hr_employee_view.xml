@@ -14,12 +14,12 @@
 						<!-- 
 							<field name="primary_lang" string="Primary language"
 								on_change="onchange_primary_lang(primary_lang)" /> 
-						 -->
-							<field name="language_ids" on_change="onchange_language_ids(language_ids)"/>
+						-->
+							<field name="language_ids" on_change="onchange_language_ids(language_ids, competence_ids)"/>
 						
 							<field name="competence" />
 						
-							<field name="competence_ids" ">
+							<field name="competence_ids" domain="[('language_id','in',language_ids)]">
 								<tree string="Language competence"> 
 								    <field name="employee_id" invisible="1" /> 
 								    <field name="language_id" /> 
