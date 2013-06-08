@@ -182,7 +182,7 @@ class translation_document(osv.Model):
                                    help="Some descriptive name for document, like: TV Manual, High school diploma..."),
                 'sequence':fields.char('Sequence', size=128),
                 'evidention_id':fields.many2one('translation.evidention','Evidention'),
-                'language_id':fields.many2one('hr.language','Origin language', required=1, domain="[('competence_ids','!=',False)]"),
+                'language_id':fields.many2one('hr.language','Origin language', required=1, domain="[('employee_ids','!=',False)]"),
                 'type_id':fields.many2one('translation.type', 'Type'),
                 'cards_estm':fields.float('Text cards', help="Estimated number of cards for translating"),
                 'date_due':fields.datetime('Deadline'),
