@@ -64,6 +64,8 @@ class translation_price(osv.osv):
                 'price':fields.float('Price', digits_compute=dp.get_precision('Product Price'), help="Price for translation"),
                 'discount_name':fields.char('Discount description', size=128),
                 'discount':fields.float('Discount %' ,digits_compute=dp.get_precision('Product Price'), help="Percentage as number (20)% (not decimal 0,2)!"),
+                'parent_left': fields.integer('Left Parent', select=1),
+                'parent_right': fields.integer('Right Parent', select=1),
                 }
     
 
@@ -108,12 +110,16 @@ class translation_evidention(osv.Model):
             for so in evidention.so_ids:
                 if so.state != 'draft':
                     raise osv.except_osv(_('Error!'), _('No more Quotations, Sale order %s is confirmed!' % (so.name)))
-            so = create_sale_order(self, cr, uid, evidention.partner_id.id, 1 , evidention.sequence)
-            products = []
+            so = create_sale_order(self, cr, uid, evidention.partner_id.id, 1 , evidention.ev_sequence)
+            if not evidention.product_id:
+                self.action_product_preview_generate(cr, uid, ids, context=None)
+                evidention=self.browse(cr, uid, evidention.id)
             for product in evidention.product_id:
                 if not product.product_id:
                     prod_id = create_product_product(self, cr, uid, product)
                     t_prod.write(cr, uid, product.id,{'product_id':prod_id})
+                    #create_sale_order_line(self, cr, uid, so, prod_id)
+                    product.product_id = prod_id
                 create_sale_order_line(self, cr, uid, so, product)
             self.write(cr, uid, evidention.id,{'so_ids':[(4,so)]})
         return True
@@ -273,11 +279,13 @@ def create_sale_order(self, cr, uid, partner, pricelist, origin):
     return self.pool.get('sale.order').create(cr, uid, values)
 
 def create_sale_order_line(self, cr, uid, so, product, context=None ):
+    ## ako nije postojao proizvod ne upiše ga.. 
+    ## trebam si poslat id proizvoda odmah ne ga vadit ovdje
     uom_id= get_uos(self, cr, uid)
     tax_id= get_default_tax(self, cr, uid)
     values = {'name':product.description,
               'order_id':so,
-              'product_id':product.product_id.id,
+              'product_id':product.product_id,
               'price_unit':product.price_id.price, # ili cijenu koja je izračunata i količine 1!
               'product_uom':uom_id,
               'product_uos':uom_id,

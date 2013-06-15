@@ -58,7 +58,7 @@ Summary:
     
     'update_xml': [
                    'config_data.xml',
-                   'config_view.xml',
+                   'marketing_view.xml',
                    'product_view.xml',
                    'security/ir.model.access.csv',
                    ],

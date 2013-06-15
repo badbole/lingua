@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="evidention_task_overview_tree_wizard" model="ir.ui.view">
+            <field name="name">evidention_task_overview_tree_wizard</field>
+            <field name="model">evid.task.overview</field>
+            <field name="arch" type="xml">
+                <tree string="Evidention - Tasks overview" >
+                    <field name="sequence"/>
+                    <field name="document"/>
+                    <field name="document_id" invisible="1"/>
+                    <field name="task"/>
+                    <field name="card_est"/>
+                </tree>
+             </field>
+        </record>
+        <record id="evidention_task_overview_view_action" model="ir.actions.act_window">
+            <field name="name">Evidention - Tasks overview</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">evid.task.overview</field>
+            <field name="view_type">tree</field>
+            <field name="view_mode">tree</field>
+            <field name="target">new</field>
+        </record>
+        </data>
+        </openerp>
+                

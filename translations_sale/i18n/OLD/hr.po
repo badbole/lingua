@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 7.0-20130604-231058\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-14 21:23+0000\n"
-"PO-Revision-Date: 2013-06-14 23:24+0100\n"
+"POT-Creation-Date: 2013-06-08 14:35+0000\n"
+"PO-Revision-Date: 2013-06-08 16:44+0100\n"
 "Last-Translator: Davor Bojkić <bole@dajmi5.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -49,18 +49,17 @@ msgstr "Grupiraj po.."
 #. module: translations_sale
 #: field:translation.product,task_id:0
 msgid "Task"
-msgstr "Task"
-
-#. module: translations_sale
-#: field:translation.evidention,product_type:0
-#: field:translation.product,product_type:0
-msgid "Product type"
-msgstr "Product type"
+msgstr "Zadatak"
 
 #. module: translations_sale
 #: field:translation.product,units:0
 msgid "Units"
-msgstr "Units"
+msgstr "Jed"
+
+#. module: translations_sale
+#: help:translation.evidention,product_type:0
+msgid "Rules for generating and invoicing translation"
+msgstr "Pravila stvaranja računa za prevode"
 
 #. module: translations_sale
 #: field:translation.product,document_id:0
@@ -112,7 +111,7 @@ msgstr "Marketing"
 #. module: translations_sale
 #: selection:translation.evidention,product_type:0
 msgid "(Single product, all tasks in description)"
-msgstr "(Single product, all tasks in description)"
+msgstr "(Jedan proizvod, svi zadaci navedeni u opisu)"
 
 #. module: translations_sale
 #: field:translation.evidention,product_id:0
@@ -172,14 +171,15 @@ msgid "Price setup"
 msgstr "Postavke cijena"
 
 #. module: translations_sale
-#: help:translation.evidention,product_type:0
-msgid "Rules for generating and invoicing translation"
-msgstr "Rules for generating and invoicing translation"
+#: field:translation.evidention,product_type:0
+#: field:translation.product,product_type:0
+msgid "Product type"
+msgstr "Vrsta proizvoda"
 
 #. module: translations_sale
 #: selection:translation.evidention,product_type:0
 msgid "(Task=Product Translate, Product Lectoring)"
-msgstr "(Task=Product Translate, Product Lectoring)"
+msgstr "(Zadatak = Prevod, Lektoriranje (odvojeno))"
 
 #. module: translations_sale
 #: field:translation.price,name:0
@@ -199,7 +199,7 @@ msgstr "Proizvod"
 #. module: translations_sale
 #: selection:translation.evidention,product_type:0
 msgid "Task=Product (translate and lectoring)"
-msgstr "Task=Product (translate and lectoring)"
+msgstr "Zadatk = Proizvod (prevod i lekturiranje u cijeni)"
 
 #. module: translations_sale
 #: selection:translation.evidention,product_type:0

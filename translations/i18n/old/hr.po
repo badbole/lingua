@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenERP Server 7.0-20130604-231058\n"
+"Project-Id-Version: OpenERP Server 7.0-20130515-231043-DAJMI5-SMOP-TYPE\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-14 21:06+0000\n"
-"PO-Revision-Date: 2013-06-14 23:23+0100\n"
+"POT-Creation-Date: 2013-05-31 00:57+0000\n"
+"PO-Revision-Date: 2013-05-31 03:11+0100\n"
 "Last-Translator: Davor Bojkić <bole@dajmi5.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,57 +16,34 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: translations
-#: field:hr.language.competence,translate:0
-msgid "Translate"
-msgstr "Prevedi"
-
-#. module: translations
-#: view:translation.evidention:0
-msgid "Not finished"
-msgstr "Nije gotovo"
-
-#. module: translations
 #: model:ir.module.category,description:translations.module_category_translations
 msgid ""
 "Helps you manage your documents and translation\n"
 "				tasks by tracking them ..."
 msgstr ""
-"Omogućuje upravanje dokumentima i zadacima\n"
-"				prevoda prateći ih..."
+"Omogućuje upravljanje dokumentima i \n"
+"			zadacima prevoda"
 
 #. module: translations
 #: view:hr.language.competence:0
-#: view:translation.document:0
 #: view:translation.document.task:0
-#: view:translation.evidention:0
 msgid "Group By..."
 msgstr "Grupiraj po..."
 
 #. module: translations
-#: view:hr.language.competence:0
-#: view:translation.document:0
 #: view:translation.document.task:0
-msgid "Not started"
-msgstr "Nije započeo"
+msgid "Pause"
+msgstr "Pauza"
 
 #. module: translations
-#: field:translation.evidention,total_cards:0
-msgid "Est cards"
-msgstr "Proc. kartica"
-
-#. module: translations
-#: field:evid.task.overview,document:0
-#: view:translation.document:0
-#: field:translation.document,name:0
-#: view:translation.document.task:0
-#: field:translation.document.task,document_id:0
-msgid "Document"
-msgstr "Dokument"
+#: field:hr.language.competence,translate:0
+msgid "Translate"
+msgstr "Prevod"
 
 #. module: translations
 #: model:res.groups,name:translations.group_translations_office
 msgid "Translator Office"
-msgstr "Prevoditelj - ured"
+msgstr "Prevoditelj - Ured"
 
 #. module: translations
 #: model:ir.model,name:translations.model_translation_evidention
@@ -75,7 +52,6 @@ msgstr "Evidencija prevoda"
 
 #. module: translations
 #: view:translation.document.task:0
-#: view:translations.work.done:0
 msgid "Finish"
 msgstr "Završi"
 
@@ -93,42 +69,21 @@ msgstr "Nepročitane poruke"
 
 #. module: translations
 #: view:translation.document.task:0
-#: view:translation.evidention:0
 msgid "Company"
 msgstr "Organizacija"
 
 #. module: translations
-#: view:translation.evidention:0
-msgid "Search translation evidention"
-msgstr "Pretraži evidenciju prevoda"
-
-#. module: translations
-#: field:hr.language.competence,synchro_trans:0
-msgid "Synchro trans"
-msgstr "Sinkro prevod"
-
-#. module: translations
 #: view:hr.language.competence:0
 #: model:res.groups,name:translations.group_translations_translator
-#: field:translation.document.task,lecture_ids:0
+#: view:translation.document.task:0
 #: field:translation.document.task,translate_ids:0
 msgid "Translator"
 msgstr "Prevoditelj"
 
 #. module: translations
-#: help:translation.work,cards_done:0
-msgid "Enter value for this session or leave blank"
-msgstr "Unesite vrijednost za ovu sesiju ili ostavite prazno"
-
-#. module: translations
 #: selection:translation.document.task,state:0
 msgid "Assigend"
 msgstr "Dodijeljeno"
-
-#. module: translations
-#: field:translation.work,cards_total:0
-msgid "Total done"
-msgstr "Ukupno napravljeno"
 
 #. module: translations
 #: model:ir.ui.menu,name:translations.menu_translation
@@ -147,17 +102,7 @@ msgstr "Prevedi sa"
 #: field:translation.document.task,lect_finish:0
 #: field:translation.document.task,trans_finish:0
 msgid "Date/time finish"
-msgstr "Datum/vrijeme završetka"
-
-#. module: translations
-#: field:translation.document,merge_with:0
-msgid "Merge with"
-msgstr "Spoji sa"
-
-#. module: translations
-#: field:evid.task.overview,task:0
-msgid "Task"
-msgstr "Zadatak"
+msgstr "Dan/vrijeme završetka"
 
 #. module: translations
 #: view:hr.language:0
@@ -165,20 +110,14 @@ msgid "Grammar"
 msgstr "Gramatika"
 
 #. module: translations
-#: field:translation.document.task,work_ids:0
-msgid "Work log"
-msgstr "Dnevnik radova"
-
-#. module: translations
 #: model:ir.ui.menu,name:translations.translation_setup
 msgid "Setup"
 msgstr "Postavke"
 
 #. module: translations
-#: field:translation.evidention,tr_cards:0
-#: field:translations.work.done,cards:0
-msgid "Translated cards"
-msgstr "Prevedeno kartica"
+#: model:res.groups,name:translations.group_translations_manager
+msgid "Translation Manager"
+msgstr "Voditelj prevoda"
 
 #. module: translations
 #: field:translation.document,message_ids:0
@@ -188,39 +127,28 @@ msgid "Messages"
 msgstr "Poruke"
 
 #. module: translations
-#: code:addons/translations/evidention.py:425
-#: code:addons/translations/evidention.py:446
+#: code:addons/translations/evidention.py:259
 #, python-format
 msgid "Error!"
 msgstr "Greška!"
 
 #. module: translations
-#: model:ir.model,name:translations.model_translation_work
-msgid "Work of translators"
-msgstr "Rad prevoditelja"
-
-#. module: translations
 #: view:translation.document.task:0
 msgid "Search translation task"
-msgstr "Pretraži zadatke prevoda"
+msgstr "Pretraži zadatke "
 
 #. module: translations
-#: code:addons/translations/evidention.py:165
+#: code:addons/translations/evidention.py:118
 #, python-format
 msgid "Warning !"
-msgstr "Upozorenje!"
+msgstr "Upozorenje !"
 
 #. module: translations
 #: help:translation.document,message_unread:0
 #: help:translation.document.task,message_unread:0
 #: help:translation.evidention,message_unread:0
 msgid "If checked new messages require your attention."
-msgstr "Ako je označeno nove poruke zahtjevaju vašu pažnju."
-
-#. module: translations
-#: field:evid.task.overview,document_id:0
-msgid "document_id"
-msgstr "document_id"
+msgstr "Ukoliko je označeno, nove poruke traže vašu pažnju!"
 
 #. module: translations
 #: field:translation.evidention,state:0
@@ -228,29 +156,20 @@ msgid "Evidention status"
 msgstr "Status evidencije"
 
 #. module: translations
-#: view:translation.document.task:0
-msgid "Work Log"
-msgstr "Dnevnik radova"
-
-#. module: translations
-#: view:translation.document.task:0
-msgid ", total translated cards :"
-msgstr ", ukupno prevedenih kartica :"
+#: code:addons/translations/evidention.py:267
+#, python-format
+msgid "start test"
+msgstr "start test"
 
 #. module: translations
 #: help:translation.document,name:0
 msgid "Some descriptive name for document, like: TV Manual, High school diploma..."
-msgstr "Neko opisno ime za dokument: TV Manual, High school diploma..."
+msgstr "Neko opisno ime za dokument, npr: Uputa za tv, diploma, životopis isl.. "
 
 #. module: translations
 #: model:ir.model,name:translations.model_translation_document
 msgid "Document for translation"
-msgstr "Dokument za prevođenje"
-
-#. module: translations
-#: selection:translation.work,work_type:0
-msgid "Translating"
-msgstr "Prevođenje"
+msgstr "Dokument za prevod"
 
 #. module: translations
 #: help:translation.document,message_summary:0
@@ -260,30 +179,26 @@ msgid "Holds the Chatter summary (number of messages, ...). This summary is dire
 msgstr "Holds the Chatter summary (number of messages, ...). This summary is directly in html format in order to be inserted in kanban views."
 
 #. module: translations
+#: view:hr.language.competence:0
+#: view:translation.document.task:0
+msgid "Not started"
+msgstr "Nije započeto"
+
+#. module: translations
 #: field:translation.document,date_due:0
 #: field:translation.evidention,date_due:0
-#: field:translation.evidention,time_remain:0
 msgid "Deadline"
 msgstr "Krajnji rok"
 
 #. module: translations
-#: view:translation.document:0
-#: field:translation.document,partner_id:0
-#: field:translation.document.task,partner_id:0
-#: view:translation.evidention:0
-#: field:translation.evidention,partner_id:0
-msgid "Partner"
-msgstr "Partner"
+#: view:translation.document.task:0
+msgid "translators"
+msgstr "prevoditelji"
 
 #. module: translations
-#: view:translation.evidention:0
-msgid "Documents in this evidention"
-msgstr "Dokumenata u ovoj evidenciji"
-
-#. module: translations
-#: field:translation.document.task,lect_cards:0
-msgid "Cards lectured"
-msgstr "Kartica lekturirano"
+#: field:translation.evidention,total_cards:0
+msgid "Total cards"
+msgstr "Ukupno kartica"
 
 #. module: translations
 #: model:ir.actions.act_window,name:translations.translation_document_menu_action
@@ -296,17 +211,7 @@ msgstr "Dokumenti"
 #. module: translations
 #: view:translation.evidention:0
 msgid "Leave blank to autofill with current date/time on save"
-msgstr "Ostavite prazno za automatsko popunjavanje prilikom snimanja"
-
-#. module: translations
-#: field:translation.work,cards_done:0
-msgid "Cards done"
-msgstr "Kartica gotovo"
-
-#. module: translations
-#: selection:translation.evidention,state:0
-msgid "For delivery"
-msgstr "Za isporuku"
+msgstr "Ostavite prazno za automatski unos trenutnog vremena prilikom snimanja"
 
 #. module: translations
 #: field:translation.document,message_follower_ids:0
@@ -316,14 +221,7 @@ msgid "Followers"
 msgstr "Followers"
 
 #. module: translations
-#: code:addons/translations/wizard/translation_work_done.py:53
-#, python-format
-msgid "Finishing work with 0 cards done is not possible"
-msgstr "Završiti prevod sa 0 kartica nije moguće"
-
-#. module: translations
 #: model:ir.model,name:translations.model_hr_employee
-#: field:translation.work,employee_id:0
 msgid "Employee"
 msgstr "Djelatnik"
 
@@ -342,26 +240,21 @@ msgstr "Date and time of recieving, leave empty for current date/time"
 
 #. module: translations
 #: view:translation.document:0
-#: view:translation.document.task:0
-msgid "Not Finished"
-msgstr "Nije gotovo"
+#: field:translation.document,name:0
+#: field:translation.document.task,document_id:0
+msgid "Document"
+msgstr "Dokument"
 
 #. module: translations
-#: code:addons/translations/evidention.py:162
-#: code:addons/translations/wizard/translation_work_done.py:53
+#: code:addons/translations/evidention.py:115
 #, python-format
 msgid "Error !"
-msgstr "Greška!"
+msgstr "Greška !"
 
 #. module: translations
 #: field:translation.document.task,lectoring:0
 msgid "Mandatory lectoring"
-msgstr "Obavezno lekturiranje"
-
-#. module: translations
-#: model:ir.module.category,name:translations.module_category_translations
-msgid "Translations"
-msgstr "Prevodi"
+msgstr "Obavezno lektoriranje"
 
 #. module: translations
 #: selection:translation.document.task,state:0
@@ -369,26 +262,16 @@ msgid "Translation in progress"
 msgstr "Prevod u tijeku"
 
 #. module: translations
-#: code:addons/translations/evidention.py:162
+#: code:addons/translations/evidention.py:115
 #, python-format
 msgid "No documents found, nothing to recive!"
 msgstr "Nije nađen nijedan dokument, nemam što zaprimiti!"
 
 #. module: translations
-#: view:translation.document.task:0
-msgid ", finished : "
-msgstr ", završeno : "
-
-#. module: translations
 #: view:hr.language.competence:0
 #: view:translation.document.task:0
 msgid "In translation"
-msgstr "U prevodu"
-
-#. module: translations
-#: field:evid.task.overview,name:0
-msgid "Task code"
-msgstr "Šifra zadataka"
+msgstr "Na prevodu"
 
 #. module: translations
 #: model:ir.model,name:translations.model_translation_type
@@ -396,29 +279,20 @@ msgid "translation.type"
 msgstr "translation.type"
 
 #. module: translations
-#: view:translation.document.task:0
-msgid "Language translation"
-msgstr "Jezik za prevod"
+#: code:addons/translations/evidention.py:267
+#, python-format
+msgid "Translation started"
+msgstr "Prevod započet"
 
 #. module: translations
 #: view:translation.document.task:0
 msgid "Evidention line"
-msgstr "Stavka evidencije"
+msgstr "Evidention line"
 
 #. module: translations
-#: view:translation.document.task:0
-msgid ", total lectured cards :"
-msgstr ", ukupno lekturirano kartica :"
-
-#. module: translations
-#: view:translation.document.task:0
-msgid "Work"
-msgstr "Rad"
-
-#. module: translations
-#: field:translation.evidention,le_cards:0
-msgid "Lectured cards"
-msgstr "Lekturirane kartice"
+#: model:ir.module.category,name:translations.module_category_translations
+msgid "Translations"
+msgstr "Prevodi"
 
 #. module: translations
 #: field:translation.document,evidention_id:0
@@ -427,40 +301,34 @@ msgid "Evidention"
 msgstr "Evidencija"
 
 #. module: translations
-#: field:evid.task.overview,card_trans:0
 #: field:hr.employee,translate_task_ids:0
 msgid "Translated"
 msgstr "Prevedeno"
 
 #. module: translations
-#: code:addons/translations/evidention.py:165
+#: view:translation.document.task:0
+msgid "Start lecturing"
+msgstr "Započni lekturiranje"
+
+#. module: translations
+#: code:addons/translations/evidention.py:118
 #, python-format
 msgid ""
 "No languages for translation\n"
 " document : %s!"
 msgstr ""
-"Nema jezika za prevod \n"
-" dokumenta : %s!"
+"No languages for translation\n"
+" document : %s!"
 
 #. module: translations
-#: field:translation.document.task,trans_cards:0
-msgid "Cards translated"
-msgstr "Prevedeno kartica"
+#: selection:translation.document.task,state:0
+msgid "Lectoring in progress"
+msgstr "Lekturiranje u tijeku"
 
 #. module: translations
-#: field:translation.document.task,user_status:0
-msgid "My status"
-msgstr "Moj status"
-
-#. module: translations
-#: view:translation.document.task:0
-msgid ", finish : "
-msgstr ", završeno : "
-
-#. module: translations
-#: view:hr.language.competence:0
-msgid "Translation competence search"
-msgstr "Translation competence search"
+#: field:translation.document,state:0
+msgid "Document status"
+msgstr "Status dokumenta"
 
 #. module: translations
 #: selection:translation.document,state:0
@@ -470,11 +338,6 @@ msgid "Canceled"
 msgstr "Otkazano"
 
 #. module: translations
-#: view:translation.document:0
-msgid "Search translation documents"
-msgstr "Pretraži dokumente za prevod"
-
-#. module: translations
 #: field:translation.document.task,lect_start:0
 #: field:translation.document.task,trans_start:0
 msgid "Date/time start"
@@ -482,8 +345,8 @@ msgstr "Datum/vrijeme početka"
 
 #. module: translations
 #: view:translation.document.task:0
-msgid "Translation start : "
-msgstr "Prevod počeo : "
+msgid "Log"
+msgstr "Dnevnik"
 
 #. module: translations
 #: model:ir.actions.act_window,name:translations.translation_evidention_menu_action
@@ -492,18 +355,10 @@ msgid "Translations Evidention"
 msgstr "Evidencija prevoda"
 
 #. module: translations
-#: view:translation.document:0
 #: selection:translation.document,state:0
 #: selection:translation.evidention,state:0
 msgid "In process"
-msgstr "U procesu"
-
-#. module: translations
-#: code:addons/translations/evidention.py:425
-#: code:addons/translations/evidention.py:446
-#, python-format
-msgid "You are not competent on this task!"
-msgstr "Niste kompetentni za ovaj zadatak!"
+msgstr "U obradi"
 
 #. module: translations
 #: field:hr.language.competence,note:0
@@ -514,10 +369,10 @@ msgid "Note"
 msgstr "Napomena"
 
 #. module: translations
-#: view:translation.document.task:0
-#: field:translation.work,job_start:0
-msgid "Start"
-msgstr "Počni"
+#: code:addons/translations/evidention.py:259
+#, python-format
+msgid "Not possible to start translating - no translators assigned!"
+msgstr "Not possible to start translating - no translators assigned!"
 
 #. module: translations
 #: selection:translation.document,state:0
@@ -527,44 +382,26 @@ msgid "Draft"
 msgstr "Nacrt"
 
 #. module: translations
-#: model:ir.model,name:translations.model_evid_task_overview
-#: model:ir.model,name:translations.model_translations_work_done
-msgid "Enter number of cards done"
-msgstr "Unesite broj obrađenih kartica teksta"
-
-#. module: translations
-#: field:translation.work,time_spent:0
-msgid "Time on job"
-msgstr "Utrošeno vrijeme"
+#: selection:translation.document.task,state:0
+msgid "Translation paused"
+msgstr "Prevod pauziran"
 
 #. module: translations
 #: view:hr.language.competence:0
-#: view:translation.document:0
 #: view:translation.document.task:0
-#: view:translation.evidention:0
 msgid "Status"
 msgstr "Status"
 
 #. module: translations
 #: help:translation.document,cards_estm:0
 msgid "Estimated number of cards for translating"
-msgstr "Procjena broja kartica za prevod"
+msgstr "Procjeni broj kartica za prevod"
 
 #. module: translations
 #: model:ir.actions.act_window,name:translations.translation_competence_action_menu
 #: model:ir.ui.menu,name:translations.translations_competence_menu
 msgid "Language competencies"
-msgstr "Language competencies"
-
-#. module: translations
-#: field:evid.task.overview,cards_lect:0
-msgid "unknown"
-msgstr "unknown"
-
-#. module: translations
-#: view:translation.evidention:0
-msgid "Processing"
-msgstr "U obradi"
+msgstr "Poznavanje jezika"
 
 #. module: translations
 #: field:translation.document,message_is_follower:0
@@ -572,16 +409,6 @@ msgstr "U obradi"
 #: field:translation.evidention,message_is_follower:0
 msgid "Is a Follower"
 msgstr "Is a Follower"
-
-#. module: translations
-#: view:translation.document.task:0
-msgid "Language original"
-msgstr "Jezik originala"
-
-#. module: translations
-#: view:translation.document.task:0
-msgid "Pause"
-msgstr "Pauza"
 
 #. module: translations
 #: field:translation.type,description:0
@@ -593,29 +420,19 @@ msgstr "Opis tipa"
 #: field:translation.document,task_ids:0
 #: field:translation.document.task,language_id:0
 msgid "Translate to"
-msgstr "Prevedi na"
-
-#. module: translations
-#: field:hr.employee,lecture_task_ids:0
-msgid "Lectured"
-msgstr "Lekturirano"
-
-#. module: translations
-#: view:hr.language.competence:0
-msgid "Language"
-msgstr "Jezik"
-
-#. module: translations
-#: model:ir.actions.act_window,name:translations.translations_work_done_form__action
-msgid "Translation work log entry"
-msgstr "Unos denvnika prevoda"
+msgstr "Prevod na"
 
 #. module: translations
 #: view:hr.language.competence:0
 #: view:translation.document.task:0
-#: selection:translation.work,work_type:0
+msgid "Language"
+msgstr "Jezik"
+
+#. module: translations
+#: view:hr.language.competence:0
+#: view:translation.document.task:0
 msgid "Lectoring"
-msgstr "Lekturiranje"
+msgstr "Lektoriranje"
 
 #. module: translations
 #: field:translation.document,message_summary:0
@@ -630,25 +447,24 @@ msgid "Origin language"
 msgstr "Jezik originala"
 
 #. module: translations
-#: field:evid.task.overview,translators:0
-#: view:hr.employee:0
+#: view:translation.document.task:0
 msgid "Translators"
 msgstr "Prevoditelji"
 
 #. module: translations
 #: model:ir.model,name:translations.model_translation_document_task
 msgid "Signle langugae for translation"
-msgstr "Pojedini jezik za prevod"
+msgstr "Signle langugae for translation"
 
 #. module: translations
-#: view:translation.document:0
-msgid "Language translated"
-msgstr "Jezik prevoda"
+#: field:hr.language.competence,synchro_trans:0
+msgid "Synchro trans"
+msgstr "Synchro trans"
 
 #. module: translations
-#: selection:translation.document,merge_with:0
-msgid "Original"
-msgstr "Original"
+#: view:translation.document.task:0
+msgid "Start translation"
+msgstr "Započni prevod"
 
 #. module: translations
 #: field:translation.document,cards_estm:0
@@ -661,137 +477,69 @@ msgid "Translation status"
 msgstr "Status prevoda"
 
 #. module: translations
-#: field:translation.evidention,ev_sequence:0
+#: field:translation.evidention,sequence:0
 msgid "Number"
 msgstr "Broj"
-
-#. module: translations
-#: view:evid.task.overview:0
-#: model:ir.actions.act_window,name:translations.evidention_task_overview_view_action
-msgid "Evidention - Tasks overview"
-msgstr "Evidencija - pregled zadataka"
-
-#. module: translations
-#: view:translations.work.done:0
-msgid "Cancel"
-msgstr "Otkaži"
-
-#. module: translations
-#: field:evid.task.overview,card_est:0
-msgid "Estimated"
-msgstr "Procjenjeno"
 
 #. module: translations
 #: selection:translation.document,state:0
 #: selection:translation.evidention,state:0
 msgid "Open"
-msgstr "Otvori"
+msgstr "Otvoren"
 
 #. module: translations
-#: selection:translation.document.task,state:0
-msgid "Lectoring in progress"
-msgstr "Lekturiranje u tijeku"
+#: view:hr.language.competence:0
+msgid "Translation competence search"
+msgstr "Translation competence search"
 
 #. module: translations
 #: view:translation.document.task:0
 msgid "Translation task "
-msgstr "Zadatak prevoda"
+msgstr "Zadatak za prevođenje"
 
 #. module: translations
 #: view:hr.language.competence:0
 msgid "Language competence"
-msgstr "Poznavanje jezika"
-
-#. module: translations
-#: view:translations.work.done:0
-msgid "Number of cards done"
-msgstr "Broj gotovih kartica"
-
-#. module: translations
-#: selection:translation.work,work_type:0
-msgid "Other"
-msgstr "Ostalo"
+msgstr "Znanje jezika"
 
 #. module: translations
 #: field:hr.language.competence,lecture:0
 msgid "Lecture"
-msgstr "Lekturiraj"
-
-#. module: translations
-#: view:translation.evidention:0
-msgid "Tasks overview"
-msgstr "Pregled zadataka"
+msgstr "Lektoriranje"
 
 #. module: translations
 #: model:ir.model,name:translations.model_hr_language_competence
 msgid "Employee competence by language"
-msgstr "Employee competence by language"
-
-#. module: translations
-#: field:translation.work,job_stop:0
-msgid "Stop"
-msgstr "Stop"
+msgstr "Poznavanje jezika po djelatniku"
 
 #. module: translations
 #: view:hr.language.competence:0
-#: view:translation.document:0
 #: selection:translation.document,state:0
 #: view:translation.document.task:0
 #: selection:translation.document.task,state:0
-#: view:translation.evidention:0
 #: selection:translation.evidention,state:0
-#: field:translation.work,job_done:0
-#: field:translations.work.done,finish:0
 msgid "Finished"
 msgstr "Završeno"
 
 #. module: translations
-#: field:translation.document.task,user_competent:0
-msgid "Competent"
-msgstr "Kompetentan"
-
-#. module: translations
-#: selection:translation.document,merge_with:0
-msgid "Copy"
-msgstr "Kopiraj"
-
-#. module: translations
-#: field:translation.document,certified:0
-#: field:translation.document.task,certified:0
-msgid "Certified"
-msgstr "Ovjereno"
-
-#. module: translations
-#: field:translation.document,state:0
-msgid "Document status"
-msgstr "Status dokumenta"
-
-#. module: translations
-#: model:res.groups,name:translations.group_translations_manager
-msgid "Translation Manager"
-msgstr "Translation Manager"
+#: selection:translation.document.task,state:0
+msgid "Lectoring paused"
+msgstr "Lektoriranje pauzirano"
 
 #. module: translations
 #: field:translation.document.task,name:0
 #: field:translation.evidention,name:0
-#: field:translation.work,name:0
 msgid "Name"
 msgstr "Naziv"
 
 #. module: translations
 #: model:ir.model,name:translations.model_hr_language
 msgid "Languages - employee related"
-msgstr "Languages - employee related"
-
-#. module: translations
-#: field:evid.task.overview,lectors:0
-msgid "Lectors"
-msgstr "Lektori"
+msgstr "Jezici - povezano sa djelatnicima"
 
 #. module: translations
 #: model:ir.actions.act_window,name:translations.translation_document_task_menu_action
 #: model:ir.ui.menu,name:translations.translation_document_task_menu
-#: view:translation.document:0
 msgid "Translation tasks"
 msgstr "Zadaci prevoda"
 
@@ -803,55 +551,45 @@ msgid "Messages and communication history"
 msgstr "Messages and communication history"
 
 #. module: translations
-#: field:evid.task.overview,sequence:0
-#: field:translation.document,doc_sequence:0
+#: field:translation.document,sequence:0
 msgid "Sequence"
 msgstr "Sequence"
 
 #. module: translations
 #: view:translation.evidention:0
 msgid "Recive"
-msgstr "Zaprimi"
+msgstr "Recive"
 
 #. module: translations
 #: field:translation.evidention,date_recived:0
 msgid "Recived"
-msgstr "Zaprimljeno"
+msgstr "Recived"
 
 #. module: translations
 #: model:ir.actions.act_window,name:translations.translation_type_menu_action
 #: model:ir.ui.menu,name:translations.translation_type_menu
 msgid "Translation types"
-msgstr "Tipovi prevoda"
-
-#. module: translations
-#: view:translation.document.task:0
-msgid "lectors"
-msgstr "Lektori"
+msgstr "Translation types"
 
 #. module: translations
 #: selection:translation.document.task,state:0
 msgid "Ready for lectoring"
-msgstr "Spremno za lektoriranje"
+msgstr "Ready for lectoring"
+
+#. module: translations
+#: field:translation.document,partner_id:0
+#: field:translation.document.task,partner_id:0
+#: field:translation.evidention,partner_id:0
+msgid "Partner"
+msgstr "Partner"
 
 #. module: translations
 #: view:translation.document.task:0
-#: field:translation.work,task_id:0
 msgid "Translation task"
-msgstr "Zadatak prevoda"
+msgstr "Translation task"
 
 #. module: translations
 #: view:translation.evidention:0
 msgid "Evidention "
-msgstr "Evidencija"
-
-#. module: translations
-#: field:translation.work,work_type:0
-msgid "Type of work"
-msgstr "Tip rada"
-
-#. module: translations
-#: view:translation.document.task:0
-msgid "Lectoring start : "
-msgstr "Lekturiranje započelo : "
+msgstr "Evidention "
 

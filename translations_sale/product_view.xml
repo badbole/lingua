@@ -135,11 +135,11 @@
 				<notebook position="inside">
 					<page string="Price" groups="translations.group_translations_manager,translations.group_translations_office">
 						<!-- <div class="oe_button_box oe_right"> -->
-						<h2>
+						<h3>
 							<label string="Advance payed : " />
 							<field name="avans" class="oe_inline" />
 							<button string="Invoice for avans" name="action_avans_invoice" type="object" /> 
-						</h2>
+						</h3>
 						<group colspan="4">
 							<field name="price_id" />
 							<field name="product_type" />

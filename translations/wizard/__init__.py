@@ -1,8 +1,9 @@
+
 # -*- encoding: utf-8 -*-
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Module: translations_sale
+#    Module: translations
 #    Author: Davor Bojkić
 #    mail:   bole@dajmi5.com
 #    Copyright (C) 2012- Daj Mi 5, 
@@ -25,9 +26,8 @@
 #
 ##############################################################################
 
-import marketing
-#import hr_employee
-import product
+import translation_work_done
+import evid_task_overview
 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

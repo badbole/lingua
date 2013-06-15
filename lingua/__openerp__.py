@@ -28,7 +28,7 @@
 {
     "name" : "LINGUA PRIJEVODI",
     "description" : """
-Lingua localizaton pack
+Lingua modification pack
 ==========================
 
 Author: Davor Bojkić - bole @ DAJ MI 5     www.dajmi5.com

@@ -7,7 +7,7 @@
 "access_translation_document","translation_document","model_translation_document","group_translations_translator",1,1,0,0
 "access_translation_document_task_manager","translation_document_task_manager","model_translation_document_task","group_translations_manager",1,1,1,1
 "access_translation_document_task_office","translation_document_task_office","model_translation_document_task","group_translations_office",1,1,1,0
-"access_translation_document_task_manager","translation_document_task_manager","model_translation_document_task","group_translations_translator",1,1,0,0
+"access_translation_document_task_manager","translation_document_task","model_translation_document_task","group_translations_translator",1,1,0,0
 "access_translation_hr_language_manager","translation_hr_language_competence_manager","model_hr_language_competence","group_translations_manager",1,1,1,0
 "access_translation_hr_language_office","translation_hr_language_competence_office","model_hr_language_competence","group_translations_office",1,1,0,0
 "access_translation_hr_language_translator","translation_hr_language_competence_translator","model_hr_language_competence","group_translations_translator",1,0,0,0
@@ -17,3 +17,6 @@
 "access_translation_translation_type_manager","translation_translation_type_manager","model_translation_type","group_translations_manager",1,1,1,0
 "access_translation_translation_type_office","translation_translation_type_office","model_translation_type","group_translations_office",1,1,0,0
 "access_translation_translation_type_translator","translation_translation_type_translator","model_translation_type","group_translations_translator",1,0,0,0
+"access_translation_work_manager","translation_work_manager","model_translation_work","group_translations_manager",1,1,1,0
+"access_translation_work_office","translation_work_office","model_translation_work","group_translations_office",1,1,1,0
+"access_translation_work_translator","translation_work_translator","model_translation_work","group_translations_translator",1,1,1,0
