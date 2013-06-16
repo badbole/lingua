@@ -82,7 +82,6 @@
 							<field name="name" />
 							<field name="employee_id" />
 							<field name="language_id" />
-							<!-- button string="TEST" type="object" name="latest_name_check"/> -->
 						</group>
 						<group colspan="4" col="6">
 						<field name="speak" />

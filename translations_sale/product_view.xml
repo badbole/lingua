@@ -64,8 +64,8 @@
 						<field name="name" readonly="1" />
 						<field name="description" />
 						<field name="price_id" on_change="onchange_product_price(price_id)" />
-						<field name="units" />
-						<field name="discount" />
+						<field name="units" on_change="onchange_units(units)" />
+						<field name="discount" on_change="onchange_discount(discount)" />
 						<field name="price_amount" />
 					</group>
 				</form>
@@ -75,7 +75,7 @@
 			<field name="name">tranlsation_sale_product_tree_view</field>
 			<field name="model">translation.product</field>
 			<field name="arch" type="xml">
-				<tree string="Translation product">
+				<tree string="Translation product" create="false">
 					<field name="product_id" />
 					<field name="evidention_id" />
 					<field name="name" />
@@ -128,27 +128,36 @@
 			<field name="model">translation.evidention</field>
 			<field name="inherit_id" ref="translations.translation_evidention_form_view" />
 			<field name="arch" type="xml">
-			     <field name="date_due" position="after">
-			         
-			         <field name="marketing_id" groups="translations.group_translations_manager,translations.group_translations_office"/>
-			     </field>
+				<field name="date_recived" position="after">
+
+					<field name="marketing_id"
+						groups="translations.group_translations_manager,translations.group_translations_office" />
+				</field>
 				<notebook position="inside">
-					<page string="Price" groups="translations.group_translations_manager,translations.group_translations_office">
-						<!-- <div class="oe_button_box oe_right"> -->
-						<h3>
-							<label string="Advance payed : " />
-							<field name="avans" class="oe_inline" />
-							<button string="Invoice for avans" name="action_avans_invoice" type="object" /> 
-						</h3>
-						<group colspan="4">
-							<field name="price_id" />
-							<field name="product_type" />
+					<page string="Price"
+						groups="translations.group_translations_manager,translations.group_translations_office">
+						<group colspan="4" col="4">
+							<group colspan="1" >
+								<field name="avans" />
+								<button string="Invoice for avans" name="action_avans_invoice"
+									type="object" />
+								<newline />
+								<field name="price_id" />
+								<field name="product_type" />
+								<button string="Generate Sale Order" name="action_sale_order_generate"
+									type="object" />
+							</group>
+							<!-- 
+							<group colspan="3" >
+								<field name="so_ids" nolabel="1" >
+								    
+                                    context="{'tree_view_ref':'translation_sale_order_short_tree_view'}">
+								 
+								</field>
+							</group>
+							-->
 						</group>
-						<button string="Generate products" name="action_product_preview_generate"
-							type="object" />
-						<button string="Generate Sale Order" name="action_sale_order_generate"
-							type="object" />
-						<field name="product_id" colspan="4" nolabel="1">
+						<field name="product_id" colspan="4" nolabel="1" create="false">
 							<tree string="Translation product">
 								<field name="product_id" />
 								<field name="name" />
@@ -162,11 +171,8 @@
 
 						</field>
 					</page>
-					<page string="Sales Orders" groups="translations.group_translations_manager,translations.group_translations_office">
-					   <field name="so_ids" nolabel="1" colspan="4">
-					   
-					   </field>
-					</page>
+					<!-- <page string="Sales Orders" groups="translations.group_translations_manager,translations.group_translations_office"> 
+						<field name="so_ids" nolabel="1" colspan="4" /> </page> -->
 				</notebook>
 			</field>
 		</record>
@@ -181,8 +187,7 @@
 			</field>
 		</record>
 		<record id="translation_document_task_form_view_inherit" model="ir.ui.view">
-			<field name="name">translation_document_task_form_view_inherit
-			</field>
+			<field name="name">translation_document_task_form_view_inherit</field>
 			<field name="model">translation.document.task</field>
 			<field name="inherit_id" ref="translations.translation_document_task_form_view" />
 			<field name="arch" type="xml">
@@ -195,7 +200,21 @@
 				</notebook>
 			</field>
 		</record>
-
+		<!-- 
+        <record id="translation_sale_order_short_tree_view" model="ir.ui.view">
+        <field name="name">translation.sale.order.short.tree.view</field>
+        <field name="model">sale.order</field>
+        <field name="priority">100</field>
+        <field name="arch" type="xml">
+            <tree string="Sales orders" create="false">
+                <field name="name"/>
+                <field name="date_order"/>
+                <field name="user_id"/>
+                <field name="state" />
+            </tree>
+        </field>
+    </record>
+     -->
 
 
 	</data>

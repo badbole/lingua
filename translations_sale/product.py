@@ -64,8 +64,8 @@ class translation_price(osv.osv):
                 'price':fields.float('Price', digits_compute=dp.get_precision('Product Price'), help="Price for translation"),
                 'discount_name':fields.char('Discount description', size=128),
                 'discount':fields.float('Discount %' ,digits_compute=dp.get_precision('Product Price'), help="Percentage as number (20)% (not decimal 0,2)!"),
-                'parent_left': fields.integer('Left Parent', select=1),
-                'parent_right': fields.integer('Right Parent', select=1),
+                #'parent_left': fields.integer('Left Parent', select=1),
+                #'parent_right': fields.integer('Right Parent', select=1),
                 }
     
 
@@ -77,6 +77,17 @@ def get_default_price(self, cr, uid, context=None):
 
 class translation_evidention(osv.Model):
     _inherit = 'translation.evidention'
+    
+    def get_uos(self, cr, uid):
+        return self.pool.get('product.uom').search(cr, uid, [('name', '=', 'card')] )[0]
+    
+    def select_price(self, cr, uid, price1, price2, price3):
+            if price3 : price=price3
+            elif price2 : price= price2
+            elif price1 : price=price1
+            else: price = self.pool.get('translation.price').search(cr, uid, [])[0]
+            ammount = self.pool.get('translation.price').browse(cr, uid, price).price
+            return price, ammount
     
     _get_product_type = [(1,'Task=Product (translate and lectoring)'),
                          (2,'(Task=Product Translate, Product Lectoring)'),
@@ -90,7 +101,7 @@ class translation_evidention(osv.Model):
                 'product_type':fields.selection(_get_product_type, 'Product type', help="Rules for generating and invoicing translation", required=1),
                 'avans':fields.float('Advace ammount',digits_compute=dp.get_precision('Product Price')),
                 'so_ids':fields.many2many('sale.order','translation_evidention_so_rel','translation_evidention_id','sale_order_id','Sale orders')
-                #'so_ids':fields.one2many('sale.order','order_id','Sales orders'),
+              
                 }
     
     _defaults = {
@@ -100,31 +111,30 @@ class translation_evidention(osv.Model):
         
         evid_obj = self.browse(cr, uid, id )
         if evid_obj.avans == 0 : return False
-        
+        #TODO
         
         return True
     
-    def action_sale_order_generate(self, cr, uid, ids, context=None):
-        t_prod=self.pool.get('translation.product')
-        for evidention in self.browse(cr, uid, ids):
-            for so in evidention.so_ids:
-                if so.state != 'draft':
-                    raise osv.except_osv(_('Error!'), _('No more Quotations, Sale order %s is confirmed!' % (so.name)))
-            so = create_sale_order(self, cr, uid, evidention.partner_id.id, 1 , evidention.ev_sequence)
-            if not evidention.product_id:
-                self.action_product_preview_generate(cr, uid, ids, context=None)
-                evidention=self.browse(cr, uid, evidention.id)
-            for product in evidention.product_id:
-                if not product.product_id:
-                    prod_id = create_product_product(self, cr, uid, product)
-                    t_prod.write(cr, uid, product.id,{'product_id':prod_id})
-                    #create_sale_order_line(self, cr, uid, so, prod_id)
-                    product.product_id = prod_id
-                create_sale_order_line(self, cr, uid, so, product)
-            self.write(cr, uid, evidention.id,{'so_ids':[(4,so)]})
-        return True
+    def load_trans_product_list(self, cr, uid, product_id, context=None):
+        res =[]
+        prod = {}
+        total = 0
+        for pr in product_id:
+            prod['id'] = pr.id
+            prod['product_type'] = pr.product_type
+            prod['product_id'] = pr.product_id.id
+            prod['name'] = pr.name
+            prod['description'] = pr.description
+            prod['price'] = pr.price_id.price
+            prod['units'] = pr.units
+            prod['discount'] = pr.discount
+            prod['price_amount'] = pr.price_amount
+            total += pr.price_amount
+            res.append(prod)
+        return res, total
     
-    def action_product_preview_generate(self, cr, uid, ids, context=None):
+    def trans_product_preview_generate(self, cr, uid, ids, context=None):
+        #rename later!!
         if context == None: context={}
         product_list = []
         for evidention in self.browse(cr, uid, ids):
@@ -141,22 +151,135 @@ class translation_evidention(osv.Model):
                     if task.language_id.trans_to:
                         desc_lang2 += ', ' + task.language_id.trans_to
                     if evidention.product_type == 1 :
-                        prepare_translation_product_type_1(self, cr, uid, evidention, document, task, product_list)
+                        self.prepare_translation_product_type_1(cr, uid, evidention, document, task, product_list)
                 if evidention.product_type == 3:
                     pass
-        #create all
-        prod = self.pool.get('translation.product')
+        return product_list
+    
+    def write_new_translation_products(self, cr, uid, prod_list, context=None):
+        pr_list=[]
+        total = 0
+        tr_prod = self.pool.get('translation.product')
+        for line in prod_list:
+            line['id'] = tr_prod.create(cr, uid, line)
+            
+            #prod_list.append('id': tr_prod.create(cr, uid, line))
+            total += line['price_amount']
+            pr_list.append(line)
+        return pr_list, total
+    
+    def compare_product_list(self, old, new):
+        #assert len(old) == len(new)
+        for i in range(len(old)):
+            if old[i]['name'] != new[i]['name'] : old[i]['name']=new[i]['name']
+            if old[i]['description'] != new[i]['description'] : old[i]['description']=new[i]['description']
+            if old[i]['price'] != new[i]['price'] : old[i]['price']=new[i]['price']
+            if old[i]['units'] != new[i]['units'] : old[i]['units']=new[i]['units']
         
-        type=product_list[0]['product_type']
-        evid=product_list[0]['evidention_id']
-        exist = prod.search(cr, uid, [('evidention_id','=',evid),('product_type','=',type)])
-        if len(exist) == 0:
-            for line in product_list:
-                p_in = [prod.create(cr, uid, line)]
-        elif len(exist) > 0:
-            # update values, write chatter
-            pass
+        return old
+    
+    def action_sale_order_generate(self, cr, uid, ids, context=None):
+        tr_prod=self.pool.get('translation.product')
+        for evidention in self.browse(cr, uid, ids):
+            so_list=[]
+            for so in evidention.so_ids:
+                if so.state not in ('draft','sent'):
+                    raise osv.except_osv(_('Error!'), _('No more Quotations, Sale order %s is confirmed!' % (so.name)))
+                so_list.append({'so_id':so.id, 'so_total':so.amount_untaxed, 'so_lines':so.order_line})
+            
+            trans_prod_list = {}
+            trans_prod_list_new = self.trans_product_preview_generate(cr, uid, ids, context=None)
+            if not evidention.product_id:
+                trans_prod_list, tr_total = self.write_new_translation_products(cr, uid, trans_prod_list_new)
+            else: 
+                trans_prod_list, tr_total = self.load_trans_product_list(cr, uid, evidention.product_id)
+                trans_prod_list = self.compare_product_list(trans_prod_list, trans_prod_list_new)
+                
+                    
+            
+            
+            #if so_list == []:
+            so = self.create_sale_order(cr, uid, evidention.partner_id.id, 1 , evidention.ev_sequence)
+            for product in trans_prod_list:
+                if so_list == []:
+                    prod_id= self.create_product_product(cr, uid, product)
+                    tr_prod.write(cr, uid, product['id'],{'product_id':prod_id})
+                    product['product_id']=prod_id
+                self.create_sale_order_line(cr, uid, so, product)
+            self.write(cr, uid, evidention.id,{'so_ids':[(4,so)]})
+
         return True
+    
+    
+    
+    def get_default_tax(self, cr, uid):
+        #ovo bolje"
+        return self.pool.get('account.tax').search(cr, uid, [('name', '=', "25% PDV usluge")] )[0]
+    
+    
+    
+    def prepare_translation_product_type_1(self, cr, uid, evidention, document, task, product_list, context=None):
+        prod_={}
+        price, ammount = self.select_price(cr, uid, task.price_id.id, document.price_id.id, evidention.price_id.id)
+        prod_['name'] = task.name
+        prod_['description'] = 'Prevod %s \nsa %s na %s' % (document.name, document.language_id.trans_from, task.language_id.trans_to)
+        prod_['units'] = document.cards_estm
+        prod_['price_id'] = price
+        prod_['price'] = ammount
+        prod_['price_amount']=ammount * document.cards_estm
+        prod_['evidention_id'] = evidention.id
+        prod_['document_id'] = document.id
+        prod_['task_id']= task.id
+        prod_['product_type'] = 1
+        
+        return product_list.append(prod_)
+    
+    def create_product_template(self, cr, uid, product, context=None):
+        uom_id=self.get_uos(cr, uid)
+        tax_id=self.get_default_tax(cr, uid)
+        prod_template = {
+                         'name':product['name'],
+                         'description': product['description'],
+                         'uom_id':uom_id,
+                         'uom_po_id':uom_id,
+                    #'category_id': kategorija,
+                        'taxes_id':[(4,tax_id)], # pdv 25%!!!
+                        'list_price':product['price_amount'],
+                        'type':'service'
+                        }
+        return self.pool.get('product.template').create(cr, uid, prod_template)
+    
+    def create_product_product(self, cr, uid, product, context=None):
+        template= self.create_product_template(cr, uid, product)
+        prod_vals = {'product_tmpl_id':template,
+                     'name_template':product['name'],
+                     #'default_code':product.name,
+                     }
+        return self.pool.get('product.product').create(cr, uid, prod_vals)
+    
+    def create_sale_order(self, cr, uid, partner, pricelist, origin):
+        values = {
+                  'partner_id':partner,
+                  'partner_invoice_id':partner,
+                  'partner_shipping_id':partner,
+                  'pricelist_id':pricelist, 
+                  'origin':origin
+                  }
+        return self.pool.get('sale.order').create(cr, uid, values)
+    
+    def create_sale_order_line(self, cr, uid, so, product, context=None ):
+        uom_id= self.get_uos(cr, uid)
+        tax_id= self.get_default_tax(cr, uid)
+        values = {'name':product['description'],
+                  'order_id':so,
+                  'product_id':product['product_id'],
+                  'price_unit':product['price'], # ili cijenu koja je izračunata i količine 1!
+                  'product_uom':uom_id,
+                  'product_uos':uom_id,
+                  'tax_id':[(4,tax_id)],
+                  'product_uom_qty':product['units'],
+                  }
+        return self.pool.get('sale.order.line').create(cr, uid, values)
 
 
 class translation_document(osv.Model):
@@ -180,10 +303,12 @@ class sale_order(osv.osv):
     _name= 'sale.order'
     _inherit = ['mail.thread', 'ir.needaction_mixin']
     _columns = {
-                #'trans_product_ids':fields.many2many('translation.product','translation_product_so_rel','sale_order_id', 'translation_product_id','Translations'),
                 'trans_evid_ids':fields.many2many('translation.evidention','translation_evidention_so_rel','sale_order_id','translation_evidention_id','Evidentions')
                 }
 
+def calculate_price(self, price, units, discount):
+        assert price>0 and units>0
+        return price * units * (100.00-discount)/100
 
 class translation_product(osv.Model):
     _name = "translation.product"
@@ -193,11 +318,23 @@ class translation_product(osv.Model):
         res={}
         price=self.pool.get('translation.price').browse(cr, uid, price_id).price
         prod = self.browse(cr, uid, ids[0])
-        units = prod.units
-        discount = prod.discount
-        res['price_amount'] = price * units * (100.00-discount)/100
+        res['price_amount'] = calculate_price(self, price, prod.units, prod.discount)
         return {'value':res}
     
+    def onchange_discount(self, cr, uid, ids, discount, context=None):
+        res={}
+        prod=self.browse(cr, uid, ids[0])
+        res['price_amount'] = calculate_price(self, prod.price_id.price, prod.units, discount)
+        return {'value':res}
+    
+    def onchange_units(self, cr, uid, ids, units, context=None):
+        res={}
+        prod=self.browse(cr, uid, ids[0])
+        res['price_amount'] = calculate_price(self, prod.price_id.price, units, prod.discount)
+        return {'value':res}
+    
+    
+        
     _columns = {
                 'name':fields.char('Code', size=128),
                 'description':fields.text('Product description'),
@@ -211,85 +348,5 @@ class translation_product(osv.Model):
                 'product_type':fields.integer('Product type'),
                 'product_id':fields.many2one('product.product','Product'),
                 'partner_id':fields.many2one('res.partner','Partner'),
-                #'so_ids':fields.many2many('sale.order','translation_product_so_rel', 'translation_product_id','sale_order_id','Sale orders'),
-                
                 }
 
-def get_uos(self, cr, uid):
-    return self.pool.get('product.uom').search(cr, uid, [('name', '=', 'card')] )[0]
-
-def get_default_tax(self, cr, uid):
-    #ovo bolje"
-    return self.pool.get('account.tax').search(cr, uid, [('name', '=', "25% PDV usluge")] )[0]
-
-def select_price(self, cr, uid, price1, price2, price3):
-        if price3 : price=price3
-        elif price2 : price= price2
-        elif price1 : price=price1
-        else: price = self.pool.get('translation.price').search(cr, uid, [])[0]
-        ammount = self.pool.get('translation.price').browse(cr, uid, price).price
-        return price, ammount
-
-def prepare_translation_product_type_1(self, cr, uid, evidention, document, task, product_list, context=None):
-    prod_={}
-    price, ammount = select_price(self, cr, uid, task.price_id.id, document.price_id.id, evidention.price_id.id)
-    prod_['name'] = task.name
-    prod_['description'] = 'Prevod %s \nsa %s na %s' % (document.name, document.language_id.trans_from, task.language_id.trans_to)
-    prod_['units'] = document.cards_estm
-    prod_['price_id'] = price
-    prod_['price_amount']=ammount * document.cards_estm
-    prod_['evidention_id'] = evidention.id
-    prod_['document_id'] = document.id
-    prod_['task_id']= task.id
-    prod_['product_type'] = 1
-    
-    return product_list.append(prod_)
-
-def create_product_template(self, cr, uid, product, context=None):
-    uom_id=get_uos(self, cr, uid)
-    tax_id=get_default_tax(self, cr, uid)
-    prod_template = {
-                     'name':product.name,
-                     'description': product.description,
-                     'uom_id':uom_id,
-                     'uom_po_id':uom_id,
-                #'category_id': kategorija,
-                    'taxes_id':[(4,tax_id)], # pdv 25%!!!
-                    'list_price':product.price_id.price,
-                    'type':'service'
-                    }
-    return self.pool.get('product.template').create(cr, uid, prod_template)
-
-def create_product_product(self, cr, uid, product, context=None):
-    template= create_product_template(self, cr, uid, product)
-    prod_vals = {'product_tmpl_id':template,
-                 'name_template':product.name,
-                 'default_code':product.name,
-                 }
-    return self.pool.get('product.product').create(cr, uid, prod_vals)
-
-def create_sale_order(self, cr, uid, partner, pricelist, origin):
-    values = {
-              'partner_id':partner,
-              'partner_invoice_id':partner,
-              'partner_shipping_id':partner,
-              'pricelist_id':pricelist, 
-              'origin':origin
-              }
-    return self.pool.get('sale.order').create(cr, uid, values)
-
-def create_sale_order_line(self, cr, uid, so, product, context=None ):
-    ## ako nije postojao proizvod ne upiše ga.. 
-    ## trebam si poslat id proizvoda odmah ne ga vadit ovdje
-    uom_id= get_uos(self, cr, uid)
-    tax_id= get_default_tax(self, cr, uid)
-    values = {'name':product.description,
-              'order_id':so,
-              'product_id':product.product_id,
-              'price_unit':product.price_id.price, # ili cijenu koja je izračunata i količine 1!
-              'product_uom':uom_id,
-              'product_uos':uom_id,
-              'tax_id':[(4,tax_id)],
-              'product_uom_qty':product.units,
-              }
-    return self.pool.get('sale.order.line').create(cr, uid, values)

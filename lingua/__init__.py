@@ -24,10 +24,8 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-import languages
-import sale
-import evidencija
-import config
+import evidention
+import hr_employee
 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

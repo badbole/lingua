@@ -7,4 +7,8 @@
 "access_translation_price_translator","translation_price_translator","model_translation_price","translations.group_translations_translator",1,0,0,0
 "access_translation_marketing_manager","translation_marketing_manager","model_translation_marketing","translations.group_translations_manager",1,1,1,1
 "access_translation_marketing_office","translation_marketing_office","model_translation_marketing","translations.group_translations_office",1,0,0,0
-"access_translation_marketing_translator","translation_marketing_translator","model_translation_marketing","translations.group_translations_translator",1,0,0,0
+"access_translation_marketing_translator","productmarketing_translator","model_translation_marketing","translations.group_translations_translator",1,0,0,0
+"access_product_template_office","product_template_office","product.model_product_template","translations.group_translations_office",1,1,1,0
+"access_product_template_manager","product_template_manager","product.model_product_template","translations.group_translations_manager",1,1,1,0
+"access_product_product_office","product_product_office","product.model_product_product","translations.group_translations_office",1,1,1,0
+"access_product_product_manager","product_product_manager","product.model_product_product","translations.group_translations_manager",1,1,1,0

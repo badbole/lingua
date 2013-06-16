@@ -7,7 +7,7 @@
 #    mail:   bole@dajmi5.com
 #    Copyright (C) 2012- Daj Mi 5, 
 #                  http://www.dajmi5.com
-#    Contributions: Vlado / ABS95
+#    Contributions: 
 #                   
 #                    
 #    This program is free software: you can redistribute it and/or modify
@@ -25,38 +25,14 @@
 #
 ##############################################################################
 
-{
-    "name" : "LINGUA PRIJEVODI",
-    "description" : """
-Lingua modification pack
-==========================
+from osv import osv, fields
+from openerp.tools.translate import _
+import openerp.addons.decimal_precision as dp
+import psycopg2
 
-Author: Davor Bojkić - bole @ DAJ MI 5     www.dajmi5.com
-
-Contributions: Borko Augustin - borko @ abs95.com
-               Vlado Jerbic   - vlado @ abs95.com
-
-Summary: 
-
-
-    - 
-
-""",
-    "version" : "1.00",
-    "author" : "DAJ MI 5",
-    "category" : "Localisation/Croatia",
-    "website": "http://www.dajmi5.com",
-
-    'depends': [
-                'l10n_hr_fiskal',
-                'translations_sale'
-                ],
+class translation_evidention(osv.Model):
+    _inherit = 'translation.evidention'
     
-    'update_xml': [
-                   'evidention_view.xml',
-                   'hr_employee_view.xml',
-                   ],
-    "active": False,
-    "installable": True,
-}
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+    _columns = {
+                'prostor_id':fields.many2one('fiskal.prostor','Podružnica')
+                }

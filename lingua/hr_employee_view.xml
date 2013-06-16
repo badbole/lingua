@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <record id="lingua_hr_employee_prostor_uredjaj" model="ir.ui.view">
+            <field name="name">lingua_hr_employee_prostor_uredjaj</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form" />
+            <field name="arch" type="xml">
+                <field name="coach_id" position="after">
+                    <field name="prostor_id" />
+                    <field name="uredjaj_id" />
+                </field>
+            </field>
+        </record>
+    </data>
+</openerp>
+                

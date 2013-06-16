@@ -69,7 +69,7 @@ class hr_employee(osv.osv):
     
     _columns = {
                 #'primary_lang':fields.many2one('hr.language', 'Primary language'),
-                'competence':fields.function(_competence_name, type="char", size=128, method=True, string="Competence"),
+                #'competence':fields.function(_competence_name, type="char", size=128, method=True, string="Competence"),
                 'competence_ids':fields.one2many('hr.language.competence', 'employee_id', 'Language competence'),
                 'language_ids':fields.many2many('hr.language','hr_employee_language_rel','hr_employee_language_ids','hr_language_employee_ids','Languages')
                 }

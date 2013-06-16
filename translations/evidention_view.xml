@@ -41,8 +41,8 @@
 					<field name="ev_sequence" />
 					<field name="name" />
 					<field name="partner_id" />
-					<!-- <field name="date_recived" /> 
-					<field name="date_due" /> -->
+					<!-- <field name="date_recived" />  -->
+					<field name="date_due" />
 					<field name="time_remain" />
 					<field name="total_cards" />
 					<field name="tr_cards" />
@@ -80,9 +80,10 @@
 							<field name="partner_id" class="oe_inline" />
 						</h2>
 						<group colspan="4" col="4">
+						<field name="date_due" />
 							<field name="date_recived"
 								help="Leave blank to autofill with current date/time on save" />
-							<field name="date_due" />
+							
 						</group>
 						<notebook colspan="4">
 							<page string="Documents">
@@ -250,7 +251,7 @@
 						<field name="date_due" />
 						<field name="merge_with" />
 					</group>
-					<field name="task_ids" colspan="4" nolabel="1"
+					<field name="task_ids" colspan="4" 
 						context="{'tree_view_ref':'translations.translation_document_task_tree_view_enter',
                                   'form_view_ref':'translations.translation_document_task_form_view_enter'}" />
 				</form>
@@ -323,7 +324,7 @@
 									<field name="trans_cards" class="oe_inline" />
 								</h4>
 
-								<field name="translate_ids" colspan="4" nolabel="1"
+								<field name="translate_ids" colspan="4" 
 									domain="['&amp;',('language_ids','in',language_origin),('language_ids','in',language_id)]"
 									context="{'tree_view_ref':'translations.translation_employee_select_tree_view',
                                               'form_view_ref':'translations.translation_employee_select_form_view'}" />
@@ -349,7 +350,7 @@
 								<field name="lecture_ids" nolabel="1" colspan="4">
 									<tree string="lectors">
 										<field name="name" />
-										<field name="competence" />
+										
 										<field name="language_ids" />
 									</tree>
 								</field>
@@ -406,7 +407,8 @@
 						<field name="lectoring" />
 						<field name="certified" />
 					</group>
-					<field name="translate_ids" colspan="4" nolabel="1"
+					
+					<field name="translate_ids" colspan="4" 
 						context="{'tree_view_ref':'translations.translation_employee_select_tree_view',
 						'form_view_ref':'translations.translation_employee_select_form_view'}" />
 				</form>

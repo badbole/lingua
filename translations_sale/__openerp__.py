@@ -54,6 +54,7 @@ Summary:
 
     'depends': [
                 'translations',
+                'sale',
                 ],
     
     'update_xml': [
