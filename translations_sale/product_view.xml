@@ -83,8 +83,8 @@
 					<field name="price_id" />
 					<field name="units" />
 					<field name="discount" />
-					<field name="price_amount" />
-					<field name="product_type" />
+					<field name="price_amount" sum="Without tax"/>
+					<field name="product_type" invisible="1"/>
 
 				</tree>
 			</field>
@@ -137,25 +137,32 @@
 					<page string="Price"
 						groups="translations.group_translations_manager,translations.group_translations_office">
 						<group colspan="4" col="4">
-							<group colspan="1" >
+							<group colspan="2" >
 								<field name="avans" />
-								<button string="Invoice for avans" name="action_avans_invoice"
-									type="object" />
+								
 								<newline />
+		                          <field name="product_type" />
 								<field name="price_id" />
-								<field name="product_type" />
+								<button string="Invoice for avans" name="action_avans_invoice"
+                                    type="object" />
 								<button string="Generate Sale Order" name="action_sale_order_generate"
 									type="object" />
 							</group>
-							<!-- 
-							<group colspan="3" >
-								<field name="so_ids" nolabel="1" >
-								    
-                                    context="{'tree_view_ref':'translation_sale_order_short_tree_view'}">
-								 
+							
+							<group colspan="2" >
+							     <label string="Sales orders"/>
+							     <newline/>
+								<field name="so_ids" nolabel="1" help="Prikazani iznos ponude ne uklučuje porez" >
+								    <tree string="so">
+								        <field name="name"/>
+								        <field name="date_order"/>
+								        <field name="user_id"/>
+								        <field name="amount_total"/>
+								        <field name="state"/>
+								    </tree>
 								</field>
 							</group>
-							-->
+							
 						</group>
 						<field name="product_id" colspan="4" nolabel="1" create="false">
 							<tree string="Translation product">

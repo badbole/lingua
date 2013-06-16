@@ -75,6 +75,8 @@ class translation_price(osv.osv):
 def get_default_price(self, cr, uid, context=None):
     return self.pool.get('translation.price').search(cr, uid, [])[0]
 
+
+
 class translation_evidention(osv.Model):
     _inherit = 'translation.evidention'
     
@@ -134,7 +136,6 @@ class translation_evidention(osv.Model):
         return res, total
     
     def trans_product_preview_generate(self, cr, uid, ids, context=None):
-        #rename later!!
         if context == None: context={}
         product_list = []
         for evidention in self.browse(cr, uid, ids):
@@ -168,15 +169,14 @@ class translation_evidention(osv.Model):
             pr_list.append(line)
         return pr_list, total
     
-    def compare_product_list(self, old, new):
-        #assert len(old) == len(new)
-        for i in range(len(old)):
-            if old[i]['name'] != new[i]['name'] : old[i]['name']=new[i]['name']
-            if old[i]['description'] != new[i]['description'] : old[i]['description']=new[i]['description']
-            if old[i]['price'] != new[i]['price'] : old[i]['price']=new[i]['price']
-            if old[i]['units'] != new[i]['units'] : old[i]['units']=new[i]['units']
+    
+    
+    def action_sale_order_cards_done(self, cr, uid, ids, context=None):
+        assert len(ids)==0, 'This option should only be used on one evidention'
+        evidention = self.browse(cr, uid, ids[0])
         
-        return old
+        return True
+   
     
     def action_sale_order_generate(self, cr, uid, ids, context=None):
         tr_prod=self.pool.get('translation.product')
@@ -186,32 +186,26 @@ class translation_evidention(osv.Model):
                 if so.state not in ('draft','sent'):
                     raise osv.except_osv(_('Error!'), _('No more Quotations, Sale order %s is confirmed!' % (so.name)))
                 so_list.append({'so_id':so.id, 'so_total':so.amount_untaxed, 'so_lines':so.order_line})
-            
             trans_prod_list = {}
-            trans_prod_list_new = self.trans_product_preview_generate(cr, uid, ids, context=None)
+            #trans_prod_list_new = self.trans_product_preview_generate(cr, uid, ids, context=None)
             if not evidention.product_id:
+                trans_prod_list_new = self.trans_product_preview_generate(cr, uid, ids, context=None)
                 trans_prod_list, tr_total = self.write_new_translation_products(cr, uid, trans_prod_list_new)
             else: 
                 trans_prod_list, tr_total = self.load_trans_product_list(cr, uid, evidention.product_id)
-                trans_prod_list = self.compare_product_list(trans_prod_list, trans_prod_list_new)
-                
-                    
             
-            
-            #if so_list == []:
+            #move to mew function
             so = self.create_sale_order(cr, uid, evidention.partner_id.id, 1 , evidention.ev_sequence)
             for product in trans_prod_list:
-                if so_list == []:
-                    prod_id= self.create_product_product(cr, uid, product)
-                    tr_prod.write(cr, uid, product['id'],{'product_id':prod_id})
-                    product['product_id']=prod_id
+                #if so_list == []:
+                prod_id= self.create_product_product(cr, uid, product)
+                tr_prod.write(cr, uid, product['id'],{'product_id':prod_id})
+                product['product_id']=prod_id
                 self.create_sale_order_line(cr, uid, so, product)
             self.write(cr, uid, evidention.id,{'so_ids':[(4,so)]})
 
-        return True
-    
-    
-    
+        return True 
+
     def get_default_tax(self, cr, uid):
         #ovo bolje"
         return self.pool.get('account.tax').search(cr, uid, [('name', '=', "25% PDV usluge")] )[0]
@@ -298,10 +292,18 @@ class translation_document_task(osv.Model):
                 
                 }
 
-
+"""
+ BOLEEEE KAKOOOO SI GLUUUPPP!!!!!
 class sale_order(osv.osv):
     _name= 'sale.order'
     _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _columns = {
+                'trans_evid_ids':fields.many2many('translation.evidention','translation_evidention_so_rel','sale_order_id','translation_evidention_id','Evidentions')
+                }
+"""
+class sale_order(osv.osv):
+    _inherit= 'sale.order'
+    #_inherit = ['mail.thread', 'ir.needaction_mixin']
     _columns = {
                 'trans_evid_ids':fields.many2many('translation.evidention','translation_evidention_so_rel','sale_order_id','translation_evidention_id','Evidentions')
                 }
