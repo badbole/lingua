@@ -6,7 +6,11 @@
             <field name="model">translations.work.done</field>
             <field name="arch" type="xml">
                 <form string="Number of cards done" >
-                   <field name="cards"/>
+                    
+                    <field name="cards"/>
+                    <!-- 
+                    <field name="finish" />
+                     -->
                     <button string="Finish" name="enter_number_cards" type="object" class="oe_highlight"/>
                     <button string="Cancel" special="cancel"/>
                     

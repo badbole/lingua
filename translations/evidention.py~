@@ -177,7 +177,7 @@ class translation_evidention(osv.osv):
             evid_={}
             evid_['id'] = evidention.id
             if not evidention.date_recived: 
-                evid_['date_recived'] = datetime.now(timezone('Europe/Zagreb')) #log_time()
+                evid_['date_recived'] = datetime.now('Europe/Zagreb') #log_time()
             evid_['ev_sequence'] = self.pool.get('ir.sequence').get(cr, uid, 'translation_evidention')
             evid_['state'] = 'open'
             for doc in evidention.document_ids:
@@ -376,7 +376,7 @@ class translation_document_task (osv.Model):
                 if not job.job_stop:
                     job_id = job.id
         if not job_id : return False
-        time = datetime.now(timezone('Europe/Zagreb')) #log_time()
+        time = datetime.now('Europe/Zagreb') #log_time()
         self.pool.get('translation.work').write(cr, uid, job_id,{'job_stop':time})
         return True
         """
@@ -394,7 +394,7 @@ class translation_document_task (osv.Model):
         state = task_obj.user_status
         if state not in ('Translating paused', 'Lectoring paused'): return False
         emp_id = get_employee_from_uid(self, cr, uid)
-        time= datetime.now(timezone('Europe/Zagreb')) #log_time()
+        time= datetime.now('Europe/Zagreb') #log_time()
         if state == 'Translating paused':
             self.translation_work_create(cr, uid, ids[0], 'trans', emp_id, time)
             #self.write(cr,uid,ids[0],{'state':'trans'})
@@ -406,7 +406,7 @@ class translation_document_task (osv.Model):
     
     
     def button_lecture_finish(self, cr, uid, ids, context=None):
-        time=  datetime.now(timezone('Europe/Zagreb')) #log_time()
+        time=  datetime.now('Europe/Zagreb') #log_time()
         task = self.browse(cr, uid, ids[0])
         if task.user_status != 'Lectoring':
             return False
@@ -426,7 +426,7 @@ class translation_document_task (osv.Model):
         ##jel gotov prevod?
         if not (task_obj.state in ('lect_w','lect')):
             return False
-        time= datetime.now(timezone('Europe/Zagreb')) #log_time()
+        time= datetime.now('Europe/Zagreb') #log_time()
         emp_id = get_employee_from_uid(self, cr, uid)
         if len(self.browse(cr, uid, ids[0]).lecture_ids) == 0:
             self.write(cr, uid, ids[0], {'lecture_ids':[(4, emp_id)]})

@@ -208,7 +208,7 @@ class translation_evidention(osv.Model):
 
     def get_default_tax(self, cr, uid):
         #ovo bolje"
-        return self.pool.get('account.tax').search(cr, uid, [('name', '=', "25% PDV")] )[0]
+        return self.pool.get('account.tax').search(cr, uid, [('name', '=', "25% PDV usluge")] )[0]
     
     
     
