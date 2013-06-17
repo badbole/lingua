@@ -174,7 +174,12 @@ class translation_evidention(osv.Model):
     def action_sale_order_cards_done(self, cr, uid, ids, context=None):
         assert len(ids)==0, 'This option should only be used on one evidention'
         evidention = self.browse(cr, uid, ids[0])
+        for prod in evidention.product_id:
+            if prod.product_type == 1:
+                if prod.units != evidention.document_ids.task_ids.trans_cards:
+                    
         
+
         return True
    
     
