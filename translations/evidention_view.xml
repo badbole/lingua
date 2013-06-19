@@ -67,23 +67,14 @@
 						<div class="oe_button_box oe_right">
 							<button string="Recive" name="action_evidention_recive"
 								type="object" class="oe_highlight" states="draft" />
-							<button string="Tasks overview" name="%(evidention_task_overview_view_action)d" type="action"/>
-							<!-- 
-							<button name="return_action_to_open" type="object"
-								context="{'xml_id':'translation_document_task_menu_action'}"
-								string="Zadaci " help="show all translation task for this evidemtion" />
-							 -->
 						</div>
-						<!-- field name="name" /> -->
 						<h2>
 							<label string="Partner" />
 							<field name="partner_id" class="oe_inline" />
 						</h2>
 						<group colspan="4" col="4">
 						<field name="date_due" />
-							<field name="date_recived"
-								help="Leave blank to autofill with current date/time on save" />
-							
+							<field name="date_recived" />
 						</group>
 						<notebook colspan="4">
 							<page string="Documents">
@@ -263,17 +254,18 @@
 			<field name="model">translation.document.task</field>
 			<field name="arch" type="xml">
 				<tree string="Translation task" create="false">
-					<!-- editable="bottom" -->
-					<field name="name" readonly="1" />
+					<field name="name" invisible="1"/>
 					<field name="document_id" invisible="1" />
 					<field name="partner_id" invisible="1" />
 					<field name="language_origin" invisible="1" />
-					<field name="language_id" />
+					<field name="language_id" invisible="1" />
+					<field name="description" />
 					<field name="lectoring" />
 					<field name="certified" />
+					<field name="est_cards" />
 					<field name="translate_ids" />
+					<field name="lecture_ids" />
 					<field name="state" readonly="1" />
-					<field name="user_competent" />
 				</tree>
 			</field>
 		</record>
@@ -291,10 +283,7 @@
 							<label string="Translation task " />
 							<field name="name" readonly="1" class="oe_inline" />
 						</h1>
-						<!-- <div class="oe_button_box oe_right"> <button string="Finish" name="button_task_finish" 
-							type="object" states="trans,lect" /> <button string="Pause" name="button_pause" 
-							type="object" states="lect,trans" /> <button string="Resume" name="button_resume" 
-							type="object" states="trans_p,lect_p" class="oe_highlight" /> </div> -->
+						
 						<h3>
 							<field name="document_id" readonly="1" />
 						</h3>
@@ -303,6 +292,7 @@
 							<field name="language_id" readonly="1" />
 							<field name="certified" />
 							<field name="lectoring" />
+							<field name="est_cards" />
 						</group>
                         <group colspan="4" col="4">
 						<field name="user_competent" />
@@ -310,11 +300,12 @@
 						</group>
 						<notebook colspan="4">
 							<page string="Translation">
-								<button string="Start" name="button_translate_start" type="object" />
-								<button string="Pause" name="button_pause" type="object" />
-								<button string="Resume" name="button_resume" type="object" />
-								<button string="Finish" name="%(translations_work_done_form__action)d"
-									type="action" context="{'type':'trans'}" />
+								<button string="Start" name="button_translate_start" type="object" attrs="{'invisible':[('user_status','not in',('No status','Assigned'))]}"/>
+								<button string="Pause" name="button_pause" type="object" attrs="{'invisible':[('user_status','!=','Translating')]}"/>
+								<button string="Resume" name="button_resume" type="object" attrs="{'invisible':[('user_status','!=','Translating paused')]}"/>
+								<button string="Finish" name="%(translations_work_done_form_action)d"
+									type="action" context="{'type':'trans'}" attrs="{'invisible':[('user_status','!=','Translating')]}"/>
+								
 								<h4>
 									<label string="Translation start : " />
 									<field name="trans_start" class="oe_inline" readonly="1" />
@@ -330,13 +321,15 @@
                                               'form_view_ref':'translations.translation_employee_select_form_view'}" />
 							</page>
 							<page string="Lectoring" >
-								<button string="Start" name="button_lecture_start" type="object" />
-								<button string="Pause" name="button_pause" type="object" />
-								<button string="Resume" name="button_resume" type="object" />
-								<!-- <button string="Finish" name="button_lecture_finish" type="object"  />
-                                 -->
-								<button string="Finish" name="%(translations_work_done_form__action)d" type="action" 
-								            context="{'type':'lect'}" />
+								<button string="Start" name="button_lecture_start" type="object" 
+								         attrs="{'invisible':[('user_status','not in',('No status','Assigned','Translating finished'))]}"/>
+								<button string="Pause" name="button_pause" type="object" 
+								        attrs="{'invisible':[('user_status','!=','Lectoring')]}"/>
+								<button string="Resume" name="button_resume" type="object" 
+								        attrs="{'invisible':[('user_status','!=','Lectoring paused')]}"/>
+								
+								<button string="Finish" name="%(translations_work_done_form_action)d" type="action" 
+								            context="{'type':'lect'}" attrs="{'invisible':[('user_status','!=','Lectoring')]}" />
 								<h4>
 
 									<label string="Lectoring start : " />
@@ -403,24 +396,23 @@
 			<field name="arch" type="xml">
 				<form string="Evidention line">
 					<group colspan="4" col="4">
-						<field name="language_id" />
+						<field name="language_id" on_change="onchange_lang_select_competent(language_id)"/>
 						<field name="lectoring" />
 						<field name="certified" />
 					</group>
-					
-					<field name="translate_ids" colspan="4" 
+					<field name="translate_ids" colspan="4" attrs="{'invisible':[('language_id','=',False)]}"
 						context="{'tree_view_ref':'translations.translation_employee_select_tree_view',
 						'form_view_ref':'translations.translation_employee_select_form_view'}" />
 				</form>
 			</field>
-		</record>
+		</record>	
 		<record id="translation_document_task_filter" model="ir.ui.view">
 			<field name="name">translation_document_task_filter</field>
 			<field name="model">translation.document.task</field>
 			<field name="arch" type="xml">
 				<search string="Search translation task">
 					<field name="name"
-						filter_domain="['|',('name','ilike',self),('partner_id','ilike',self)]" />
+						filter_domain="['|',('description','ilike',self),('partner_id','ilike',self)]" />
 					<filter name="state_nostart" string="Not started"
 						domain="[('state','in',('draft','asigned'))]" />
 					<filter name="state_tran" string="In translation"
@@ -461,7 +453,7 @@
 			<field name="model">hr.employee</field>
 			<field name="priority" eval="20" />
 			<field name="arch" type="xml">
-				<tree string="Translators">
+				<tree string="Translators" create="false">
 					<field name="name" />
 					<field name="language_ids" />
 					<field name="mobile_phone" />
@@ -473,7 +465,7 @@
 			<field name="model">hr.employee</field>
 			<field name="priority" eval="20" />
 			<field name="arch" type="xml">
-				<form string="Translators">
+				<form string="Translators" create="false">
 					<group colspan="4" col="4">
 						<field name="name" />
 						<field name="notes" />

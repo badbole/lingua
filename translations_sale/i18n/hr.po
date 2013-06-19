@@ -28,7 +28,7 @@ msgstr "Opis proizvoda"
 #. module: translations_sale
 #: model:ir.model,name:translations_sale.model_translation_document_task
 msgid "Signle langugae for translation"
-msgstr "Pojedini jezik za prevod"
+msgstr "Pojedini jezik za prijevod"
 
 #. module: translations_sale
 #: field:translation.price,discount:0
@@ -86,7 +86,7 @@ msgstr "Marketing postavke"
 #. module: translations_sale
 #: model:ir.model,name:translations_sale.model_translation_evidention
 msgid "Evidention of translations"
-msgstr "Evidencija prevoda"
+msgstr "Evidencija prijevoda"
 
 #. module: translations_sale
 #: field:translation.marketing,description:0
@@ -101,7 +101,7 @@ msgstr "Iznos"
 #. module: translations_sale
 #: model:ir.model,name:translations_sale.model_translation_product
 msgid "Translation products - pre sale"
-msgstr "Prevodi - proizvodi (prije prodaje)"
+msgstr "Prijevodi - proizvodi (prije prodaje)"
 
 #. module: translations_sale
 #: field:translation.evidention,marketing_id:0
@@ -117,7 +117,7 @@ msgstr "(Single product, all tasks in description)"
 #. module: translations_sale
 #: field:translation.evidention,product_id:0
 msgid "Translations"
-msgstr "Prevodi"
+msgstr "Prijevodi"
 
 #. module: translations_sale
 #: view:translation.evidention:0
@@ -148,7 +148,7 @@ msgstr "Cijene"
 #: view:translation.evidention:0
 #: view:translation.product:0
 msgid "Translation product"
-msgstr "Prevod-proizvod"
+msgstr "Prijevod-proizvod"
 
 #. module: translations_sale
 #: model:product.uom.categ,name:translations_sale.translation_uom_category
@@ -226,7 +226,7 @@ msgstr "Proozvodi"
 #. module: translations_sale
 #: help:translation.price,price:0
 msgid "Price for translation"
-msgstr "Cijena prevoda"
+msgstr "Cijena prijevoda"
 
 #. module: translations_sale
 #: view:translation.product:0
@@ -258,7 +258,7 @@ msgstr "Marketing"
 #: model:ir.actions.act_window,name:translations_sale.translation_sale_product_action_menu
 #: model:ir.ui.menu,name:translations_sale.translation_sale_product_menu
 msgid "Translated products"
-msgstr "Prevodi - proizvodi"
+msgstr "Prijevodi - proizvodi"
 
 #. module: translations_sale
 #: field:translation.product,name:0
@@ -295,7 +295,7 @@ msgstr "Napravi ponudu"
 #. module: translations_sale
 #: model:ir.model,name:translations_sale.model_translation_document
 msgid "Document for translation"
-msgstr "Dokument za prevod"
+msgstr "Dokument za prijevod"
 
 #. module: translations_sale
 #: field:translation.evidention,avans:0

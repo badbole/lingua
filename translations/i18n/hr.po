@@ -135,7 +135,7 @@ msgstr "Ukupno napravljeno"
 #: model:ir.ui.menu,name:translations.translation_overview
 #: view:translation.document.task:0
 msgid "Translation"
-msgstr "Prevod"
+msgstr "Prijevod"
 
 #. module: translations
 #: field:hr.language,trans_from:0
@@ -202,7 +202,7 @@ msgstr "Rad prevoditelja"
 #. module: translations
 #: view:translation.document.task:0
 msgid "Search translation task"
-msgstr "Pretraži zadatke prevoda"
+msgstr "Pretraži zadatke Prijevoda"
 
 #. module: translations
 #: code:addons/translations/evidention.py:165
@@ -319,7 +319,7 @@ msgstr "Followers"
 #: code:addons/translations/wizard/translation_work_done.py:53
 #, python-format
 msgid "Finishing work with 0 cards done is not possible"
-msgstr "Završiti prevod sa 0 kartica nije moguće"
+msgstr "Završiti prijevod sa 0 kartica nije moguće"
 
 #. module: translations
 #: model:ir.model,name:translations.model_hr_employee
@@ -366,7 +366,7 @@ msgstr "Prevodi"
 #. module: translations
 #: selection:translation.document.task,state:0
 msgid "Translation in progress"
-msgstr "Prevod u tijeku"
+msgstr "Prijevod u tijeku"
 
 #. module: translations
 #: code:addons/translations/evidention.py:162
@@ -398,7 +398,7 @@ msgstr "translation.type"
 #. module: translations
 #: view:translation.document.task:0
 msgid "Language translation"
-msgstr "Jezik za prevod"
+msgstr "Jezik za prijevod"
 
 #. module: translations
 #: view:translation.document.task:0
@@ -439,7 +439,7 @@ msgid ""
 "No languages for translation\n"
 " document : %s!"
 msgstr ""
-"Nema jezika za prevod \n"
+"Nema jezika za prijevod \n"
 " dokumenta : %s!"
 
 #. module: translations
@@ -472,7 +472,7 @@ msgstr "Otkazano"
 #. module: translations
 #: view:translation.document:0
 msgid "Search translation documents"
-msgstr "Pretraži dokumente za prevod"
+msgstr "Pretraži dokumente za prijevod"
 
 #. module: translations
 #: field:translation.document.task,lect_start:0
@@ -483,13 +483,13 @@ msgstr "Datum/vrijeme početka"
 #. module: translations
 #: view:translation.document.task:0
 msgid "Translation start : "
-msgstr "Prevod počeo : "
+msgstr "Prijevod počeo : "
 
 #. module: translations
 #: model:ir.actions.act_window,name:translations.translation_evidention_menu_action
 #: model:ir.ui.menu,name:translations.translation_evidention_menu
 msgid "Translations Evidention"
-msgstr "Evidencija prevoda"
+msgstr "Evidencija prijevoda"
 
 #. module: translations
 #: view:translation.document:0
@@ -548,7 +548,7 @@ msgstr "Status"
 #. module: translations
 #: help:translation.document,cards_estm:0
 msgid "Estimated number of cards for translating"
-msgstr "Procjena broja kartica za prevod"
+msgstr "Procjena broja kartica za prijevod"
 
 #. module: translations
 #: model:ir.actions.act_window,name:translations.translation_competence_action_menu
@@ -608,7 +608,7 @@ msgstr "Jezik"
 #. module: translations
 #: model:ir.actions.act_window,name:translations.translations_work_done_form__action
 msgid "Translation work log entry"
-msgstr "Unos denvnika prevoda"
+msgstr "Unos denvnika prijevoda"
 
 #. module: translations
 #: view:hr.language.competence:0
@@ -638,12 +638,12 @@ msgstr "Prevoditelji"
 #. module: translations
 #: model:ir.model,name:translations.model_translation_document_task
 msgid "Signle langugae for translation"
-msgstr "Pojedini jezik za prevod"
+msgstr "Pojedini jezik za prijevod"
 
 #. module: translations
 #: view:translation.document:0
 msgid "Language translated"
-msgstr "Jezik prevoda"
+msgstr "Jezik prijevoda"
 
 #. module: translations
 #: selection:translation.document,merge_with:0
@@ -658,7 +658,7 @@ msgstr "Kartica teksta"
 #. module: translations
 #: field:translation.document.task,state:0
 msgid "Translation status"
-msgstr "Status prevoda"
+msgstr "Status prijevoda"
 
 #. module: translations
 #: field:translation.evidention,ev_sequence:0
@@ -695,7 +695,7 @@ msgstr "Lekturiranje u tijeku"
 #. module: translations
 #: view:translation.document.task:0
 msgid "Translation task "
-msgstr "Zadatak prevoda"
+msgstr "Zadatak prijevoda"
 
 #. module: translations
 #: view:hr.language.competence:0
@@ -793,7 +793,7 @@ msgstr "Lektori"
 #: model:ir.ui.menu,name:translations.translation_document_task_menu
 #: view:translation.document:0
 msgid "Translation tasks"
-msgstr "Zadaci prevoda"
+msgstr "Zadaci prijevoda"
 
 #. module: translations
 #: help:translation.document,message_ids:0
@@ -822,7 +822,7 @@ msgstr "Zaprimljeno"
 #: model:ir.actions.act_window,name:translations.translation_type_menu_action
 #: model:ir.ui.menu,name:translations.translation_type_menu
 msgid "Translation types"
-msgstr "Tipovi prevoda"
+msgstr "Tipovi prijevoda"
 
 #. module: translations
 #: view:translation.document.task:0
@@ -838,7 +838,7 @@ msgstr "Spremno za lektoriranje"
 #: view:translation.document.task:0
 #: field:translation.work,task_id:0
 msgid "Translation task"
-msgstr "Zadatak prevoda"
+msgstr "Zadatak prijevoda"
 
 #. module: translations
 #: view:translation.evidention:0

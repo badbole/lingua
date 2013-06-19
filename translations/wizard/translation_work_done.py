@@ -30,20 +30,26 @@ from openerp.tools.translate import _
 import openerp.addons.decimal_precision as dp
 from datetime import datetime, date
 from pytz import timezone
+from tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT
+
 
 def log_time():
     tstamp = datetime.now(timezone('Europe/Zagreb'))
-    logtime ='%02d.%02d.%02d %02d:%02d:%02d' % (tstamp.day, tstamp.month, tstamp.year, tstamp.hour, tstamp.minute, tstamp.second)
-    return logtime
+    return tstamp.strftime(DEFAULT_SERVER_DATETIME_FORMAT )
 
 class translations_work_done(osv.osv_memory):
     _name = "translations.work.done"
     _description = "Enter number of cards done"
     
+    def check_me_or_other(self, cr, uid, ids, context=None):
+        return True
+    
     _columns = {
                 'cards':fields.float('Translated cards', required=True),
-                'finish':fields.boolean('Finished')
+                'finish':fields.boolean('Finished'),
+                'employee_id':fields.many2one('hr.employee', 'Employee'),
                 }
+    
     def task_get(self, cr, uid, caller_id):
         return self.pool.get('translation.document.task').browse(cr, uid, caller_id)
     

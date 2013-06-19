@@ -29,7 +29,6 @@ from osv import osv, fields
 from openerp.tools.translate import _
 import openerp.addons.decimal_precision as dp
 import psycopg2
-from openerp import netsvc
 
 
 class translation_price(osv.osv):
@@ -110,43 +109,13 @@ class translation_evidention(osv.Model):
     _defaults = {
                  'product_type' :1,
                  }
-    ###########################################
-     ## borrow from sale confirm  remove later    
-    def action_button_confirm(self, cr, uid, ids, context=None):
-        assert len(ids) == 1, 'This option should only be used for a single id at a time.'
-        wf_service = netsvc.LocalService('workflow')
-        wf_service.trg_validate(uid, 'sale.order', ids[0], 'order_confirm', cr)
-
-        # redisplay the record as a sales order
-        view_ref = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'sale', 'view_order_form')
-        view_id = view_ref and view_ref[1] or False,
-        return {
-            'type': 'ir.actions.act_window',
-            'name': _('Sales Order'),
-            'res_model': 'sale.order',
-            'res_id': ids[0],
-            'view_type': 'form',
-            'view_mode': 'form',
-            'view_id': view_id,
-            'target': 'current',
-            'nodestroy': True,
-        }#####################
-        ##########################
     def action_avans_invoice(self, cr, uid, id, context=None):
-        view_ref = self.pool.get('ir.model.data').get_obj_reference(cr, uid, 'sale', 'view_order_form')
-        view_id = view_ref and view_ref[1] or False,
         
-        return {
-            'type': 'ir.actions.act_window',
-            'name': _('Sales Order'),
-            'res_model': 'sale.order',
-            'res_id': ids[0],
-            'view_type': 'form',
-            'view_mode': 'form',
-            'view_id': view_id,
-            'target': 'current',
-            'nodestroy': True,
-        }
+        evid_obj = self.browse(cr, uid, id )
+        if evid_obj.avans == 0 : return False
+        #TODO
+        
+        return True
     
     def load_trans_product_list(self, cr, uid, product_id, context=None):
         res =[]
@@ -175,7 +144,7 @@ class translation_evidention(osv.Model):
             for document in evidention.document_ids: 
                 cards = 0.0
                 price2 = document.price_id.id
-                description2 = "Prijevod %s s %s na " %(document.name, document.language_id.trans_from)
+                description2 = "Prijevod %s sa %s na " %(document.name, document.language_id.trans_from)
                 desc_lang2 = ""
                 for task in document.task_ids:
                     cards += document.cards_estm
@@ -205,12 +174,7 @@ class translation_evidention(osv.Model):
     def action_sale_order_cards_done(self, cr, uid, ids, context=None):
         assert len(ids)==0, 'This option should only be used on one evidention'
         evidention = self.browse(cr, uid, ids[0])
-        for prod in evidention.product_id:
-            if prod.product_type == 1:
-                if prod.units != evidention.document_ids.task_ids.trans_cards:
-                    pass
         
-
         return True
    
     
@@ -243,9 +207,8 @@ class translation_evidention(osv.Model):
         return True 
 
     def get_default_tax(self, cr, uid):
-        #ovo bolje 
-        # 1. get partner fiscal position, get tax!
-        return self.pool.get('account.tax').search(cr, uid, [('name', '=', "25% PDV")] )[0]
+        #ovo bolje"
+        return self.pool.get('account.tax').search(cr, uid, [('name', '=', "25% PDV usluge")] )[0]
     
     
     

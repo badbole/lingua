@@ -41,27 +41,6 @@ class hr_language_competence (osv.Model):
                ('1','1 - Bad')
                ]
     
-
-
-    
-    def latest_name_check(self, cr, uid, id, context=None):
-        
-        comp_obj = self.pool.get('hr.language.competence')
-        all = comp_obj.search(cr, uid, [('employee_id','!=', False)])
-        competence = comp_obj.browse(cr, uid, all)
-        for c in competence:
-            employ=comp_obj.search(cr, uid, [('employee_id','=', c.employee_id.id)])
-            cname = ''
-            for e in employ:
-                if comp_obj.browse(cr, uid, e).language_id:
-                    cname = '/'.join([cname, comp_obj.browse(cr, uid, e).language_id.iso_code2.upper()])
-            fname='/'.join([c.name, cname])
-            if c.name != fname: 
-                for e in employ:
-                    comp_obj.write(cr, uid, e, {'name':fname})
-                self.pool.get('hr.employee').write(cr, uid, e, {'competence':cname})
-        return True
-    
     def _get_lang_avg(self, cr, uid, ids, field_name, field_value, context = None):
         if context == None : Context={}
         records = self.browse(cr, uid, ids)
@@ -83,7 +62,7 @@ class hr_language_competence (osv.Model):
 
 class hr_language (osv.Model):
     _name = 'hr.language'
-    _description = 'Languages - employee related'
+    _description = 'Employee language competence'
     
     _columns = {
                 'name':fields.char('Language name', size=64),

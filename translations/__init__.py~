@@ -1,4 +1,3 @@
-
 # -*- encoding: utf-8 -*-
 ##############################################################################
 #
@@ -26,8 +25,9 @@
 #
 ##############################################################################
 
-import translation_work_done
-
+import wizard
+import languages
+import evidention
 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

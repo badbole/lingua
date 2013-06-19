@@ -48,6 +48,11 @@ class hr_language_competence (osv.Model):
     
 class hr_employee(osv.Model):
     _inherit = 'hr.employee'
+    
+    def get_employee_cards(self, cr, uid, ids, context=None):
+        
+        return True
+    
     _columns = {
                 'translate_task_ids':fields.many2many('translation.document.task',
                                                       'translate_task_translate_employee_rel',
@@ -58,5 +63,6 @@ class hr_employee(osv.Model):
                                                     'translate_task_lecture_employee_rel',
                                                     'hr_employee_lecture_task_ids', 
                                                     'translation_document_task_lecture_ids',
-                                                    'Lectured' )
+                                                    'Lectured' ),
                 }
+                

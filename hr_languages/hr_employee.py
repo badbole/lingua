@@ -32,23 +32,7 @@ from osv import fields, osv
 
 class hr_employee(osv.osv):
     _inherit = "hr.employee"
-    
-    def _competence_name(self, cr, uid, ids, field_name, field_value, context=None):
-        
-        competence_obj = self.pool.get('hr.language.competence')
-        records = self.browse(cr,uid, ids)
-        res={}
-        for r in records:
-            temp_name = ''
-            competence_ids=competence_obj.search(cr, uid,[('employee_id','=',r.id)])
-            for id in competence_ids:
-                if competence_obj.browse(cr, uid, id).language_id:
-                    temp_name='-'.join([temp_name, competence_obj.browse(cr, uid, id).language_id.iso_code2.upper()])
-            if r.name != temp_name:
-                res[r.id] = temp_name
-            
-        return res
-    
+    """ not needed at this point
     def onchange_language_ids(self, cr, uid, ids, language_ids, competence_ids, context=None):
         res={}
         values=[]
@@ -65,35 +49,13 @@ class hr_employee(osv.osv):
         
         res['competence_ids'] = [(6,0,values)]
         return res  
-    
+    """
     
     _columns = {
-                #'primary_lang':fields.many2one('hr.language', 'Primary language'),
-                #'competence':fields.function(_competence_name, type="char", size=128, method=True, string="Competence"),
                 'competence_ids':fields.one2many('hr.language.competence', 'employee_id', 'Language competence'),
                 'language_ids':fields.many2many('hr.language','hr_employee_language_rel','hr_employee_language_ids','hr_language_employee_ids','Languages')
                 }
     
    
     
-    def onchange_primary_lang(self, cr, uid, ids, primary_lang, context=None):
-        if context == None: 
-            Context={}
-            
-        langs = self.resolve_2many_commands(cr, uid,'language_ids', language_ids_langs)
-        return True
-        res={}
-        if primary_lang: 
-            values={
-                    'employee_id': ids[0],
-                    'language_id': primary_lang,
-                    }
-            if len(language_competence) == 0:
-                res = {'value':{'language_competence':[(0,0,values)]}}
-            else :
-                #curr_competence=language_competence[2]
-                #test = language_competence.append([1,ids[0],values])
-                res = {'value':{'language_competence':language_competence.append([0,'False',values])}} 
-                #TODO : nadopuniti ne zamijeniti listu!
-        return res 
-        
+    
