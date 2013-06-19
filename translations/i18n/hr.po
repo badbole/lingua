@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenERP Server 7.0-20130604-231058\n"
+"Project-Id-Version: OpenERP Server 7.0-20130615-231352\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-14 21:06+0000\n"
-"PO-Revision-Date: 2013-06-14 23:23+0100\n"
+"POT-Creation-Date: 2013-06-19 08:22+0000\n"
+"PO-Revision-Date: 2013-06-19 10:24+0100\n"
 "Last-Translator: Davor Bojkić <bole@dajmi5.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -43,11 +43,9 @@ msgid "Group By..."
 msgstr "Grupiraj po..."
 
 #. module: translations
-#: view:hr.language.competence:0
-#: view:translation.document:0
 #: view:translation.document.task:0
-msgid "Not started"
-msgstr "Nije započeo"
+msgid "Pause"
+msgstr "Pauza"
 
 #. module: translations
 #: field:translation.evidention,total_cards:0
@@ -55,7 +53,6 @@ msgid "Est cards"
 msgstr "Proc. kartica"
 
 #. module: translations
-#: field:evid.task.overview,document:0
 #: view:translation.document:0
 #: field:translation.document,name:0
 #: view:translation.document.task:0
@@ -116,9 +113,15 @@ msgid "Translator"
 msgstr "Prevoditelj"
 
 #. module: translations
-#: help:translation.work,cards_done:0
-msgid "Enter value for this session or leave blank"
-msgstr "Unesite vrijednost za ovu sesiju ili ostavite prazno"
+#: code:addons/translations/evidention.py:327
+#, python-format
+msgid "to"
+msgstr "na"
+
+#. module: translations
+#: field:translation.document.task,est_cards:0
+msgid "Cards estimate"
+msgstr "Proc. kartica"
 
 #. module: translations
 #: selection:translation.document.task,state:0
@@ -155,11 +158,6 @@ msgid "Merge with"
 msgstr "Spoji sa"
 
 #. module: translations
-#: field:evid.task.overview,task:0
-msgid "Task"
-msgstr "Zadatak"
-
-#. module: translations
 #: view:hr.language:0
 msgid "Grammar"
 msgstr "Gramatika"
@@ -188,8 +186,8 @@ msgid "Messages"
 msgstr "Poruke"
 
 #. module: translations
-#: code:addons/translations/evidention.py:425
-#: code:addons/translations/evidention.py:446
+#: code:addons/translations/evidention.py:431
+#: code:addons/translations/evidention.py:452
 #, python-format
 msgid "Error!"
 msgstr "Greška!"
@@ -205,7 +203,7 @@ msgid "Search translation task"
 msgstr "Pretraži zadatke Prijevoda"
 
 #. module: translations
-#: code:addons/translations/evidention.py:165
+#: code:addons/translations/evidention.py:153
 #, python-format
 msgid "Warning !"
 msgstr "Upozorenje!"
@@ -216,11 +214,6 @@ msgstr "Upozorenje!"
 #: help:translation.evidention,message_unread:0
 msgid "If checked new messages require your attention."
 msgstr "Ako je označeno nove poruke zahtjevaju vašu pažnju."
-
-#. module: translations
-#: field:evid.task.overview,document_id:0
-msgid "document_id"
-msgstr "document_id"
 
 #. module: translations
 #: field:translation.evidention,state:0
@@ -260,6 +253,13 @@ msgid "Holds the Chatter summary (number of messages, ...). This summary is dire
 msgstr "Holds the Chatter summary (number of messages, ...). This summary is directly in html format in order to be inserted in kanban views."
 
 #. module: translations
+#: view:hr.language.competence:0
+#: view:translation.document:0
+#: view:translation.document.task:0
+msgid "Not started"
+msgstr "Nije započeo"
+
+#. module: translations
 #: field:translation.document,date_due:0
 #: field:translation.evidention,date_due:0
 #: field:translation.evidention,time_remain:0
@@ -294,11 +294,6 @@ msgid "Documents"
 msgstr "Dokumenti"
 
 #. module: translations
-#: view:translation.evidention:0
-msgid "Leave blank to autofill with current date/time on save"
-msgstr "Ostavite prazno za automatsko popunjavanje prilikom snimanja"
-
-#. module: translations
 #: field:translation.work,cards_done:0
 msgid "Cards done"
 msgstr "Kartica gotovo"
@@ -316,7 +311,7 @@ msgid "Followers"
 msgstr "Followers"
 
 #. module: translations
-#: code:addons/translations/wizard/translation_work_done.py:53
+#: code:addons/translations/wizard/translation_work_done.py:59
 #, python-format
 msgid "Finishing work with 0 cards done is not possible"
 msgstr "Završiti prijevod sa 0 kartica nije moguće"
@@ -324,6 +319,7 @@ msgstr "Završiti prijevod sa 0 kartica nije moguće"
 #. module: translations
 #: model:ir.model,name:translations.model_hr_employee
 #: field:translation.work,employee_id:0
+#: field:translations.work.done,employee_id:0
 msgid "Employee"
 msgstr "Djelatnik"
 
@@ -336,9 +332,9 @@ msgid "Type"
 msgstr "Tip"
 
 #. module: translations
-#: help:translation.evidention,date_recived:0
-msgid "Date and time of recieving, leave empty for current date/time"
-msgstr "Date and time of recieving, leave empty for current date/time"
+#: field:translation.document,state:0
+msgid "Document status"
+msgstr "Status dokumenta"
 
 #. module: translations
 #: view:translation.document:0
@@ -347,8 +343,8 @@ msgid "Not Finished"
 msgstr "Nije gotovo"
 
 #. module: translations
-#: code:addons/translations/evidention.py:162
-#: code:addons/translations/wizard/translation_work_done.py:53
+#: code:addons/translations/evidention.py:150
+#: code:addons/translations/wizard/translation_work_done.py:59
 #, python-format
 msgid "Error !"
 msgstr "Greška!"
@@ -369,7 +365,7 @@ msgid "Translation in progress"
 msgstr "Prijevod u tijeku"
 
 #. module: translations
-#: code:addons/translations/evidention.py:162
+#: code:addons/translations/evidention.py:150
 #, python-format
 msgid "No documents found, nothing to recive!"
 msgstr "Nije nađen nijedan dokument, nemam što zaprimiti!"
@@ -383,12 +379,7 @@ msgstr ", završeno : "
 #: view:hr.language.competence:0
 #: view:translation.document.task:0
 msgid "In translation"
-msgstr "U prevodu"
-
-#. module: translations
-#: field:evid.task.overview,name:0
-msgid "Task code"
-msgstr "Šifra zadataka"
+msgstr "U prijevodu"
 
 #. module: translations
 #: model:ir.model,name:translations.model_translation_type
@@ -399,6 +390,11 @@ msgstr "translation.type"
 #: view:translation.document.task:0
 msgid "Language translation"
 msgstr "Jezik za prijevod"
+
+#. module: translations
+#: field:translation.evidention,ev_sequence:0
+msgid "Evidention Number"
+msgstr "Evidention Number"
 
 #. module: translations
 #: view:translation.document.task:0
@@ -427,13 +423,12 @@ msgid "Evidention"
 msgstr "Evidencija"
 
 #. module: translations
-#: field:evid.task.overview,card_trans:0
 #: field:hr.employee,translate_task_ids:0
 msgid "Translated"
 msgstr "Prevedeno"
 
 #. module: translations
-#: code:addons/translations/evidention.py:165
+#: code:addons/translations/evidention.py:153
 #, python-format
 msgid ""
 "No languages for translation\n"
@@ -499,13 +494,6 @@ msgid "In process"
 msgstr "U procesu"
 
 #. module: translations
-#: code:addons/translations/evidention.py:425
-#: code:addons/translations/evidention.py:446
-#, python-format
-msgid "You are not competent on this task!"
-msgstr "Niste kompetentni za ovaj zadatak!"
-
-#. module: translations
 #: field:hr.language.competence,note:0
 #: field:translation.document.task,note:0
 #: view:translation.evidention:0
@@ -551,20 +539,31 @@ msgid "Estimated number of cards for translating"
 msgstr "Procjena broja kartica za prijevod"
 
 #. module: translations
+#: code:addons/translations/evidention.py:326
+#, python-format
+msgid "from"
+msgstr "sa"
+
+#. module: translations
 #: model:ir.actions.act_window,name:translations.translation_competence_action_menu
 #: model:ir.ui.menu,name:translations.translations_competence_menu
 msgid "Language competencies"
-msgstr "Language competencies"
-
-#. module: translations
-#: field:evid.task.overview,cards_lect:0
-msgid "unknown"
-msgstr "unknown"
+msgstr "Poznavanje jezika"
 
 #. module: translations
 #: view:translation.evidention:0
 msgid "Processing"
 msgstr "U obradi"
+
+#. module: translations
+#: help:translation.evidention,date_recived:0
+msgid "Keep empty to use the current date"
+msgstr "Keep empty to use the current date"
+
+#. module: translations
+#: help:translation.work,cards_done:0
+msgid "Enter value for this session or leave blank"
+msgstr "Unesite vrijednost za ovu sesiju ili ostavite prazno"
 
 #. module: translations
 #: field:translation.document,message_is_follower:0
@@ -577,11 +576,6 @@ msgstr "Is a Follower"
 #: view:translation.document.task:0
 msgid "Language original"
 msgstr "Jezik originala"
-
-#. module: translations
-#: view:translation.document.task:0
-msgid "Pause"
-msgstr "Pauza"
 
 #. module: translations
 #: field:translation.type,description:0
@@ -606,7 +600,7 @@ msgid "Language"
 msgstr "Jezik"
 
 #. module: translations
-#: model:ir.actions.act_window,name:translations.translations_work_done_form__action
+#: model:ir.actions.act_window,name:translations.translations_work_done_form_action
 msgid "Translation work log entry"
 msgstr "Unos denvnika prijevoda"
 
@@ -630,7 +624,6 @@ msgid "Origin language"
 msgstr "Jezik originala"
 
 #. module: translations
-#: field:evid.task.overview,translators:0
 #: view:hr.employee:0
 msgid "Translators"
 msgstr "Prevoditelji"
@@ -661,31 +654,22 @@ msgid "Translation status"
 msgstr "Status prijevoda"
 
 #. module: translations
-#: field:translation.evidention,ev_sequence:0
-msgid "Number"
-msgstr "Broj"
-
-#. module: translations
-#: view:evid.task.overview:0
-#: model:ir.actions.act_window,name:translations.evidention_task_overview_view_action
-msgid "Evidention - Tasks overview"
-msgstr "Evidencija - pregled zadataka"
-
-#. module: translations
 #: view:translations.work.done:0
 msgid "Cancel"
 msgstr "Otkaži"
 
 #. module: translations
-#: field:evid.task.overview,card_est:0
-msgid "Estimated"
-msgstr "Procjenjeno"
+#: code:addons/translations/evidention.py:431
+#: code:addons/translations/evidention.py:452
+#, python-format
+msgid "You are not competent on this task!"
+msgstr "Niste kompetentni za ovaj zadatak!"
 
 #. module: translations
 #: selection:translation.document,state:0
 #: selection:translation.evidention,state:0
 msgid "Open"
-msgstr "Otvori"
+msgstr "Otvoreno"
 
 #. module: translations
 #: selection:translation.document.task,state:0
@@ -718,14 +702,14 @@ msgid "Lecture"
 msgstr "Lekturiraj"
 
 #. module: translations
-#: view:translation.evidention:0
-msgid "Tasks overview"
-msgstr "Pregled zadataka"
+#: field:translation.document.task,description:0
+msgid "Description"
+msgstr "Opis"
 
 #. module: translations
 #: model:ir.model,name:translations.model_hr_language_competence
 msgid "Employee competence by language"
-msgstr "Employee competence by language"
+msgstr "Znanje jezika po djelatniku"
 
 #. module: translations
 #: field:translation.work,job_stop:0
@@ -762,11 +746,6 @@ msgid "Certified"
 msgstr "Ovjereno"
 
 #. module: translations
-#: field:translation.document,state:0
-msgid "Document status"
-msgstr "Status dokumenta"
-
-#. module: translations
 #: model:res.groups,name:translations.group_translations_manager
 msgid "Translation Manager"
 msgstr "Translation Manager"
@@ -781,12 +760,7 @@ msgstr "Naziv"
 #. module: translations
 #: model:ir.model,name:translations.model_hr_language
 msgid "Languages - employee related"
-msgstr "Languages - employee related"
-
-#. module: translations
-#: field:evid.task.overview,lectors:0
-msgid "Lectors"
-msgstr "Lektori"
+msgstr "Jezici - veza sa djelatnicima"
 
 #. module: translations
 #: model:ir.actions.act_window,name:translations.translation_document_task_menu_action
@@ -803,10 +777,9 @@ msgid "Messages and communication history"
 msgstr "Messages and communication history"
 
 #. module: translations
-#: field:evid.task.overview,sequence:0
 #: field:translation.document,doc_sequence:0
 msgid "Sequence"
-msgstr "Sequence"
+msgstr "Oznaka"
 
 #. module: translations
 #: view:translation.evidention:0
