@@ -289,13 +289,14 @@ class translation_document_task (osv.Model):
         for job in jobs:
             if emp_id == job.employee_id.id:
                 if job.work_type == 'lect':
-                    if job.job_done: return 'Lectoring finished'
-                    elif job.job_stop : return 'Lectoring paused'
+                    if job.job_done: status =  'Lectoring finished'
+                    elif job.job_stop : status = 'Lectoring paused'
                     else: return 'Lectoring'
                 elif job.work_type == 'trans':
-                    if job.job_done: return 'Translating finished'
-                    elif job.job_stop : return 'Translating paused'
-                    else: return 'Translating'
+                    if job.job_done: status = 'Translating finished'
+                    elif job.job_stop : status = 'Translating paused'
+                    else: status = 'Translating'
+        return status
         
     
     def _my_task_competence(self, cr, uid, ids, field_name, field_value, context=None):
