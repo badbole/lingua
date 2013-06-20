@@ -8,7 +8,7 @@
 			<field name="inherit_id" ref="translations.translation_evidention_form_view" />
 			<field name="arch" type="xml">
 				<field name="date_recived" position="after">
-					<field name="prostor_id" />
+					<field name="prostor_id" attrs="{'readonly':[('state','!=','draft')]}"/>
 				</field>
 			</field>
 		</record>

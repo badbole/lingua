@@ -33,6 +33,14 @@ import psycopg2
 class translation_evidention(osv.Model):
     _inherit = 'translation.evidention'
     
+    def _get_prostor_id(self, cr, uid, id, context=None):
+        return self.pool.get('hr.employee').browse(cr, uid, uid).prostor_id.id
+    
     _columns = {
                 'prostor_id':fields.many2one('fiskal.prostor','Podružnica')
                 }
+    
+    _defaults = {
+                 'prostor_id':_get_prostor_id
+                 }
+    

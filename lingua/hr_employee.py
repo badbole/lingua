@@ -35,5 +35,6 @@ class hr_employee(osv.osv):
     
     _columns = {
                 'prostor_id':fields.many2one('fiskal.prostor','Podružnica', help="Zadana podružnica"),
-                'uredjaj_id':fields.many2one('fiskal.uredjaj','Naplatni uredjaj',help="Zadani naplatni uređaj")
+                'uredjaj_id':fields.many2one('fiskal.uredjaj','Naplatni uredjaj',help="Zadani naplatni uređaj"),
+                'double_check':fields.boolean('Dvostruka provjera'),
                 }

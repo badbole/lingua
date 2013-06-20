@@ -97,18 +97,22 @@ class translation_evidention(osv.Model):
                          (3,'Document=Product (aaa trans to bbb,ccc) (T+L)'),
                          (4,'(Document=Product Translate, Product Lector)'),
                          (5,'(Single product, all tasks in description)')]
+    
+    
+    
     _columns = {
                 'marketing_id':fields.many2one('translation.marketing','Marketing'),
                 'price_id':fields.many2one('translation.price','Price template'),
                 'product_id':fields.one2many('translation.product','evidention_id','Translations'),
                 'product_type':fields.selection(_get_product_type, 'Product type', help="Rules for generating and invoicing translation", required=1),
                 'avans':fields.float('Advace ammount',digits_compute=dp.get_precision('Product Price')),
-                'so_ids':fields.many2many('sale.order','translation_evidention_so_rel','translation_evidention_id','sale_order_id','Sale orders')
-              
+                'so_ids':fields.many2many('sale.order','translation_evidention_so_rel','translation_evidention_id','sale_order_id','Sale orders'),
+                'company_id':fields.many2one('res.company','Company')
                 }
     
     _defaults = {
                  'product_type' :1,
+                 'company_id': 1    #TODO MULTICOMPANY...
                  }
     ###########################################
      ## borrow from sale confirm  remove later    
@@ -132,15 +136,50 @@ class translation_evidention(osv.Model):
             'nodestroy': True,
         }#####################
         ##########################
-    def action_avans_invoice(self, cr, uid, id, context=None):
-        view_ref = self.pool.get('ir.model.data').get_obj_reference(cr, uid, 'sale', 'view_order_form')
+        
+    def _prepare_invoice(self, cr, uid, order, lines=None, context=None):
+        if context is None: context = {}
+        journal_ids = self.pool.get('account.journal').search(cr, uid,
+            [('type', '=', 'sale'), ('company_id', '=', order.company_id.id)],
+            limit=1)
+        if not journal_ids:
+            raise osv.except_osv(_('Error!'),
+                _('Please define sales journal for this company: "%s" (id:%d).') % (order.company_id.name, order.company_id.id))
+        invoice_vals = {
+            'name': '',
+            'origin': order.ev_sequence,
+            'type': 'out_invoice',
+            'reference': order.ev_sequence,
+            'account_id': order.partner_id.property_account_receivable.id,
+            'partner_id': order.partner_id.id,
+            'journal_id': journal_ids[0],
+            #'invoice_line': [(6, 0, lines)] or False,
+            #'currency_id': order.pricelist_id.currency_id.id,
+            'comment': order.note,
+            #'payment_term': order.payment_term and order.payment_term.id or False,
+            'fiscal_position': order.partner_id.property_account_position.id or False,
+            'date_invoice': context.get('date_invoice', False),
+            #'company_id': order.company_id.id,
+            'user_id': uid
+        }
+
+        # Care for deprecated _inv_get() hook - FIXME: to be removed after 6.1
+        #invoice_vals.update(self._inv_get(cr, uid, order, context=context))
+        return invoice_vals
+    
+    def action_avans_invoice(self, cr, uid, ids, context=None):
+        assert len(ids)==1 ,'For one invoice at a time!'
+        evidention = self.browse(cr, uid, ids[0])
+        invoice_vals = self._prepare_invoice(cr, uid, evidention, context)
+        view_ref = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'account', 'invoice_form')
         view_id = view_ref and view_ref[1] or False,
         
+        invoice=self.pool.get('account.invoice').create(cr, uid, invoice_vals)
         return {
             'type': 'ir.actions.act_window',
             'name': _('Sales Order'),
             'res_model': 'sale.order',
-            'res_id': ids[0],
+            'res_id': invoice,
             'view_type': 'form',
             'view_mode': 'form',
             'view_id': view_id,
@@ -151,8 +190,10 @@ class translation_evidention(osv.Model):
     def load_trans_product_list(self, cr, uid, product_id, context=None):
         res =[]
         prod = {}
-        total = 0
         for pr in product_id:
+            tax_list=[]
+            for tax in pr.product_id.taxes_id:
+                tax_list.append(tax.id)
             prod['id'] = pr.id
             prod['product_type'] = pr.product_type
             prod['product_id'] = pr.product_id.id
@@ -162,9 +203,9 @@ class translation_evidention(osv.Model):
             prod['units'] = pr.units
             prod['discount'] = pr.discount
             prod['price_amount'] = pr.price_amount
-            total += pr.price_amount
+            prod['taxes_id'] = pr.product_id.taxes_id
             res.append(prod)
-        return res, total
+        return res
     
     def trans_product_preview_generate(self, cr, uid, ids, context=None):
         if context == None: context={}
@@ -190,15 +231,11 @@ class translation_evidention(osv.Model):
     
     def write_new_translation_products(self, cr, uid, prod_list, context=None):
         pr_list=[]
-        total = 0
         tr_prod = self.pool.get('translation.product')
         for line in prod_list:
             line['id'] = tr_prod.create(cr, uid, line)
-            
-            #prod_list.append('id': tr_prod.create(cr, uid, line))
-            total += line['price_amount']
             pr_list.append(line)
-        return pr_list, total
+        return pr_list
     
     
     
@@ -224,28 +261,22 @@ class translation_evidention(osv.Model):
                 so_list.append({'so_id':so.id, 'so_total':so.amount_untaxed, 'so_lines':so.order_line})
             trans_prod_list = {}
             #trans_prod_list_new = self.trans_product_preview_generate(cr, uid, ids, context=None)
-            if not evidention.product_id:
+            if not evidention.product_id: 
                 trans_prod_list_new = self.trans_product_preview_generate(cr, uid, ids, context=None)
-                trans_prod_list, tr_total = self.write_new_translation_products(cr, uid, trans_prod_list_new)
-            else: 
-                trans_prod_list, tr_total = self.load_trans_product_list(cr, uid, evidention.product_id)
+                trans_prod_list= self.write_new_translation_products(cr, uid, trans_prod_list_new)
+                for product in trans_prod_list:
+                    prod_id= self.create_product_product(cr, uid, product)
+                    tr_prod.write(cr, uid, product['id'],{'product_id':prod_id})
             
-            #move to mew function
-            so = self.create_sale_order(cr, uid, evidention.partner_id.id, 1 , evidention.ev_sequence)
+            trans_prod_list = self.load_trans_product_list(cr, uid, evidention.product_id)
+            
+            fiscal_position, fis_pos, payment_term = self.get_partner_fiscal_position(cr, uid, evidention.partner_id.id)
+            so = self.create_sale_order(cr, uid, evidention.partner_id.id, 1 , evidention.ev_sequence, fiscal_position, payment_term)
             for product in trans_prod_list:
-                #if so_list == []:
-                prod_id= self.create_product_product(cr, uid, product)
-                tr_prod.write(cr, uid, product['id'],{'product_id':prod_id})
-                product['product_id']=prod_id
-                self.create_sale_order_line(cr, uid, so, product)
+                self.create_sale_order_line(cr, uid, so, product, fis_pos)
             self.write(cr, uid, evidention.id,{'so_ids':[(4,so)]})
 
         return True 
-
-    def get_default_tax(self, cr, uid):
-        #ovo bolje 
-        # 1. get partner fiscal position, get tax!
-        return self.pool.get('account.tax').search(cr, uid, [('name', '=', "25% PDV")] )[0]
     
     
     
@@ -288,26 +319,41 @@ class translation_evidention(osv.Model):
                      }
         return self.pool.get('product.product').create(cr, uid, prod_vals)
     
-    def create_sale_order(self, cr, uid, partner, pricelist, origin):
+    def get_partner_fiscal_position(self, cr, uid, partner, context=None):
+        if not partner:
+            return {'value': {'partner_invoice_id': False, 'partner_shipping_id': False,  'payment_term': False, 'fiscal_position': False}}
+        part = self.pool.get('res.partner').browse(cr, uid, partner, context=context)
+        payment_term = part.property_payment_term and part.property_payment_term.id or False
+        fiscal_position = part.property_account_position and part.property_account_position.id or False
+        fis_pos = part.property_account_position or False
+        return fiscal_position, fis_pos, payment_term
+        
+    def create_sale_order(self, cr, uid, partner, pricelist, origin, fiscal_position=None, payment=None):
         values = {
                   'partner_id':partner,
                   'partner_invoice_id':partner,
                   'partner_shipping_id':partner,
+                  'fiscal_position':fiscal_position,
+                  'payment_term':payment,
                   'pricelist_id':pricelist, 
                   'origin':origin
                   }
         return self.pool.get('sale.order').create(cr, uid, values)
     
-    def create_sale_order_line(self, cr, uid, so, product, context=None ):
+    
+    
+    def create_sale_order_line(self, cr, uid, so, product, fiscal_position=False, context=None ):
         uom_id= self.get_uos(cr, uid)
-        tax_id= self.get_default_tax(cr, uid)
+        fpos_obj = self.pool.get('account.fiscal.position')
+        new_taxes = fpos_obj.map_tax(cr, uid, fiscal_position, product['taxes_id'])
+        #tax_id= self.get_default_tax(cr, uid)
         values = {'name':product['description'],
                   'order_id':so,
                   'product_id':product['product_id'],
                   'price_unit':product['price'], # ili cijenu koja je izračunata i količine 1!
                   'product_uom':uom_id,
                   'product_uos':uom_id,
-                  'tax_id':[(4,tax_id)],
+                  'tax_id':new_taxes and[(6,0,new_taxes)] or False,
                   'product_uom_qty':product['units'],
                   }
         return self.pool.get('sale.order.line').create(cr, uid, values)

@@ -36,7 +36,7 @@ from tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT
 
 
 def log_time():
-    tstamp = datetime.now(timezone('Europe/Zagreb'))
+    tstamp = datetime.now() #datetime.now(timezone('Europe/Zagreb'))
     return tstamp.strftime(DEFAULT_SERVER_DATETIME_FORMAT )
 
 
@@ -275,10 +275,10 @@ class translation_document_task (osv.Model):
         res={}
         emp_id = get_employee_from_uid(self, cr, uid)
         for task in self.browse(cr, uid, ids):
-            status = 'No status'
+            status = _('No status')
             for trans in task.translate_ids:
                 if emp_id == trans.id:
-                    status = 'Assigned'
+                    status = _('Assigned')
                     status = self.check_my_status(emp_id, status, task.work_ids )
             res[task.id]=status
         return res
@@ -289,13 +289,19 @@ class translation_document_task (osv.Model):
         for job in jobs:
             if emp_id == job.employee_id.id:
                 if job.work_type == 'lect':
-                    if job.job_done: status =  'Lectoring finished'
-                    elif job.job_stop : status = 'Lectoring paused'
-                    else: return 'Lectoring'
+                    if job.job_done: 
+                        status =  _('Lectoring finished')
+                    elif job.job_stop : 
+                        status = _('Lectoring paused')
+                    else: 
+                        return _('Lectoring')
                 elif job.work_type == 'trans':
-                    if job.job_done: status = 'Translating finished'
-                    elif job.job_stop : status = 'Translating paused'
-                    else: status = 'Translating'
+                    if job.job_done: 
+                        status = _('Translating finished')
+                    elif job.job_stop : 
+                        status = _('Translating paused')
+                    else: 
+                        status = _("I'm translating")
         return status
         
     
@@ -371,8 +377,10 @@ class translation_document_task (osv.Model):
 
     _order = "id desc"
     
+    
+    
     def write(self, cr, uid, ids, vals, context=None):
-        if vals.get('state')=='draft' and vals.get('translate_ids'):
+        if vals.get('state') and vals.get('state')=='draft' and vals.get('translate_ids'):
             vals['state'] = 'assig'
         return super(translation_document_task, self).write(cr, uid, ids, vals, context)
     
@@ -403,10 +411,10 @@ class translation_document_task (osv.Model):
         time= log_time() #datetime.now(timezone('Europe/Zagreb')) #log_time()
         if state == 'Translating paused':
             self.translation_work_create(cr, uid, ids[0], 'trans', emp_id, time)
-            #self.write(cr,uid,ids[0],{'state':'trans'})
+            #task_obj.write({'state':'trans'})
         elif state == "Lectoring paused":
             self.translation_work_create(cr, uid, ids[0], 'lect', emp_id, time)
-            #self.write(cr,uid,ids[0],{'state':'lect'})
+            #task_obj.write({'state':'lect'})
         return True
     
     
@@ -450,13 +458,13 @@ class translation_document_task (osv.Model):
         task_obj = self.browse(cr, uid, ids[0])
         if not task_obj.user_competent:
             raise osv.except_osv(_('Error!'), _('You are not competent on this task!'))
-        if not (task_obj.user_status in ('No status','Asigned')):
+        if not (task_obj.user_status in (_('No status'),_('Assigned'))):
             return False
         emp_id = get_employee_from_uid(self, cr, uid)
         if task_obj.translate_ids == []:
             self.write(cr, uid, ids[0],{'translate_ids':[(4, emp_id)]})
         else:
-            if task_obj.user_status == 'No status':
+            if task_obj.user_status == _('No status'):
                 tr_list=[emp_id]
                 for tr in  task_obj.translate_ids:
                     tr_list.append(tr.id)
