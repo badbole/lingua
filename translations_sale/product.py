@@ -155,7 +155,7 @@ class translation_evidention(osv.Model):
             'journal_id': journal_ids[0],
             #'invoice_line': [(6, 0, lines)] or False,
             #'currency_id': order.pricelist_id.currency_id.id,
-            'comment': order.note,
+            'comment': order.note or False,
             #'payment_term': order.payment_term and order.payment_term.id or False,
             'fiscal_position': order.partner_id.property_account_position.id or False,
             'date_invoice': context.get('date_invoice', False),
@@ -192,8 +192,9 @@ class translation_evidention(osv.Model):
         prod = {}
         for pr in product_id:
             tax_list=[]
-            for tax in pr.product_id.taxes_id:
-                tax_list.append(tax.id)
+            if pr.product_id.taxes_id:
+                for tax in pr.product_id.taxes_id:
+                    tax_list.append(tax.id)
             prod['id'] = pr.id
             prod['product_type'] = pr.product_type
             prod['product_id'] = pr.product_id.id
@@ -267,8 +268,8 @@ class translation_evidention(osv.Model):
                 for product in trans_prod_list:
                     prod_id= self.create_product_product(cr, uid, product)
                     tr_prod.write(cr, uid, product['id'],{'product_id':prod_id})
-            
-            trans_prod_list = self.load_trans_product_list(cr, uid, evidention.product_id)
+            else:
+                trans_prod_list = self.load_trans_product_list(cr, uid, evidention.product_id)
             
             fiscal_position, fis_pos, payment_term = self.get_partner_fiscal_position(cr, uid, evidention.partner_id.id)
             so = self.create_sale_order(cr, uid, evidention.partner_id.id, 1 , evidention.ev_sequence, fiscal_position, payment_term)
@@ -298,17 +299,18 @@ class translation_evidention(osv.Model):
     
     def create_product_template(self, cr, uid, product, context=None):
         uom_id=self.get_uos(cr, uid)
-        tax_id=self.get_default_tax(cr, uid)
+        ir_values = self.pool.get('ir.values')
+        taxes_id = ir_values.get_default(cr, uid, 'product.product', 'taxes_id', company_id=1)
         prod_template = {
                          'name':product['name'],
                          'description': product['description'],
                          'uom_id':uom_id,
                          'uom_po_id':uom_id,
-                    #'category_id': kategorija,
-                        'taxes_id':[(4,tax_id)], # pdv 25%!!!
-                        'list_price':product['price_amount'],
-                        'type':'service'
-                        }
+                         #'category_id': kategorija,
+                         'taxes_id':[(6,0,taxes_id)], # pdv 25%!!!
+                         'list_price':product['price_amount'],
+                         'type':'service'
+                          }
         return self.pool.get('product.template').create(cr, uid, prod_template)
     
     def create_product_product(self, cr, uid, product, context=None):
@@ -346,7 +348,7 @@ class translation_evidention(osv.Model):
         uom_id= self.get_uos(cr, uid)
         fpos_obj = self.pool.get('account.fiscal.position')
         new_taxes = fpos_obj.map_tax(cr, uid, fiscal_position, product['taxes_id'])
-        #tax_id= self.get_default_tax(cr, uid)
+        
         values = {'name':product['description'],
                   'order_id':so,
                   'product_id':product['product_id'],
@@ -375,15 +377,7 @@ class translation_document_task(osv.Model):
                 
                 }
 
-"""
- BOLEEEE KAKOOOO SI GLUUUPPP!!!!!
-class sale_order(osv.osv):
-    _name= 'sale.order'
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
-    _columns = {
-                'trans_evid_ids':fields.many2many('translation.evidention','translation_evidention_so_rel','sale_order_id','translation_evidention_id','Evidentions')
-                }
-"""
+
 class sale_order(osv.osv):
     _inherit= 'sale.order'
     #_inherit = ['mail.thread', 'ir.needaction_mixin']

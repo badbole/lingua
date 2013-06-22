@@ -145,8 +145,7 @@
 								<field name="price_id" />
 								<button string="Invoice for avans" name="action_avans_invoice"
                                     type="object" />
-								<button string="Generate Sale Order" name="action_sale_order_generate"
-									type="object" />
+								
 							</group>
 							
 							<group colspan="2" >
@@ -199,7 +198,6 @@
 			<field name="inherit_id" ref="translations.translation_document_task_form_view" />
 			<field name="arch" type="xml">
 				<notebook position="inside">
-
 					<page string="Price">
 						<label string="Price " />
 						<field name="price_id" class="oe_inline" />

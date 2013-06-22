@@ -59,10 +59,9 @@ Summary:
                    'security/translations_security.xml',
                    'translations_base_data.xml',
                    'wizard/translation_work_done.xml',
-                   #'wizard/translation_work_check.xml',
-                   #'wizard/evid_task_overview.xml',
                    'languages_view.xml',
                    'evidention_view.xml',
+                   #'translation_report.xml',
                    'translation_sequence.xml',
                    'security/ir.model.access.csv',
 

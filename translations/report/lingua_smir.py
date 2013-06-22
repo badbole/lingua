@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Module: lingua
+#    Module: translations
 #    Author: Davor Bojkić
 #    mail:   bole@dajmi5.com
 #    Copyright (C) 2012- Daj Mi 5, 
@@ -25,22 +25,20 @@
 #
 ##############################################################################
 
-from osv import osv, fields
-from openerp.tools.translate import _
-import openerp.addons.decimal_precision as dp
-import psycopg2
 
-class translation_evidention(osv.Model):
-    _inherit = 'translation.evidention'
-    
-    def _get_prostor_id(self, cr, uid, id, context=None):
-        return self.pool.get('hr.employee').browse(cr, uid, uid).prostor_id.id
-    
-    _columns = {
-                'prostor_id':fields.many2one('fiskal.prostor','Podružnica')
-                }
-    
-    _defaults = {
-                 'prostor_id':_get_prostor_id
-                 }
-    
+import time
+from openerp.report import report_sxw
+
+class translation_evidention(report_sxw.rml_parse):
+    def __init__(self, cr, uid, name, context):
+        super(translation_evidention, self).__init__(cr, uid, name, context=context)
+        self.localcontext.update({
+            'time': time,
+        })
+report_sxw.report_sxw(
+    'report.lingua.smir',
+    'translation.evidention.smir',
+    'addons/translation/report/lingua_smir.rml',
+    parser=translation_evidention , header=False
+)
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

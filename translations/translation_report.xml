@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <report auto="False" id="report_translations_smir" model="translation.evidention" name="translation_evidention_smir"
+                rml="addons/translations/report/lingua_smir.rml" string="Evidention SMIR"
+                usage="default"/>
+
+    </data>
+</openerp>

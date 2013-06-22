@@ -131,6 +131,23 @@ class translation_evidention(osv.osv):
     
     _order = "id desc"
     
+    def print_smir(self, cr, uid, ids, context=None):
+        '''
+        This function prints the SMIR envelope
+        '''
+        assert len(ids) == 1, 'This option should only be used for a single id at a time.'
+        datas = {
+             'ids': ids,
+             'model': 'translation.evidention',
+             'form': self.read(cr, uid, ids[0], context=context)
+        }
+        return {
+            'type': 'ir.actions.report.xml',
+            'report_name': 'translation.evidention.smir',
+            'datas': datas,
+            'nodestroy' : True
+        }
+    
     def copy(self, cr, uid, id, default=None, context=None):
         if not default:
             default = {}
@@ -151,11 +168,6 @@ class translation_evidention(osv.osv):
             for doc in evidention.document_ids:
                 if not doc.task_ids:
                     raise osv.except_osv(_('Warning !'), _('No languages for translation\n document : %s!') % (doc.name))
-        return True
-    
-    def action_evidention_add_document(self, cr, uid, ids, context=None):
-        #dodaje zaboravljeni dokument
-        #u već zaprimljenu evidenciju
         return True
     
     def action_evidention_recive(self, cr, uid, ids, context=None):
@@ -189,7 +201,7 @@ class translation_evidention(osv.osv):
                 doc_list.append ([doc.id, doc_])
             evid_list.append([evidention.id, evid_])
             self.write_recived_all(cr, uid, task_list, doc_list, evid_list)
-        
+            self.write(cr, uid, evidention.id,{})
             
         return True
     
@@ -259,17 +271,6 @@ class translation_document_task (osv.Model):
                            ,('finish',"Finished")
                            ,('cancel',"Canceled")
                            ]
-    """
-    def _user_status_selection(self, cr, uid, ids, context=None):
-        return [('no','No status'),
-                ('ass','Assigned'),
-                ('trans','Translating'),
-                ('trans_p','Translating paused'),
-                ('trans_f','Translating finished'),
-                ('lect','Lectoring'),
-                ('lect_p','Lectoring paused'),
-                ('lect_f','Lectoring finished')]
-    """
     
     def _my_task_work_status(self, cr, uid, ids, field_name, field_value, context=None):
         res={}
@@ -282,8 +283,6 @@ class translation_document_task (osv.Model):
                     status = self.check_my_status(emp_id, status, task.work_ids )
             res[task.id]=status
         return res
-    
-    
     
     def check_my_status(self, emp_id, status, jobs):
         for job in jobs:
@@ -301,7 +300,7 @@ class translation_document_task (osv.Model):
                     elif job.job_stop : 
                         status = _('Translating paused')
                     else: 
-                        status = _("I'm translating")
+                        status = _("Translating")
         return status
         
     

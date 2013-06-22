@@ -58,6 +58,8 @@
 			<field name="arch" type="xml">
 				<form string="Evidention" version="7.0">
 					<header>
+					   <button string="Recive" name="action_evidention_recive" type="object" class="oe_highlight" states="draft" />
+					    <button name="print_smir" string="ŠMIR" type="object" />
 						<field name="state" widget="statusbar" statusbar_visible="open,process,deliver,finish" />
 					</header>
 					<sheet>
@@ -65,10 +67,6 @@
 							<label string="Evidention " />
 							<field name="ev_sequence" class="oe_inline" readonly="1" />
 						</h1>
-						<div class="oe_button_box oe_right">
-							<button string="Recive" name="action_evidention_recive"
-								type="object" class="oe_highlight" states="draft" />
-						</div>
 						<h2>
 							<label string="Partner" />
 							<field name="partner_id" class="oe_inline" />

@@ -27,7 +27,8 @@
 
 import marketing
 #import hr_employee
-import product
+#import product
+import translations_sale
 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

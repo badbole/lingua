@@ -60,7 +60,8 @@ Summary:
     'update_xml': [
                    'config_data.xml',
                    'marketing_view.xml',
-                   'product_view.xml',
+                   #'product_view.xml',
+                   'translations_sale_view.xml',
                    'security/ir.model.access.csv',
                    ],
     "active": False,
