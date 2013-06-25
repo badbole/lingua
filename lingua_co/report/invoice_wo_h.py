@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Module: translations
+#    Module: lingua_company
 #    Author: Davor Bojkić
 #    mail:   bole@dajmi5.com
 #    Copyright (C) 2012- Daj Mi 5, 
@@ -26,5 +26,21 @@
 ##############################################################################
 
 
+import time
+from openerp.report import report_sxw
 
-import lingua_smir
+from netsvc import Service
+#del Service._services['report.translat
+
+class invoice_wo_h(report_sxw.rml_parse):
+    def __init__(self, cr, uid, name, context):
+        super(invoice_wo_h, self).__init__(cr, uid, name, context=context)
+        self.localcontext.update({
+            'time': time,
+        })
+report_sxw.report_sxw(
+    'report.invoice_wo_h',
+    'account.invoice',
+    'addons/translation/report/invoice_wo_h.rml',
+    parser=invoice_wo_h , header=False
+)

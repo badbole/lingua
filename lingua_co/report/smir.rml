@@ -19,6 +19,7 @@
     </initialize>
     <paraStyle name="P1" fontName="Helvetica"/>
     <paraStyle name="P2" rightIndent="0.0" leftIndent="0.0" fontName="Helvetica" fontSize="8.0" leading="10" alignment="LEFT" spaceBefore="0.0" spaceAfter="0.0"/>
+    <paraStyle name="P3" rightIndent="0.0" leftIndent="0.0" fontName="Helvetica" fontSize="8.0" leading="10" alignment="LEFT" spaceBefore="0.0" spaceAfter="0.0"/>
     <paraStyle name="Standard" fontName="Helvetica"/>
     <paraStyle name="Heading" fontName="Helvetica" fontSize="14.0" leading="17" spaceBefore="12.0" spaceAfter="6.0"/>
     <paraStyle name="Text body" fontName="Helvetica" spaceBefore="0.0" spaceAfter="6.0"/>
@@ -28,36 +29,63 @@
     <paraStyle name="Heading 1" fontName="Helvetica-Bold" fontSize="115%" leading="NaN" spaceBefore="12.0" spaceAfter="6.0"/>
     <paraStyle name="terp_header" fontName="Helvetica-Bold" fontSize="12.0" leading="15" alignment="LEFT" spaceBefore="12.0" spaceAfter="6.0"/>
     <paraStyle name="terp_default_8" rightIndent="0.0" leftIndent="0.0" fontName="Helvetica" fontSize="8.0" leading="10" alignment="LEFT" spaceBefore="0.0" spaceAfter="0.0"/>
+    <paraStyle name="Table Contents" fontName="Helvetica"/>
     <images/>
   </stylesheet>
   <story>
-    <para style="P2">[[ repeatIn(objects,'o') ]]</para>
-    <para style="P2">[[ setLang(o.partner_id.lang) ]]</para>
-    <para style="P2">
-      <font color="white"> </font>
-    </para>
-    <para style="P2">
+  <pto>
+    <para style="terp_default_8">[[repeatIn(objects,'o')]]</para>
+    <para style="terp_default_8">[[ setLang(o.partner_id.lang) ]]</para>
+  
+    <para style="P1">EVIDENCIJA PRIJEVODA - [[ (o.ev_sequence) ]]</para>
+    <para style="terp_default_8">
       <font color="white"> </font>
     </para>
     <blockTable colWidths="372.0" style="Table1">
       <tr>
         <td>
-          <para style="P2">[[ (o.partner_id and o.partner_id.title and o.partner_id.title.name) or '' ]] [[ (o.partner_id and o.partner_id.name) or '' ]] </para>
-          <para style="P2">[[ display_address(o.partner_id) ]]</para>
-          <para style="P2">
+          <para style="terp_default_8">[[ (o.partner_id and o.partner_id.title.name) or '' ]] [[ (o.partner_id and o.partner_id.name) or '' ]] </para>
+          <para style="terp_default_8">[[ display_address(o.partner_id) ]]</para>
+          <para style="terp_default_8">
             <font color="white"> </font>
           </para>
-          <para style="P2">Tel. : [[ (o.partner_id.phone) or removeParentNode('para') ]] </para>
-          <para style="P2">Fax : [[ (o.partner_id.fax) or removeParentNode('para') ]] </para>
-          <para style="P2">T<font face="Helvetica">IN</font> : [[ (o.partner_id.vat) or removeParentNode('para') ]]</para>
+          <para style="P3">Tel.: [[ (o.partner_id.phone) or removeParentNode('para') ]] </para>
+          <para style="P3">Fax : [[ (o.partner_id.fax) or removeParentNode('para') ]] </para>
+          <para style="P2">Email: [[ (o.partner_id.email) or removeParentNode('para') ]]</para>
         </td>
       </tr>
     </blockTable>
-    <para style="P1">
+    <para style="Standard">
       <font color="white"> </font>
     </para>
     <para style="P1">
-      <font face="Helvetica">EVIDENCIJA PRIJEVODA [[o.ev_sequence]]</font>
+      <font face="Helvetica">Zaprimljeno : [[ formatLang(o.date_recived, date = True) ]]</font>
     </para>
+    <para style="Standard">
+      <font color="white"> </font>
+    </para>
+    <para style="P1">
+      <font face="Helvetica">Rok isporuke : [[ formatLang(o.date_due, date_time = True) ]]</font>
+    </para>
+    <para style="P1">
+      <font face="Helvetica"/>
+    </para>
+    <para style="P1">
+      <font face="Helvetica">Zaprimljeni dokumenti:</font>
+    </para>
+    <section>
+    <para style="terp_default_1">[[repeatIn(o.document_ids,'doc')]]</para>
+    <blockTable colWidths="180.0,70.0" >
+        <tr>
+          <td>
+            <para style="terp_default_9">[[ (doc.name) ]] </para>
+          </td>
+          <td>
+            <para style="terp_default_9">[[ (doc.cards_estm) ]] </para>
+          </td>
+         </tr>
+    </blockTable>
+    </section>
+    </pto>
   </story>
 </document>

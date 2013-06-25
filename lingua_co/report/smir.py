@@ -2,12 +2,12 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Module: lingua
+#    Module: lingua_company
 #    Author: Davor Bojkić
 #    mail:   bole@dajmi5.com
 #    Copyright (C) 2012- Daj Mi 5, 
 #                  http://www.dajmi5.com
-#    Contributions: Vlado / ABS95
+#    Contributions: 
 #                   
 #                    
 #    This program is free software: you can redistribute it and/or modify
@@ -25,40 +25,24 @@
 #
 ##############################################################################
 
-{
-    "name" : "LINGUA PRIJEVODI",
-    "description" : """
-Lingua modification pack
-==========================
 
-Author: Davor Bojkić - bole @ DAJ MI 5     www.dajmi5.com
+import time
+from openerp.report import report_sxw
 
-Contributions: Borko Augustin - borko @ abs95.com
-               Vlado Jerbic   - vlado @ abs95.com
+from netsvc import Service
+#del Service._services['report.translation.evidention.smir'] 
+#del Service._services['report.translations.smir'] 
 
-Summary: 
-
-
-    - 
-
-""",
-    "version" : "1.00",
-    "author" : "DAJ MI 5",
-    "category" : "Localisation/Croatia",
-    "website": "http://www.dajmi5.com",
-
-    'depends': [
-                'l10n_hr_fiskal',
-                'translations_sale'
-                ],
-    
-    'update_xml': [
-                   'evidention_view.xml',
-#                   'hr_employee_view.xml',
-                   'translation_report.xml',
-                   #'account_invoice_view.xml',
-                   ],
-    "active": False,
-    "installable": True,
-}
+class smir(report_sxw.rml_parse):
+    def __init__(self, cr, uid, name, context):
+        super(smir, self).__init__(cr, uid, name, context=context)
+        self.localcontext.update({
+            'time': time,
+        })
+report_sxw.report_sxw(
+    'report.smir',
+    'translation.evidention',
+    'addons/translation/report/smir.rml',
+    parser=smir , header=False
+)
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

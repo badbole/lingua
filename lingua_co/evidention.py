@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Module: lingua
+#    Module: lingua_co
 #    Author: Davor Bojkić
 #    mail:   bole@dajmi5.com
 #    Copyright (C) 2012- Daj Mi 5, 
@@ -33,17 +33,33 @@ import psycopg2
 class translation_evidention(osv.Model):
     _inherit = 'translation.evidention'
     
-    def _get_prostor_id(self, cr, uid, id, context=None):
-        return self.pool.get('hr.employee').browse(cr, uid, uid).prostor_id.id
+    def get_default_prostor_id(self, cr, uid, id, context=None):
+        return self.pool.get('res.users').browse(cr, uid, uid).prostor_id.id or False
     
     _columns = {
                 'prostor_id':fields.many2one('fiskal.prostor','Podružnica')
                 }
     
     _defaults = {
-                 'prostor_id':_get_prostor_id
+                 'prostor_id':get_default_prostor_id
                  }
     
+    def print_smir(self, cr, uid, ids, context=None):
+        '''
+        This function prints the SMIR envelope
+        '''
+        assert len(ids) == 1, 'This option should only be used for a single id at a time.'
+        datas = {
+             'ids': ids,
+             'model': 'translation.evidention',
+             'form': self.read(cr, uid, ids[0], context=context)
+        }
+        return {
+            'type': 'ir.actions.report.xml',
+            'report_name': 'smir',
+            'datas': datas,
+            'nodestroy' : True
+        }
     
 
     

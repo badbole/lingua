@@ -28,7 +28,7 @@ from osv import osv, fields
 from openerp.tools.translate import _
 from datetime import datetime, date
 from pytz import timezone
-import tools
+import tools, time
 import logging
 _logger = logging.getLogger(__name__)
 import openerp.addons.decimal_precision as dp
@@ -36,7 +36,11 @@ from tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT
 
 
 def log_time():
-    tstamp = datetime.now() #datetime.now(timezone('Europe/Zagreb'))
+    
+    #set UTC time on server an use this
+    tstamp = datetime.now(timezone('Europe/Zagreb')) 
+    # if server timezone is set use:
+    #tstamp = datetime.now() #
     return tstamp.strftime(DEFAULT_SERVER_DATETIME_FORMAT )
 
 
@@ -131,22 +135,14 @@ class translation_evidention(osv.osv):
     
     _order = "id desc"
     
-    def print_smir(self, cr, uid, ids, context=None):
-        '''
-        This function prints the SMIR envelope
-        '''
-        assert len(ids) == 1, 'This option should only be used for a single id at a time.'
-        datas = {
-             'ids': ids,
-             'model': 'translation.evidention',
-             'form': self.read(cr, uid, ids[0], context=context)
-        }
-        return {
-            'type': 'ir.actions.report.xml',
-            'report_name': 'translation.evidention.smir',
-            'datas': datas,
-            'nodestroy' : True
-        }
+    def check_evidention_state(self, cr, uid, evid_id, context=None):
+        evidention = self.pool.get('translation.evidention').browse(cr, uid, evid_id)
+        finished = True
+        for doc in evidention.document_ids:
+            if doc.state != 'finish':
+                finished = False
+        if finished :evidention.write({'state':'deliver'})
+        return finished
     
     def copy(self, cr, uid, id, default=None, context=None):
         if not default:
@@ -177,7 +173,7 @@ class translation_evidention(osv.osv):
             evid_={}
             evid_['id'] = evidention.id
             if not evidention.date_recived: 
-                evid_['date_recived'] = datetime.now(timezone('Europe/Zagreb')) #log_time()
+                evid_['date_recived'] = log_time() #datetime.now(timezone('Europe/Zagreb')) #log_time()
             evid_['ev_sequence'] = self.pool.get('ir.sequence').get(cr, uid, 'translation_evidention')
             evid_['state'] = 'open'
             for doc in evidention.document_ids:
@@ -202,12 +198,20 @@ class translation_evidention(osv.osv):
             evid_list.append([evidention.id, evid_])
             self.write_recived_all(cr, uid, task_list, doc_list, evid_list)
             self.write(cr, uid, evidention.id,{})
-            
         return True
+    
+    
     
     def write_recived_all(self,cr, uid, task_list, doc_list, evid_list, context=None ):
         task_obj=self.pool.get('translation.document.task')
         for t in task_list:
+            """
+            task = task_obj.browse(cr, uid, t[0])
+            if task.translate_ids:
+                t[1]['translate_ids'] = write_many2many(self,task.translate_ids)
+            if task.lecture_ids:
+                t[1]['lecture_ids'] = write_many2many(self, task.lecture_ids)
+            """
             task_obj.write(cr, uid, t[0], t[1])
         doc_obj=self.pool.get('translation.document')
         for d in doc_list:
@@ -216,7 +220,15 @@ class translation_evidention(osv.osv):
             self.write(cr, uid, e[0], e[1]) 
         return True
     
-    
+def write_many2many(self, browse_list, context=None):
+    """
+    function returns correct many2many tuple from browse record in many2many
+    """
+    list=[]
+    for l in browse_list:
+        list.append(l.id)
+    return [[6,0,list]]
+        
         
 class translation_document(osv.Model):
     _name = 'translation.document'
@@ -250,6 +262,16 @@ class translation_document(osv.Model):
                 
                 }
     
+    def check_document_state(self, cr, uid, doc_id, context=None):
+        document = self.pool.get('translation.document').browse(cr, uid, doc_id)
+        finished = True
+        for task in document.task_ids:
+            if task.state != 'finish':
+                finished = False
+        if finished: 
+            document.write({'state':'finish'})
+            self.pool.get('translation.evidention').check_evidention_state(cr, uid, document.evidention_id.id)
+        return finished
 
     _defaults = {
                  'cards_estm':1,
@@ -262,7 +284,7 @@ class translation_document_task (osv.Model):
     _inherit = ['mail.thread']
     _description = 'Signle langugae for translation'
     
-
+    
     _document_task_status =[('draft',"Draft")
                            ,('assign',"Assigend")
                            ,('trans',"Translation in progress")
@@ -272,68 +294,40 @@ class translation_document_task (osv.Model):
                            ,('cancel',"Canceled")
                            ]
     
-    def _my_task_work_status(self, cr, uid, ids, field_name, field_value, context=None):
-        res={}
-        emp_id = get_employee_from_uid(self, cr, uid)
-        for task in self.browse(cr, uid, ids):
-            status = _('No status')
-            for trans in task.translate_ids:
-                if emp_id == trans.id:
-                    status = _('Assigned')
-                    status = self.check_my_status(emp_id, status, task.work_ids )
-            res[task.id]=status
-        return res
-    
-    def check_my_status(self, emp_id, status, jobs):
-        for job in jobs:
-            if emp_id == job.employee_id.id:
-                if job.work_type == 'lect':
-                    if job.job_done: 
-                        status =  _('Lectoring finished')
-                    elif job.job_stop : 
-                        status = _('Lectoring paused')
-                    else: 
-                        return _('Lectoring')
-                elif job.work_type == 'trans':
-                    if job.job_done: 
-                        status = _('Translating finished')
-                    elif job.job_stop : 
-                        status = _('Translating paused')
-                    else: 
-                        status = _("Translating")
-        return status
-        
-    
-    def _my_task_competence(self, cr, uid, ids, field_name, field_value, context=None):
-        res={}
-        emp_id = get_employee_from_uid(self, cr, uid)
-        employee=self.pool.get('hr.employee').browse(cr, uid, emp_id)
-        for task in self.browse(cr, uid, ids):
-            l_from=task.language_origin.id
-            l_to=task.language_id.id
-            ok_from, ok_to = False, False
-            for lang in employee.language_ids:
-                if l_from == lang.id: ok_from = True
-                if l_to == lang.id: ok_to = True
-            if ok_from and ok_to:
-                res[task.id] = True
-            else : res[task.id] = False
-        return res
-    
-    
     def onchange_lang_select_competent(self, cr, uid, ids, language_id, context=None):
         return {'domain':{'translate_ids':[('language_ids','in',language_id)]}}
     
     def _get_task_description(self, cr, uid, ids, field_name, field_value, context=None):
+        if len(ids)==0:return False
         tasks=self.browse(cr, uid, ids)
         res={}
         for t in tasks:
-            res[t.id]=' '.join([t.document_id.name,_('from'),
+            res[t.id]=' '.join([t.document_id.name,'\n',_('from'),
                                t.language_origin.trans_from,_('to'),
                                t.language_id.trans_to])
         return res
     
-    
+    def check_task_state(self, cr, uid, task_id, context=None):
+        task = self.browse(cr, uid, task_id)
+        status = 'draft'
+        if task.translate_ids and task.translate_ids[0]:
+            status = 'assign'
+            if task.trans_start and not task.trans_finish:
+                status='trans'
+            if task.trans_finish:
+                status='finish'
+                if task.lectoring:
+                    status='lect_w'
+        if status=='lect_w':
+            if task.lect_start:
+                status='lect'
+                if task.lect_finish:
+                    status="finish"
+        if task.state != status:
+            task.write({'state':status})
+        if status == 'finish':
+            self.pool.get('translation.document').check_document_state(cr, uid, task.document_id.id)
+        return status #task.write({'state':status})        
     
     _columns = {
                 'name':fields.char('Name',size=64),
@@ -343,8 +337,9 @@ class translation_document_task (osv.Model):
                 'language_id':fields.many2one('hr.language','Translate to', required=True, domain="[('employee_ids','!=',False)]"),
                 'type_id':fields.many2one('translation.type','Type'),
                 'partner_id':fields.many2one('res.partner','Partner'),
-                'lectoring':fields.boolean ('Mandatory lectoring'),
+                'lectoring':fields.boolean('Mandatory lectoring'),
                 'state':fields.selection (_document_task_status,'Translation status'),
+                #'state':fields.function(check_task_state,'Translation status'),
                 'note':fields.text('Note'),
                 'est_cards':fields.float('Cards estimate'),
                 'translate_ids':fields.many2many('hr.employee',
@@ -365,8 +360,8 @@ class translation_document_task (osv.Model):
                 'lect_cards':fields.float('Cards lectured'),
                 'certified':fields.boolean('Certified'),
                 'work_ids':fields.one2many('translation.work','task_id','Work log'),
-                'user_status':fields.function(_my_task_work_status, string='My status', type="char"),
-                'user_competent':fields.function(_my_task_competence, string="Competent", type="boolean")
+                #'user_status':fields.function(_my_task_work_status, string='My status', type="char"),
+                #'user_competent':fields.function(_my_task_competence, string="Competent", type="boolean")
                 }
     
     _defaults = {
@@ -376,136 +371,40 @@ class translation_document_task (osv.Model):
 
     _order = "id desc"
     
-    
-    
-    def write(self, cr, uid, ids, vals, context=None):
-        if vals.get('state') and vals.get('state')=='draft' and vals.get('translate_ids'):
-            vals['state'] = 'assig'
-        return super(translation_document_task, self).write(cr, uid, ids, vals, context)
-    
-    def button_pause(self, cr, uid, ids, context=None):
-        assert len(ids) == 1
-        task_obj = self.browse(cr, uid, ids[0])
-        state = task_obj.user_status
-        if state not in ('Translating', 'Lectoring'): return False
-        emp_id = get_employee_from_uid(self, cr, uid)
-        job_id = False
-        for job in task_obj.work_ids :
-            if job.employee_id.id == emp_id:
-                if not job.job_stop:
-                    job_id = job.id
-        if not job_id : return False
-        time = log_time() #datetime.now(timezone('Europe/Zagreb')) #log_time()
-        self.pool.get('translation.work').write(cr, uid, job_id,{'job_stop':time})
-        return True
-        
-        
-    
-    def button_resume(self, cr, uid, ids, context=None):
-        assert len(ids) == 1
-        task_obj = self.browse(cr, uid, ids[0])
-        state = task_obj.user_status
-        if state not in ('Translating paused', 'Lectoring paused'): return False
-        emp_id = get_employee_from_uid(self, cr, uid)
-        time= log_time() #datetime.now(timezone('Europe/Zagreb')) #log_time()
-        if state == 'Translating paused':
-            self.translation_work_create(cr, uid, ids[0], 'trans', emp_id, time)
-            #task_obj.write({'state':'trans'})
-        elif state == "Lectoring paused":
-            self.translation_work_create(cr, uid, ids[0], 'lect', emp_id, time)
-            #task_obj.write({'state':'lect'})
-        return True
-    
-    
-    
-    def button_lecture_finish(self, cr, uid, ids, context=None):
-        time= log_time() #datetime.now(timezone('Europe/Zagreb')) #log_time()
-        task = self.browse(cr, uid, ids[0])
-        if task.user_status != 'Lectoring':
-            return False
-        emp_id = get_employee_from_uid(self, cr, uid)
-        for job in task.work_ids:
-            if (job.work_type == 'lect') and not job.job_stop and (job.employee_id == emp_id):
-                self.pool.get('translation.work').write(cr, uid, job_id,{'job_stop':time, 'job_done':True})
-        
-        
-        return True
-    
-    def button_lecture_start(self, cr, uid, ids, context=None):
-        assert len(ids) == 1 # should be run only one task at a time
-        task_obj=self.browse(cr, uid, ids[0])
-        if not task_obj.user_competent:
-            raise osv.except_osv(_('Error!'), _('You are not competent on this task!'))
-        ##jel gotov prevod?
-        if not (task_obj.state in ('lect_w','lect')):
-            return False
-        time= log_time() #datetime.now(timezone('Europe/Zagreb')) #log_time()
-        emp_id = get_employee_from_uid(self, cr, uid)
-        if len(self.browse(cr, uid, ids[0]).lecture_ids) == 0:
-            self.write(cr, uid, ids[0], {'lecture_ids':[(4, emp_id)]})
-        else:
-            le_list=[emp_id]
-            for lec in  task_obj.lecture_ids:
-                le_list.append(lec.id)
-            self.write(cr, uid, ids[0],{'lecture_ids':[(6,0,le_list)]})
-        self.translation_work_create(cr, uid, ids[0], 'lect', emp_id, time)
-        self.write(cr, uid, ids[0],{'state':'lect','lect_start':time})
-        return True
-    
-    def button_translate_start(self, cr, uid, ids, context=None):
-        assert len(ids) == 1 ,'should be run only one task at a time'
-        task_obj = self.browse(cr, uid, ids[0])
-        if not task_obj.user_competent:
-            raise osv.except_osv(_('Error!'), _('You are not competent on this task!'))
-        if not (task_obj.user_status in (_('No status'),_('Assigned'))):
-            return False
-        emp_id = get_employee_from_uid(self, cr, uid)
-        if task_obj.translate_ids == []:
-            self.write(cr, uid, ids[0],{'translate_ids':[(4, emp_id)]})
-        else:
-            if task_obj.user_status == _('No status'):
-                tr_list=[emp_id]
-                for tr in  task_obj.translate_ids:
-                    tr_list.append(tr.id)
-                self.write(cr, uid, ids[0],{'translate_ids':[(6,0,tr_list)]})
-        time =  log_time() #datetime.now(timezone('Europe/Zagreb')) #log_time()
-        self.translation_work_create(cr, uid, ids[0], 'trans', emp_id, time)
-        
-        if task_obj.document_id.state != 'process':
-            doc_id = task_obj.document_id.id
-            self.pool.get('translation.document').write( cr, uid, doc_id, {'state':'process'})
-        if task_obj.document_id.evidention_id.state != 'process':
-            evid_id = task_obj.document_id.evidention_id.id
-            self.pool.get('translation.evidention').write(cr, uid, evid_id, {'state':'process'})
-        my_vals = {}
-        if task_obj.state in ('draft','assign'):
-            my_vals['state']='trans'
-        if not task_obj.trans_start:
-            my_vals['trans_start'] = time
-        if my_vals != {}:
-            self.write(cr,uid,ids[0],{'state':'trans','trans_start':time })
-        return True
-    
-    def translation_work_create(self, cr, uid, task, type, employee, start, context=None):
+    def translation_work_create(self, cr, uid, task, type, employee, context=None):
         work_vals = {
                 'task_id':task,
                 'work_type': type,
                 'employee_id': employee,
-                'job_start' : start,
                 }
         return self.pool.get('translation.work').create(cr, uid, work_vals)
     
-
-def time_diff_formatter(self, timedelta):
-    res =""
-    if timedelta.days > 0 :
-        res = "%s days" % (timedelta.days)
-    sec = timedelta.seconds
-    hours, remain =divmod(sec, 3600)
-    mins, secs = divmod(remain, 60)
-    res += " %s:%s:%s" % (hours, mins, secs)
-    return res
-
+    def open_employee_work_log(self, cr, uid, ids, w_list, type, context=None):
+        work = self.pool.get('translation.work')
+        emp_list= w_list[0][2] 
+        task_obj=self.browse(cr, uid, ids[0])
+        for emp_id in emp_list:
+            write_it = True
+            for job in task_obj.work_ids:
+                if emp_id==job.employee_id.id and type==job.work_type:
+                    write_it=False
+            if write_it : self.translation_work_create(cr, uid, ids[0], type, emp_id)
+        return True
+    
+    def write(self, cr, uid, ids, vals, context=None):
+        if isinstance(ids, int):
+            ids=[ids]
+        translate_ids = vals.get('translate_ids')
+        lecture_ids = vals.get('lecture_ids')
+        if lecture_ids and (lecture_ids[0][0]==6 ):
+            self.open_employee_work_log(cr, uid, ids, lecture_ids, 'lect')
+        if translate_ids and (translate_ids[0][0]==6 ):
+            self.open_employee_work_log(cr, uid, ids, translate_ids, 'trans')
+        if self.browse(cr, uid, ids[0]).state=='draft' and lecture_ids or translate_ids:
+            vals['state']='assign'
+        return super(translation_document_task, self).write(cr, uid, ids, vals, context)
+    
+    
 class translation_work(osv.Model):
     _name = 'translation.work'
     _description = 'Work of translators'
@@ -513,10 +412,7 @@ class translation_work(osv.Model):
     _get_work_type=[('trans','Translating'),
                     ('lect','Lectoring'),
                     ('other','Other')]
-    
-    
-        
-    
+
     def _get_time_spent(self, cr, uid, ids, field_name, field_values, context=None):
         res = {}
         for job in self.browse(cr, uid, ids):
@@ -544,48 +440,68 @@ class translation_work(osv.Model):
                 'job_done':fields.boolean('Finished'),
                 'cards_total':fields.float('Total done'),
                 'time_spent':fields.function(_get_time_spent, string='Time on job', type="char"),
-                
                 } 
     
     _order = "id desc"
+    
+    def copy(self, cr, uid, id, default=None, context=None):
+        result= super(translation_work, self).copy(cr, uid, id, default, context=context)
+        if not default:
+            default = {}
+        default.update({
+            'job_start': False,
+            'job_stop': False,
+            'cards_total': False,
+        })
+        return result #super(translation_work, self).copy(cr, uid, id, default, context=context)
+    
+    # button in every work log line 
+    def button_start(self, cr, uid, ids, context=None):
+        work_obj = self.browse(cr, uid, ids[0])
+        task_id = work_obj.task_id.id
+        work_type=work_obj.work_type
+        task_obj = self.pool.get('translation.document.task')
+        if work_type=='trans':
+            if not work_obj.task_id.trans_start:
+                task_obj.write(cr, uid, task_id, {'trans_start':log_time()})
+                self.pool.get('translation.document').write(cr, uid, work_obj.task_id.document_id.id, {'state':'process'})
+        elif work_type=='lect':
+            if not work_obj.task_id.lect_start:
+                task_obj.write(cr, uid, task_id, {'lect_start':log_time()})
+        self.write(cr, uid, ids[0], {'job_start':log_time()})
+        task_obj.check_task_state(cr, uid, task_id )
+
+        view_ref = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'translations', 'translation_document_task_form_view')
+        view_id = view_ref and view_ref[1] or False,
+        return {
+                'type': 'ir.actions.act_window',
+                'name': _('Translation task'),
+                'res_model': 'translation.document.task',
+                'res_id': task_id,
+                'view_type': 'form',
+                'view_mode': 'form',
+                'view_id': view_id,
+                'target': 'current',
+                'nodestroy': True,
+                }
+        
+    def check_task_type_finish(self, cr, uid, ids, task_id, work_type, context=None):
+        works = self.search(cr, uid, [('task_id','=',task_id),('work_type','=',work_type)])
+        finish=True
+        for w in self.browse(cr, uid, works):
+            if not w.job_done: finish=False
+        return finish
 
 def get_employee_from_uid(self, cr,  uid, context=None):
     return self.pool.get('hr.employee').search(cr, uid, [('resource_id.user_id','=', uid)] )[0]
 
-
-
-"""    
-def get_trans_group_ids(self, cr, uid, context=None):
-    group_obj=self.pool.get('res.groups')
-    translator_ids=group_obj.search(cr, uid, [('name','=','Translator')])
-    office_ids=group_obj.search(cr, uid, [('name','=','Translator Office')])
-    manager_ids=group_obj.search(cr, uid, [('name','=','Translation Manager')])
-    return translator_ids, office_ids, manager_ids
-    
-def get_user_groups(self, cr, uid, context=None ):
-    user=self.pool.get('res.users').browse(cr, uid, uid)
-    user_group = []
-    for grp in user.groups_id:
-        user_group.append(grp.id)
-    return user_group   
-"""
-
-
-
-def check_document_finish(self, cr, uid, doc_id, context=None):
-    document = self.pool.get('translation.document').browse(cr, uid, doc_id)
-    finished = True
-    for task in document.task_ids:
-        if task.state != 'finish':
-            finished = False
-    return finished
-
-def check_evidention_finish(self, cr, uid, evid_id, context=None):
-    evidention = self.pool.get('translation.evidention').browse(cr, uid, evid_id)
-    finished = True
-    for doc in evidention.document_ids:
-        if doc.state != 'finish':
-            finished = False
-            
-    return finished
+def time_diff_formatter(self, timedelta):
+    res =""
+    if timedelta.days > 0 :
+        res = "%s days" % (timedelta.days)
+    sec = timedelta.seconds
+    hours, remain =divmod(sec, 3600)
+    mins, secs = divmod(remain, 60)
+    res += " %s:%s:%s" % (hours, mins, secs)
+    return res
     

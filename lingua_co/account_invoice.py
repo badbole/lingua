@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Module: translations
+#    Module: lingua_co
 #    Author: Davor Bojkić
 #    mail:   bole@dajmi5.com
 #    Copyright (C) 2012- Daj Mi 5, 
@@ -25,20 +25,25 @@
 #
 ##############################################################################
 
+from osv import osv, fields
+from openerp.tools.translate import _
+import openerp.addons.decimal_precision as dp
+import psycopg2
 
-import time
-from openerp.report import report_sxw
 
-class translation_evidention(report_sxw.rml_parse):
-    def __init__(self, cr, uid, name, context):
-        super(translation_evidention, self).__init__(cr, uid, name, context=context)
-        self.localcontext.update({
-            'time': time,
-        })
-report_sxw.report_sxw(
-    'report.lingua.smir',
-    'translation.evidention.smir',
-    'addons/translation/report/lingua_smir.rml',
-    parser=translation_evidention , header=False
-)
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+class account_invoice(osv.Model):
+    _inherit = "account.invoice"
+    
+    def invoice_memo(self, cr, uid, ids, context=None):
+        assert len(ids) == 1, 'This option should only be used for a single id at a time.'
+        datas = {
+             'ids': ids,
+             'model': 'account.invoice',
+             'form': self.read(cr, uid, ids[0], context=context)
+        }
+        return {
+            'type': 'ir.actions.report.xml',
+            'report_name': 'invoice_wo_h',
+            'datas': datas,
+            'nodestroy' : True
+        }

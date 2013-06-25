@@ -60,8 +60,8 @@ Summary:
                    'translations_base_data.xml',
                    'wizard/translation_work_done.xml',
                    'languages_view.xml',
+                   'hr_employee_view.xml',
                    'evidention_view.xml',
-                   #'translation_report.xml',
                    'translation_sequence.xml',
                    'security/ir.model.access.csv',
 

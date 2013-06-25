@@ -7,11 +7,33 @@
 			<field name="model">translation.evidention</field>
 			<field name="inherit_id" ref="translations.translation_evidention_form_view" />
 			<field name="arch" type="xml">
+			     <field name="state" position="before">
+			         <button name="print_smir" type="object" string="ŠMIR" states="open"/>
+			     </field>
 				<field name="date_recived" position="after">
 					<field name="prostor_id" attrs="{'readonly':[('state','!=','draft')]}"/>
 				</field>
 			</field>
 		</record>
+		<record id="translation_evidention_tree_view_inherit_prostor" model="ir.ui.view">
+            <field name="name">translation_evidention_tree_view_inherit_prostor</field>
+            <field name="model">translation.evidention</field>
+            <field name="inherit_id" ref="translations.translation_evidention_tree_view" />
+            <field name="arch" type="xml">
+                <field name="ev_sequence" position="before">
+                    <field name="prostor_id" />
+                </field>
+            </field>
+        </record>
+        <record id="translation_evidention_filter_lingua" model="ir.ui.view">
+            <field name="name">translation_evidention_filter_lingua</field>
+            <field name="model">translation.evidention</field>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='state_proc']" position="after">
+                    <filter name="prostor_id" string="Prostor" domain="[('prostor_id','=', get_prostor_id)]" />
+                </xpath>
+            </field>
+        </record>
 	</data>
 </openerp>
                     

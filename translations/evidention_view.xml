@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
 	<data>
-	  
+
 		<!-- Translation TYPES -->
 		<record id="translation_type_tree_view" model="ir.ui.view">
 			<field name="name">"translation_type_tree_view"</field>
@@ -40,15 +40,14 @@
 						green:state =='deliver' grey:state == 'cancel'"> -->
 
 					<field name="ev_sequence" />
-					<field name="name" />
 					<field name="partner_id" />
-					<!-- <field name="date_recived" />  -->
 					<field name="date_due" />
 					<field name="time_remain" />
 					<field name="total_cards" />
 					<field name="tr_cards" />
-					<field name="le_cards"/>
+					<field name="le_cards" />
 					<field name="state" />
+
 				</tree>
 			</field>
 		</record>
@@ -58,8 +57,8 @@
 			<field name="arch" type="xml">
 				<form string="Evidention" version="7.0">
 					<header>
-					   <button string="Recive" name="action_evidention_recive" type="object" class="oe_highlight" states="draft" />
-					    <button name="print_smir" string="ŠMIR" type="object" />
+						<button string="Recive" name="action_evidention_recive"
+							type="object" class="oe_highlight" states="draft" />
 						<field name="state" widget="statusbar" statusbar_visible="open,process,deliver,finish" />
 					</header>
 					<sheet>
@@ -72,7 +71,7 @@
 							<field name="partner_id" class="oe_inline" />
 						</h2>
 						<group colspan="4" col="4">
-						<field name="date_due" />
+							<field name="date_due" />
 							<field name="date_recived" attrs="{'readonly':[('state','!=','draft')]}" />
 						</group>
 						<notebook colspan="4">
@@ -102,16 +101,16 @@
 			<field name="model">translation.evidention</field>
 			<field name="arch" type="xml">
 				<search string="Search translation evidention">
-					<field name="name"
-						filter_domain="['|',('name','ilike',self),('partner_id','ilike',self)]" />
-					<filter name="state_notfin" string="Not finished"
-						domain="[('state','!=','finish')]" />
-					<filter name="state_fin" string="Finished" domain="[('state','=','finish')]" />
+					<field name="name" filter_domain="['|',('name','ilike',self),('partner_id','ilike',self)]" />
+					<filter name="state_notfin" string="Not finished" domain="[('state','!=','finish')]" />
 					<filter name="state_proc" string="Processing" domain="[('state','=','process')]" />
+					<filter name="state_del" string="For delivery" domain="[('state','=','deliver')]" />
+					<filter name="state_fin" string="Finished" domain="[('state','=','finish')]" />
 					<group expand="0" string="Group By...">
 						<separator />
 						<filter string="Company" context="{'group_by':'partner_id'}" />
 						<filter string="Status" context="{'group_by':'state'}" />
+						<filter string="Days to deliver" context="{'group_by':'time_remain'}" />
 					</group>
 				</search>
 			</field>
@@ -152,23 +151,23 @@
 					<sheet>
 						<h1>
 							<field name="doc_sequence" readonly="1" class="oe_inline" />
-							<field name="name" class="oe_inline"/>
+							<field name="name" class="oe_inline" />
 						</h1>
 						<group colspan="4" col="4">
 							<field name="cards_estm" />
-                            <field name="date_due" />
-                        </group>
-                        <group>
+							<field name="date_due" />
+						</group>
+						<group>
 							<field name="language_id" />
 							<field name="type_id" />
 							<field name="partner_id" invisible="1" />
 							<field name="merge_with" />
 						</group>
 						<notebook>
-						  <page string="Translation tasks">
-						      <field name="task_ids" />
-						</page>
-						
+							<page string="Translation tasks">
+								<field name="task_ids" />
+							</page>
+
 						</notebook>
 					</sheet>
 					<div class="oe_chatter">
@@ -241,7 +240,7 @@
 						<field name="date_due" />
 						<field name="merge_with" />
 					</group>
-					<field name="task_ids" colspan="4" 
+					<field name="task_ids" colspan="4"
 						context="{'tree_view_ref':'translations.translation_document_task_tree_view_enter',
                                   'form_view_ref':'translations.translation_document_task_form_view_enter'}" />
 				</form>
@@ -253,7 +252,7 @@
 			<field name="model">translation.document.task</field>
 			<field name="arch" type="xml">
 				<tree string="Translation task" create="false">
-					<field name="name" invisible="1"/>
+					<field name="name" invisible="1" />
 					<field name="document_id" invisible="1" />
 					<field name="partner_id" invisible="1" />
 					<field name="language_origin" invisible="1" />
@@ -265,6 +264,7 @@
 					<field name="translate_ids" />
 					<field name="lecture_ids" />
 					<field name="state" readonly="1" />
+
 				</tree>
 			</field>
 		</record>
@@ -272,10 +272,9 @@
 			<field name="name">translation_document_task_form_view</field>
 			<field name="model">translation.document.task</field>
 			<field name="arch" type="xml">
-				<form string="Evidention line" version="7.0" create="false">
+				<form string="Translation task" version="7.0" create="false">
 					<header>
-						<field name="state" widget="statusbar" statusbar_visible="draft,assign,finish"
-							statusbar_colors='{"trans_p":"green","lect_p":"green","finish":"red","cancel":"red"}' />
+						<field name="state" widget="statusbar" statusbar_visible="draft,finish" />
 					</header>
 					<sheet>
 						<h1>
@@ -292,42 +291,53 @@
 							<field name="lectoring" />
 							<field name="est_cards" />
 						</group>
-                        <group colspan="4" col="4">
-						<field name="user_competent" />
-						<field name="user_status" readonly="1" />
+						<!-- 
+						<group colspan="4" col="4">
+							<field name="user_competent" />
+							<field name="user_status" readonly="1" />
 						</group>
+						 -->
 						<notebook colspan="4">
 							<page string="Translation">
-								<button string="Start" name="button_translate_start" type="object" attrs="{'invisible':[('user_status','not in',('No status','Assigned'))]}"/>
-								<button string="Pause" name="button_pause" type="object" attrs="{'invisible':[('user_status','!=','Translating')]}"/>
-								<button string="Resume" name="button_resume" type="object" attrs="{'invisible':[('user_status','!=','Translating paused')]}"/>
+							<!-- 
+								<button string="Start" name="button_translate_start"
+									type="object"
+									attrs="{'invisible':[('user_status','not in',('No status','Assigned'))]}" />
+								<button string="Pause" name="button_pause" type="object"
+									attrs="{'invisible':[('user_status','!=','Translating')]}" />
+								<button string="Resume" name="button_resume" type="object"
+									attrs="{'invisible':[('user_status','!=','Translating paused')]}" />
 								<button string="Finish" name="%(translations_work_done_form_action)d"
-									type="action" context="{'type':'trans'}" attrs="{'invisible':[('user_status','!=','Translating')]}"/>
-								
-                                <h4>
+									type="action" context="{'type':'trans'}"
+									attrs="{'invisible':[('user_status','!=','Translating')]}" />
+                             -->
+								<h4>
 									<label string="Translation start : " />
 									<field name="trans_start" class="oe_inline" readonly="1" />
 									<label string=", finished : " />
 									<field name="trans_finish" class="oe_inline" readonly="1" />
 									<label string=", total translated cards :" />
-									<field name="trans_cards" class="oe_inline" />
+									<field name="trans_cards" class="oe_inline" readonly="1"/>
 								</h4>
 
-								<field name="translate_ids" colspan="4" 
+								<field name="translate_ids" colspan="4"
 									domain="['&amp;',('language_ids','in',language_origin),('language_ids','in',language_id)]"
-									context="{'tree_view_ref':'translations.translation_employee_select_tree_view',
-                                              'form_view_ref':'translations.translation_employee_select_form_view'}" />
+									context="{'tree_view_ref':'translations.translation_employee_edit_tree_view',
+                                              'form_view_ref':'translations.translation_employee_edit_form_view'}" />
 							</page>
-							<page string="Lectoring" >
-								<button string="Start" name="button_lecture_start" type="object" 
-								         attrs="{'invisible':[('user_status','not in',('No status','Assigned','Translating finished'))]}"/>
-								<button string="Pause" name="button_pause" type="object" 
-								        attrs="{'invisible':[('user_status','!=','Lectoring')]}"/>
-								<button string="Resume" name="button_resume" type="object" 
-								        attrs="{'invisible':[('user_status','!=','Lectoring paused')]}"/>
-								
-								<button string="Finish" name="%(translations_work_done_form_action)d" type="action" 
-								            context="{'type':'lect'}" attrs="{'invisible':[('user_status','!=','Lectoring')]}" />
+							<page string="Lectoring">
+							<!-- 
+								<button string="Start" name="button_lecture_start" type="object"
+									attrs="{'invisible':[('user_status','not in',('No status','Assigned','Translating finished'))]}" />
+								<button string="Pause" name="button_pause" type="object"
+									attrs="{'invisible':[('user_status','!=','Lectoring')]}" />
+								<button string="Resume" name="button_resume" type="object"
+									attrs="{'invisible':[('user_status','!=','Lectoring paused')]}" />
+
+								<button string="Finish" name="%(translations_work_done_form_action)d"
+									type="action" context="{'type':'lect'}"
+									attrs="{'invisible':[('user_status','!=','Lectoring')]}" />
+								 -->
 								<h4>
 
 									<label string="Lectoring start : " />
@@ -335,28 +345,19 @@
 									<label string=", finish : " class="oe_inline" />
 									<field name="lect_finish" class="oe_inline" readonly="1" />
 									<label string=", total lectured cards :" />
-                                    <field name="lect_cards" class="oe_inline" />
+									<field name="lect_cards" class="oe_inline" readonly="1"/>
 								</h4>
 
-								<field name="lecture_ids" nolabel="1" colspan="4">
-									<tree string="lectors">
-										<field name="name" />
-										
-										<field name="language_ids" />
-									</tree>
+								<field name="lecture_ids" nolabel="1" colspan="4"
+									domain="['&amp;',('language_ids','in',language_origin),('language_ids','in',language_id)]"
+									context="{'tree_view_ref':'translations.translation_employee_edit_tree_view',
+                                              'form_view_ref':'translations.translation_employee_edit_form_view'}">
 								</field>
 							</page>
-							<page string="Work Log" colspan="4">
-								<field name="work_ids" nolabel="1" colspan="4">
-									<tree string="Work" editable="top">
-										<field name="work_type" />
-										<field name="job_start" />
-										<field name="job_stop" />
-										<field name="time_spent" />
-										<field name="employee_id" />
-										<field name="cards_done" />
-										<field name="job_done" />
-									</tree>
+							<page string="Work Log" colspan="4" >
+								<field name="work_ids" nolabel="1" colspan="4" 
+									domain="[('employee_id','in',[translate_ids.employee_id]),('employee_id','in',[lecture_ids.employee_id])]">
+
 								</field>
 							</page>
 						</notebook>
@@ -393,42 +394,44 @@
 			<field name="arch" type="xml">
 				<form string="Evidention line">
 					<group colspan="4" col="4">
-						<field name="language_id" on_change="onchange_lang_select_competent(language_id)"/>
+						<field name="language_id" on_change="onchange_lang_select_competent(language_id)" />
 						<field name="lectoring" />
 						<field name="certified" />
 					</group>
-					<field name="translate_ids" colspan="4" attrs="{'invisible':[('language_id','=',False)]}"
+    <!-- 
+					<field name="translate_ids" colspan="4" string="Translator"
+						attrs="{'invisible':[('language_id','=',False)]}"
+						domain="[('language_ids','in',language_id)]"
 						context="{'tree_view_ref':'translations.translation_employee_select_tree_view',
-						'form_view_ref':'translations.translation_employee_select_form_view'}" />
+						          'form_view_ref':'translations.translation_employee_select_form_view'}" />
+				    
+				    <field name="translate_ids" colspan="4" string="Lector"
+                        attrs="{'invisible':[('language_id','=',False)]}"
+                        context="{'tree_view_ref':'translations.translation_employee_select_tree_view',
+                                  'form_view_ref':'translations.translation_employee_select_form_view'}" />
+                      -->
 				</form>
 			</field>
-		</record>	
+		</record>
 		<record id="translation_document_task_filter" model="ir.ui.view">
 			<field name="name">translation_document_task_filter</field>
 			<field name="model">translation.document.task</field>
 			<field name="arch" type="xml">
 				<search string="Search translation task">
-					<field name="name"
-						filter_domain="['|',('description','ilike',self),('partner_id','ilike',self)]" />
-					<filter name="state_nostart" string="Not started"
-						domain="[('state','in',('draft','asigned'))]" />
-					<filter name="state_tran" string="In translation"
-						domain="[('state','=','trans')]" />
-					<filter name="state_lect" string="Lectoring"
-						domain="[('state','=',('lect','lect_w'))]" />
-					<filter name="state_notfin" string="Not Finished"
-						domain="[('state','!=','finish')]" />
+					<field name="name" filter_domain="['|',('description','ilike',self),('partner_id','ilike',self)]" />
+					<filter name="state_nostart" string="Not started" domain="[('state','in',('draft','asigned'))]" />
+					<filter name="state_tran" string="In translation" domain="[('state','=','trans')]" />
+					<filter name="state_lect" string="Lectoring" domain="[('state','=',('lect','lect_w'))]" />
+					<filter name="state_notfin" string="Not Finished" domain="[('state','!=','finish')]" />
 					<filter name="state_fin" string="Finished" domain="[('state','=','finish')]" />
 					<group expand="0" string="Group By...">
-						<filter string="Language original" domain="[]"
-							context="{'group_by' : 'language_origin'}" />
-						<filter string="Language translation" domain="[]"
-							context="{'group_by' : 'language_id'}" />
+						<filter string="Language original" domain="[]" context="{'group_by':'language_origin'}" />
+						<filter string="Language translation" domain="[]" context="{'group_by':'language_id'}" />
 						<separator />
-						<filter string="Company" context="{'group_by': 'partner_id'}" />
-						<filter string="Status" context="{'group_by': 'state'}" />
+						<filter string="Company" context="{'group_by':'partner_id'}" />
+						<filter string="Status" context="{'group_by':'state'}" />
 						<separator />
-                        <filter string="Document" context="{'group_by': 'document_id'}" />
+						<filter string="Document" context="{'group_by':'document_id'}" />
 					</group>
 				</search>
 			</field>
@@ -444,34 +447,28 @@
 		<menuitem action="translation_document_task_menu_action"
 			parent="translation_overview" id="translation_document_task_menu"
 			sequence="20" />
-		<!-- translation employee view -->
-		<record id="translation_employee_select_tree_view" model="ir.ui.view">
-			<field name="name">translation_employee_select_tree_view</field>
-			<field name="model">hr.employee</field>
-			<field name="priority" eval="20" />
+		<!-- translation work view -->
+		<record id="translation_work_tree_view" model="ir.ui.view">
+			<field name="name">"translation_work_tree_view"</field>
+			<field name="model">translation.work</field>
 			<field name="arch" type="xml">
-				<tree string="Translators" create="false">
-					<field name="name" />
-					<field name="language_ids" />
-					<field name="mobile_phone" />
+				<tree string="Work" editable="top" delete="false" create="false">
+					<field name="employee_id" />
+					<field name="work_type" />
+					<field name="cards_done" />
+					<field name="job_start" />
+					<field name="job_stop" />
+					<field name="time_spent" />
+					<field name="job_done" />
+					<!-- 
+					<button name="button_test" type="object" icon="gtk-jump-to" />
+					<button name="button_pause" type="object" icon="gtk-stop"/>
+					 -->
+                    <button name="button_start" type="object" icon="gtk-edit" attrs="{'invisible':[('job_start','!=',False)]}"/>
+                    <button name="%(translations_work_done_form_action)d" type="action" icon="gtk-apply" attrs="{'invisible':[('job_done','=',True)]}"/>
 				</tree>
 			</field>
 		</record>
-		<record id="translation_employee_select_form_view" model="ir.ui.view">
-			<field name="name">translation_employee_select_form_view</field>
-			<field name="model">hr.employee</field>
-			<field name="priority" eval="20" />
-			<field name="arch" type="xml">
-				<form string="Translators" create="false">
-					<group colspan="4" col="4">
-						<field name="name" />
-						<field name="notes" />
-						<field name="language_ids" />
-					</group>
-				</form>
-			</field>
-		</record>
-		
 	</data>
 </openerp>
  

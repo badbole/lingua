@@ -69,13 +69,15 @@
 							<field name="avans" />
 						</group>
 						<button string="Products generate" name="evidention_products_generate"
-							type="object" help="Possible on recived evidention. Count Estimated Cards"/>
+							type="object" help="Possible on recived evidention. Count Estimated Cards" 
+							attrs="{'invisible':[('state','=','draft')]}"/>
 						<button string="Quotation" name="evidention_quotation_generate"
-							type="object" help="Count only cards done"/>
+							type="object" help="Count only cards done"
+							attrs="{'invisible':[('state','=','draft')]}"/>
 						<button string="Check work" name="check_translated_cards"
-                            type="object" />
+                            type="object" states='deliver'/>
 						<button string="Invoice" name="evidention_invoice_generate"
-							type="object" />
+							type="object" states='deliver' />
 						<notebook>
 							<page string="Products">
 								<field name="product_id" colspan="4" nolabel="1" />

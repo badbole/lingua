@@ -25,7 +25,7 @@
 #
 ##############################################################################
 
-from osv import osv, fields, orm
+from openerp.osv import osv, fields, orm
 from openerp.tools.translate import _
 import openerp.addons.decimal_precision as dp
 import psycopg2
@@ -64,8 +64,6 @@ class translation_price(osv.osv):
                 'price':fields.float('Price', digits_compute=dp.get_precision('Product Price'), help="Price for translation"),
                 'discount_name':fields.char('Discount description', size=128),
                 'discount':fields.float('Discount %' ,digits_compute=dp.get_precision('Product Price'), help="Percentage as number (20)% (not decimal 0,2)!"),
-                #'parent_left': fields.integer('Left Parent', select=1),
-                #'parent_right': fields.integer('Right Parent', select=1),
                 }
     
 class translation_evidention(osv.Model):
@@ -106,8 +104,59 @@ class translation_evidention(osv.Model):
                  'company_id': 1    #TODO MULTICOMPANY...
                  }
     
+    def evidention_invoice_generate(self, cr, uid, ids, context=None):
+        if context==None : context={}
+        invoice_obj = self.pool.get('account.invoice')
+        
+        for evidention in self.browse(cr, uid, ids):
+            inv_vals = self._prepare_invoice_vals(cr, uid, evidention)
+            inv = invoice_obj.create(self, cr, uid, inv_vals)
+            
+            for prod in evidention.product_id:
+                line_vals=self._prepare_invoice_line(cr, uid, evidention, prod, inv)
+        return True
+    
+    def _prepare_invoice_line(self, cr, uid, evidention, prod, inv, context=None):
+        uos = self.pool.get('product.uom').search(cr, uid, [('name', '=', 'card')] )[0]
+        values={
+                'account_id':prod.product_id.property_account_income.id,
+                'name':prod.description, #description
+                'invoice_id':inv,
+                'price_unit':prod.price,
+                'company_id':1, #TODO MULTI COMPANY!
+                'discount':prod.discount,
+                'quantity':prod.units,
+                'uos_id': uos,
+                'invoice_line_tax_id': [(6, 0, [x.id for x in prod.tax_ids])],
+                'partner_id':evidention.partner_id.id,
+                'product_id':prod.product_id.id,
+                }
+    
+    def _prepare_invoice_vals(self, cr, uid, evidention, context=None):
+        user_obj=self.pool.get ('res.users').browse(cr, uid, uid)
+        invoice_vals = {
+            'name': '',
+            'origin': evidention.name,
+            'type': 'out_invoice',
+            'reference': evidention.name,
+            'account_id': evidention.partner_id.property_account_receivable.id,
+            'partner_id': evidention.partner_id.id,
+            #ovo uzmem iz defaulta od usera
+            'journal_id': user_obj.journal_id,
+            'uredjaj_id':user_obj.uredjaj_id,
+            #'nac_plac':(),
+            #'invoice_line': [(6, 0, lines)],
+            'currency_id': 1, #order.pricelist_id.currency_id.id,
+            'comment': evidention.note or '',
+            'payment_term': evidention.payment_term and evidention.payment_term.id or False,
+            'fiscal_position': evidention.partner_id.property_account_position.id,
+            #'date_invoice': context.get('date_invoice', False),
+            'company_id': 1, # TODO MULTI! evidention.company_id.id,
+            'user_id': uid}
+        return invoice_vals
     
     
+        
     def check_translated_cards(self, cr, uid, ids, context=None):
         for evidention in self.browse(cr, uid, ids):
             for prod in evidention.product_id:
@@ -121,7 +170,19 @@ class translation_evidention(osv.Model):
             so = self.create_sale_order(cr, uid, evidention)
             for product in evidention.product_id:
                 self.create_sale_order_line(cr, uid, so, product, evidention.fiscal_position.id)
-        return True
+        view_ref = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'sale', 'view_order_form')
+        view_id = view_ref and view_ref[1] or False,
+        return {
+                'type': 'ir.actions.act_window',
+                'name': _('Sales Order'),
+                'res_model': 'sale.order',
+                'res_id': so,
+                'view_type': 'form',
+                'view_mode': 'form',
+                'view_id': view_id,
+                'target': 'current',
+                'nodestroy': True,
+                }
     
     def create_sale_order_line(self, cr, uid, so, product, fiscal_position=False, context=None ):
         uom_id = self.pool.get('product.uom').search(cr, uid, [('name', '=', 'card')] )[0]
@@ -192,7 +253,8 @@ class translation_evidention(osv.Model):
     
     def _create_product_product(self, cr, uid, product, context=None):
         template= self._create_product_template(cr, uid, product)
-        prod_vals = {'product_tmpl_id':template,
+        prod_vals = {
+                     'product_tmpl_id':template,
                      'name_template':product['name'],
                      }#'default_code':product.name,
         return self.pool.get('product.product').create(cr, uid, prod_vals)
@@ -245,16 +307,16 @@ class translation_evidention(osv.Model):
 class translation_document(osv.Model):
     _inherit = 'translation.document'
     _columns = {
-                'price_id':fields.many2one('translation.price','Price template'),
-                'product_id':fields.one2many('translation.product','document_id','Products')
+                'price_id':fields.many2one('translation.price','Price template'), #depreciated .. TO BE REMOVED 
+                'product_id':fields.one2many('translation.product','document_id','Products') #depreciated .. TO BE REMOVED 
                 }
     
 
 class translation_document_task(osv.Model):
     _inherit = 'translation.document.task'
     _columns = {
-                'price_id':fields.many2one('translation.price','Price template'),
-                'product_id':fields.one2many('translation.product','task_id','Products'),
+                'price_id':fields.many2one('translation.price','Price template'), #depreciated .. TO BE REMOVED 
+                'product_id':fields.one2many('translation.product','task_id','Products'), 
                 }
 
 class sale_order(osv.osv):
