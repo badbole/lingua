@@ -14,12 +14,34 @@
       <blockAlignment value="LEFT"/>
       <blockValign value="TOP"/>
     </blockTableStyle>
+    <blockTableStyle id="Table2">
+      <blockAlignment value="LEFT"/>
+      <blockValign value="TOP"/>
+      <lineStyle kind="LINEBEFORE" colorName="#000000" start="0,0" stop="0,-1"/>
+      <lineStyle kind="LINEABOVE" colorName="#000000" start="0,0" stop="0,0"/>
+      <lineStyle kind="LINEBELOW" colorName="#000000" start="0,-1" stop="0,-1"/>
+      <lineStyle kind="LINEBEFORE" colorName="#000000" start="1,0" stop="1,-1"/>
+      <lineStyle kind="LINEABOVE" colorName="#000000" start="1,0" stop="1,0"/>
+      <lineStyle kind="LINEBELOW" colorName="#000000" start="1,-1" stop="1,-1"/>
+      <lineStyle kind="LINEBEFORE" colorName="#000000" start="2,0" stop="2,-1"/>
+      <lineStyle kind="LINEAFTER" colorName="#000000" start="2,0" stop="2,-1"/>
+      <lineStyle kind="LINEABOVE" colorName="#000000" start="2,0" stop="2,0"/>
+      <lineStyle kind="LINEBELOW" colorName="#000000" start="2,-1" stop="2,-1"/>
+      <lineStyle kind="LINEBEFORE" colorName="#000000" start="0,1" stop="0,-1"/>
+      <lineStyle kind="LINEBELOW" colorName="#000000" start="0,-1" stop="0,-1"/>
+      <lineStyle kind="LINEBEFORE" colorName="#000000" start="1,1" stop="1,-1"/>
+      <lineStyle kind="LINEBELOW" colorName="#000000" start="1,-1" stop="1,-1"/>
+      <lineStyle kind="LINEBEFORE" colorName="#000000" start="2,1" stop="2,-1"/>
+      <lineStyle kind="LINEAFTER" colorName="#000000" start="2,1" stop="2,-1"/>
+      <lineStyle kind="LINEBELOW" colorName="#000000" start="2,-1" stop="2,-1"/>
+    </blockTableStyle>
     <initialize>
       <paraStyle name="all" alignment="justify"/>
     </initialize>
-    <paraStyle name="P1" fontName="Helvetica"/>
-    <paraStyle name="P2" rightIndent="0.0" leftIndent="0.0" fontName="Helvetica" fontSize="8.0" leading="10" alignment="LEFT" spaceBefore="0.0" spaceAfter="0.0"/>
-    <paraStyle name="P3" rightIndent="0.0" leftIndent="0.0" fontName="Helvetica" fontSize="8.0" leading="10" alignment="LEFT" spaceBefore="0.0" spaceAfter="0.0"/>
+    <paraStyle name="P1" fontName="Helvetica" alignment="CENTER"/>
+    <paraStyle name="P2" fontName="Helvetica"/>
+    <paraStyle name="P3" fontName="Helvetica"/>
+    <paraStyle name="P4" fontName="Helvetica"/>
     <paraStyle name="Standard" fontName="Helvetica"/>
     <paraStyle name="Heading" fontName="Helvetica" fontSize="14.0" leading="17" spaceBefore="12.0" spaceAfter="6.0"/>
     <paraStyle name="Text body" fontName="Helvetica" spaceBefore="0.0" spaceAfter="6.0"/>
@@ -30,62 +52,46 @@
     <paraStyle name="terp_header" fontName="Helvetica-Bold" fontSize="12.0" leading="15" alignment="LEFT" spaceBefore="12.0" spaceAfter="6.0"/>
     <paraStyle name="terp_default_8" rightIndent="0.0" leftIndent="0.0" fontName="Helvetica" fontSize="8.0" leading="10" alignment="LEFT" spaceBefore="0.0" spaceAfter="0.0"/>
     <paraStyle name="Table Contents" fontName="Helvetica"/>
+    <paraStyle name="Heading 2" fontName="Helvetica-BoldOblique" fontSize="14.0" leading="17" spaceBefore="12.0" spaceAfter="6.0"/>
+    <paraStyle name="Header left" fontName="Helvetica"/>
+    <paraStyle name="Table Heading" fontName="Helvetica" alignment="CENTER"/>
     <images/>
   </stylesheet>
   <story>
-  <pto>
     <para style="terp_default_8">[[repeatIn(objects,'o')]]</para>
-    <para style="terp_default_8">[[ setLang(o.partner_id.lang) ]]</para>
-  
-    <para style="P1">EVIDENCIJA PRIJEVODA - [[ (o.ev_sequence) ]]</para>
+    <para style="terp_default_8">[[setLang(o.partner_id.lang)]]</para>
+    <para style="terp_default_8">
+      <font color="white"> </font>
+    </para>
+    <para style="terp_default_8">
+      <font color="white"> </font>
+    </para>
+    <para style="terp_default_8">
+      <font color="white"> </font>
+    </para>
+    <para style="Heading 2">EVIDENCIJA PRIJEVODA - [[ (o.ev_sequence) ]]</para>
     <para style="terp_default_8">
       <font color="white"> </font>
     </para>
     <blockTable colWidths="372.0" style="Table1">
       <tr>
         <td>
-          <para style="terp_default_8">[[ (o.partner_id and o.partner_id.title.name) or '' ]] [[ (o.partner_id and o.partner_id.name) or '' ]] </para>
-          <para style="terp_default_8">[[ display_address(o.partner_id) ]]</para>
-          <para style="terp_default_8">
+          <para style="Header left">[[ (o.partner_id and o.partner_id.title.name) or '' ]] [[ (o.partner_id and o.partner_id.name) or '' ]] </para>
+          <para style="Header left">
             <font color="white"> </font>
           </para>
-          <para style="P3">Tel.: [[ (o.partner_id.phone) or removeParentNode('para') ]] </para>
-          <para style="P3">Fax : [[ (o.partner_id.fax) or removeParentNode('para') ]] </para>
-          <para style="P2">Email: [[ (o.partner_id.email) or removeParentNode('para') ]]</para>
+          <para style="Header left">Tel.: [[ (o.partner_id.phone) or removeParentNode('para') ]] </para>
+          <para style="Header left">Fax : [[ (o.partner_id.fax) or removeParentNode('para') ]] </para>
+          <para style="Header left">Email: [[ (o.partner_id.email) or removeParentNode('para') ]]</para>
         </td>
       </tr>
     </blockTable>
-    <para style="Standard">
-      <font color="white"> </font>
-    </para>
-    <para style="P1">
-      <font face="Helvetica">Zaprimljeno : [[ formatLang(o.date_recived, date = True) ]]</font>
-    </para>
-    <para style="Standard">
-      <font color="white"> </font>
-    </para>
-    <para style="P1">
-      <font face="Helvetica">Rok isporuke : [[ formatLang(o.date_due, date_time = True) ]]</font>
-    </para>
-    <para style="P1">
-      <font face="Helvetica"/>
-    </para>
-    <para style="P1">
-      <font face="Helvetica">Zaprimljeni dokumenti:</font>
-    </para>
-    <section>
-    <para style="terp_default_1">[[repeatIn(o.document_ids,'doc')]]</para>
-    <blockTable colWidths="180.0,70.0" >
-        <tr>
-          <td>
-            <para style="terp_default_9">[[ (doc.name) ]] </para>
-          </td>
-          <td>
-            <para style="terp_default_9">[[ (doc.cards_estm) ]] </para>
-          </td>
-         </tr>
-    </blockTable>
-    </section>
-    </pto>
+    <para style="Standard"> <font color="white"> </font></para>
+    <para style="P2">Zaprimljeno :<font color="white">...........</font> [[ formatLang(o.date_recived,date_time=True) ]]</para>
+    <para style="P2">Rok isporuke :<font color="white">..........</font> [[ formatLang(o.date_due,date_time=True) ]]</para>
+    <para style="P2">Zaprimljeni dokumenti :</para>
+	<para style="Standard"> <font color="white"> </font></para>
+    <para style="terp_default_8">[[repeatIn(o.document_ids,'d')]]</para>
+	<para stype="terp_default_8">[[ d.name or removeParentNode('para')]]</para>
   </story>
 </document>

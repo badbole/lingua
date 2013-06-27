@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+	    <menuitem id="menu_mikra" name="Mikra" sequence="10"  /> 
+        <menuitem id="mikra_digitron" name="Kalkulator" parent="menu_mikra" />
+	
+		<record id="product_normal_form_view_mikra_inherit" model="ir.ui.view">
+			<field name="name">product_normal_form_view_mikra_inherit</field>
+			<field name="model">product.product</field>
+			<field name="inherit_id" ref="product.product_normal_form_view" />
+			<field name="arch" type="xml">
+				<field name="standard_price" position="after">
+					<group>
+						<field name="nabavna_eur" />
+						<field name="nabavna_kn" />
+					</group>
+					<group>
+						<field name="nabavna_75" readonly="1" />
+						<field name="nabavna_80" readonly="1" />
+					</group>
+
+					<group string="Izračun prodajne cijene iz " colspan="6" col="6">
+					<field name="p_base" colspan="4" on_change="onchange_digitron(p_base, fak1, fak2)"/>
+					<newline/>
+					<field name="fak1" string="F1" on_change="onchange_digitron(p_base, fak1, fak2)"/>
+					<field name="fak2" string="* F2" onchange="onchange_digitron(p_base, fak1, fak2)"/>
+					<field name="prodajna" string="= prodajna"  />
+					</group>
+					<button name="primjeni_na_kategoriju" type="object" string="Primjeni na kategoriju" />
+
+
+				</field>
+			</field>
+		</record>
+		
+		 <record id="product_template_mikra_price_tree_view" model="ir.ui.view">
+            <field name="name">product_template_mikra_price_tree_view</field>
+            <field name="model">product.template</field>
+            <field name="priority" eval="105" />
+            <field name="arch" type="xml">
+                <tree string="Products" editable="top" delete="false" create="false" >
+                    <field name="name" readonly="1"/>
+                    <field name="categ_id" invisible="1"/>
+                    <field name="type" invisible="1"/>
+                    <field name="list_price" invisible="1"/>
+                    <field name="nabavna_eur" />
+                    <field name="nabavna_kn" />
+                    <field name="p_base"/>
+                    <field name="fak1" />
+                    <field name="fak2" />
+                    <field name="prodajna"/>
+                </tree>
+            </field>
+        </record>
+         <record id="product_template_mikra_price_form_view" model="ir.ui.view">
+            <field name="name">product_template_mikra_price_form_view</field>
+            <field name="model">product.template</field>
+            <field name="priority" eval="105" />
+            <field name="arch" type="xml">
+             <form string="Products" >
+                    <field name="name"/>
+                    <field name="description_sale"/>
+                    <field name="categ_id" invisible="1"/>
+                    <field name="type" invisible="1"/>
+                    <field name="list_price" invisible="1"/>
+                    <field name="nabavna_eur" />
+                    <field name="nabavna_kn" />
+                    <field name="p_base"/>
+                    <field name="fak1" />
+                    <field name="fak2" />
+                    <field name="prodajna"/>
+                </form>
+            </field>
+        </record>
+         <record id="product_normal_action_mikra" model="ir.actions.act_window">
+            <field name="name">Formiranje cijena</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.template</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="product_template_mikra_price_tree_view"/>
+            <!-- 
+            <field name="search_view_id" ref="product_search_form_view"/>
+             -->
+         </record>
+       
+        <menuitem id="menu_product_mikra" action="product_normal_action_mikra" name="Formiranje cijena" parent="mikra_digitron" sequence="69"/>
+         
+	</data>
+</openerp>

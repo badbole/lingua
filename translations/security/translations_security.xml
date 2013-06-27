@@ -7,7 +7,6 @@
 				tasks by tracking them ...</field>
 			<field name="sequence">50</field>
 		</record>
-<!-- makni underscore poslje! -->
         <record id="group_translations_translator" model="res.groups" >
             <field name="name">Translator</field>
             <field name="category_id" ref="module_category_translations" />

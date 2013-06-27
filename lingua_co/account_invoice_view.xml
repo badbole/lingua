@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <openerp>
-	<data>
-		<record name="account_invoice_form_view_inherit_lingua" model="ir.ui.view">
-			<field name="name">account_invoice_form_view_inherit_lingua</field>
-			<field name="model">account.invoice</field>
-			<field name="inherit_id" ref="account.invoice_form" />
-			<field name="arch" type="xml">
-			     <field name="state" position="before">
-				    <button name="invoice_memo" string="Ispis bez zaglavlja" type="object" /> 
-				</field>
-			</field>
-		</record>
-	</data>
+    <data>
+<!-- 
+        <record id="account_invoice_form_fiskal" model="ir.ui.view" >
+            <field name="name">account_invoice_form_fiskal</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                  
+            </field>
+        </record>
+ -->
+    </data>
 </openerp>
