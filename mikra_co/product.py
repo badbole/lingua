@@ -76,6 +76,9 @@ class product_template(osv.Model):
                  'p_base':'n75',
                  }
     
+    
+        
+    
 class product_product(osv.Model):
     _inherit = 'product.product'
     
@@ -93,9 +96,15 @@ class product_product(osv.Model):
         values=self.pool.get('product.template').digitron(cr, uid, selected, template.p_base, template.fak1, template.fak2)
         t=self.pool.get('product.template')
         for val in values:
-            t.write(cr, uid, val, {'list_price' : values[val]['prodajna']})
+            t.write(cr, uid, val, {'list_price' : values[val]['prodajna'], 
+                                   'fak1':template.fak1,
+                                   'fak2':template.fak2,
+                                   'p_base':template.p_base,
+                                   'prodajna':values[val]['prodajna']})
             
         return True
+    
+   
                 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

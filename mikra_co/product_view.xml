@@ -27,7 +27,7 @@
 					<field name="prodajna" string="= prodajna"  />
 					</group>
 					<button name="primjeni_na_kategoriju" type="object" string="Primjeni na kategoriju" />
-
+                    <button name="uzmi_nabavnu" type="object" string="Prepiši nabavne cijene" />
 
 				</field>
 			</field>

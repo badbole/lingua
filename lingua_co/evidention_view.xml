@@ -6,8 +6,10 @@
 			<field name="model">translation.evidention</field>
 			<field name="inherit_id" ref="translations.translation_evidention_form_view" />
 			<field name="arch" type="xml">
-			     <field name="state" position="before">
-			         <button name="print_smir" type="object" string="ŠMIR" states="open"/>
+			     <field name="ev_sequence" position="after">
+			         <div class="oe_button_box">
+			         <button name="print_smir" type="object" string="ŠMIR" states="open" class="oe_button_right"/>
+			         </div>
 			     </field>
 				<field name="date_recived" position="after">
 					<field name="prostor_id" attrs="{'readonly':[('state','!=','draft')]}"/>

@@ -2,15 +2,17 @@
 
 <openerp>
     <data>
-<!-- 
+
         <record id="account_invoice_form_fiskal" model="ir.ui.view" >
             <field name="name">account_invoice_form_fiskal</field>
             <field name="model">account.invoice</field>
             <field name="inherit_id" ref="account.invoice_form"/>
             <field name="arch" type="xml">
-                  
+                  <field name="fiscal_position" position="after">
+                        <button name="invoice_memo" type="object" string="Ispis na MEMO"/>
+                  </field>
             </field>
         </record>
- -->
+
     </data>
 </openerp>

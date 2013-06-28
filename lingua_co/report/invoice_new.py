@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Module: lingua_co
+#    Module: lingua_company
 #    Author: Davor Bojkić
 #    mail:   bole@dajmi5.com
 #    Copyright (C) 2012- Daj Mi 5, 
@@ -25,33 +25,22 @@
 #
 ##############################################################################
 
-from osv import osv, fields
-from openerp.tools.translate import _
-import openerp.addons.decimal_precision as dp
-import psycopg2
 
+import time
+from openerp.report import report_sxw
 
-class account_invoice(osv.Model):
-    _inherit = "account.invoice"
-    """
+from netsvc import Service
+#del Service._services['report.translat
+
+class invoice_new(report_sxw.rml_parse):
     def __init__(self, cr, uid, name, context):
-        super(account_invoice, self).__init__(cr, uid, name, context=context)
+        super(invoice_wo_h, self).__init__(cr, uid, name, context=context)
         self.localcontext.update({
             'time': time,
         })
-    """
-    def invoice_memo(self, cr, uid, ids, context=None):
-        assert len(ids) == 1, 'This option should only be used for a single id at a time.'
-        datas = {
-             'ids': ids,
-             'model': 'account.invoice',
-             'form': self.read(cr, uid, ids[0], context=context)
-        }
-        return {
-            'type': 'ir.actions.report.xml',
-            'report_name': 'invoice_wo_h',
-            'datas': datas,
-            'nodestroy' : True
-        }
-        
-        
+report_sxw.report_sxw(
+    'report.invoice_new',
+    'account.invoice',
+    'addons/translation/report/invoice_new.rml',
+    parser=invoice_new , header=True
+)
