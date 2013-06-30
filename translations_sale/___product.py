@@ -114,28 +114,7 @@ class translation_evidention(osv.Model):
                  'product_type' :1,
                  'company_id': 1    #TODO MULTICOMPANY...
                  }
-    ###########################################
-     ## borrow from sale confirm  remove later    
-    def action_button_confirm(self, cr, uid, ids, context=None):
-        assert len(ids) == 1, 'This option should only be used for a single id at a time.'
-        wf_service = netsvc.LocalService('workflow')
-        wf_service.trg_validate(uid, 'sale.order', ids[0], 'order_confirm', cr)
-
-        # redisplay the record as a sales order
-        view_ref = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'sale', 'view_order_form')
-        view_id = view_ref and view_ref[1] or False,
-        return {
-            'type': 'ir.actions.act_window',
-            'name': _('Sales Order'),
-            'res_model': 'sale.order',
-            'res_id': ids[0],
-            'view_type': 'form',
-            'view_mode': 'form',
-            'view_id': view_id,
-            'target': 'current',
-            'nodestroy': True,
-        }#####################
-        ##########################
+    
         
     def _prepare_invoice(self, cr, uid, order, lines=None, context=None):
         if context is None: context = {}
@@ -217,6 +196,7 @@ class translation_evidention(osv.Model):
             for document in evidention.document_ids: 
                 cards = 0.0
                 price2 = document.price_id.id
+                
                 description2 = "Prijevod %s s %s na " %(document.name, document.language_id.trans_from)
                 desc_lang2 = ""
                 for task in document.task_ids:
@@ -285,7 +265,9 @@ class translation_evidention(osv.Model):
         prod_={}
         price, ammount = self.select_price(cr, uid, task.price_id.id, document.price_id.id, evidention.price_id.id)
         prod_['name'] = task.name
-        prod_['description'] = 'Prevod %s \nsa %s na %s' % (document.name, document.language_id.trans_from, task.language_id.trans_to)
+        work = task.certified and _('Certified translation') or _('Translation')
+        
+        prod_['description'] = _('%s of %s \nfrom %s to %s') % (work, document.name, document.language_id.trans_from, task.language_id.trans_to)
         prod_['units'] = document.cards_estm
         prod_['price_id'] = price
         prod_['price'] = ammount

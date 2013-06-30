@@ -71,8 +71,9 @@ class translation_evidention(osv.osv):
         returns number of cards translated and lectured as entered by employees
         """
         res={}
-        tr_cards = le_cards = es_cards = 0
+        
         for evid in self.browse(cr, uid, ids):
+            tr_cards = le_cards = es_cards = 0
             for document in evid.document_ids:
                 for task in document.task_ids:
                     tr_cards += task.trans_cards

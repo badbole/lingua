@@ -55,7 +55,7 @@ Summary:
     'update_xml': [
                    'evidention_view.xml',
 #                   'hr_employee_view.xml',
-                   'translation_report.xml',
+                   'lingua_report.xml',
                    'account_invoice_view.xml',
                    ],
     "active": False,

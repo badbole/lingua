@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Module: translations
+#    Module: lingua_co
 #    Author: Davor Bojkić
 #    mail:   bole@dajmi5.com
 #    Copyright (C) 2012- Daj Mi 5, 

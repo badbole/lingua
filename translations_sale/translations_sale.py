@@ -269,6 +269,8 @@ class translation_evidention(osv.Model):
                          'name':product['name'],
                          'description': product['description'],
                          'uom_id':uom_id,
+                         'uos_id':uom_id,
+                         
                          'uom_po_id':uom_id,
                          'tax_ids':[(6,0, product['tax_ids'])],
                          'list_price':product['price'],
@@ -281,14 +283,16 @@ class translation_evidention(osv.Model):
             prod_type=evidention.product_type
         product_list=[]
         for document in evidention.document_ids: 
-            description2 = _("Translation of %s from %s to ") %(document.name, document.language_id.trans_from)
+            
+            #description2 = _("%s %s from %s to ") %(work, document.name, document.language_id.trans_from)
             desc_languages = ""
             for task in document.task_ids:
                 desc_languages += ', ' + task.language_id.trans_to
                 if prod_type == 1 :
                     prod_={}
                     prod_['name'] = task.name
-                    prod_['description'] = _('Translation of %s \nfrom %s to %s') % (document.name, document.language_id.trans_from, task.language_id.trans_to)
+                    work = task.certified and _('Certified translation of') or _('Translation of')
+                    prod_['description'] = _('%s %s \nfrom %s to %s') % (work, document.name, document.language_id.trans_from, task.language_id.trans_to)
                     prod_['units'] = document.cards_estm
                     prod_['evidention_id'] = evidention.id
                     prod_['document_id'] = document.id
@@ -366,12 +370,12 @@ class translation_product(osv.Model):
                 'name':fields.char('Name', size=128),
                 'description':fields.text('Description'),
                 'price_id':fields.many2one('translation.price','Price type'),
-                'price':fields.float('Price', readonly=True ),# dodati float na dvije decimale!
+                'price':fields.float('Price', digits_compute= dp.get_precision('Product Price'), readonly=True ),# dodati float na dvije decimale!
                 'units':fields.float('Units'),
                 'discount':fields.float('Discount'),
                 'tax_ids':fields.many2many('account.tax','trans_product_taxes_rel','t_prod_ids','tax_ids','Taxes'),
-                'total_untaxed':fields.function(_get_total, type="float", string='Total untaxed', multi='total'),
-                'total_tax':fields.function(_get_total, type="float", string="Tax", multi='total'),
+                'total_untaxed':fields.function(_get_total, type="float", digits_compute= dp.get_precision('Product Price'), string='Total untaxed', multi='total'),
+                'total_tax':fields.function(_get_total, type="float",digits_compute= dp.get_precision('Account'), string="Tax", multi='total'),
                 'total':fields.function(_get_total, type="float", string="Total", multi='total'),
                 'evidention_id':fields.many2one('translation.evidention','Evidention'),
                 'document_id':fields.many2one('translation.document','Document'),

@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenERP Server 7.0-20130604-231058\n"
+"Project-Id-Version: OpenERP Server 7.0-20130615-231352\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-14 21:23+0000\n"
-"PO-Revision-Date: 2013-06-14 23:24+0100\n"
+"POT-Creation-Date: 2013-06-30 14:03+0000\n"
+"PO-Revision-Date: 2013-06-30 16:09+0100\n"
 "Last-Translator: Davor Bojkić <bole@dajmi5.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -21,9 +21,22 @@ msgid "Percentage as number (20)% (not decimal 0,2)!"
 msgstr "Postotak kao broj (20)% (ne decimalno 0,2)!"
 
 #. module: translations_sale
-#: field:translation.product,description:0
-msgid "Product description"
-msgstr "Opis proizvoda"
+#: view:translation.product:0
+#: field:translation.product,total_untaxed:0
+msgid "Total untaxed"
+msgstr "Netto"
+
+#. module: translations_sale
+#: field:translation.evidention,product_type:0
+#: field:translation.product,product_type:0
+msgid "Product type"
+msgstr "Tip proizvoda"
+
+#. module: translations_sale
+#: code:addons/translations_sale/translations_sale.py:294
+#, python-format
+msgid "Translation of"
+msgstr "Prijevod"
 
 #. module: translations_sale
 #: model:ir.model,name:translations_sale.model_translation_document_task
@@ -36,31 +49,34 @@ msgid "Discount %"
 msgstr "Popust %"
 
 #. module: translations_sale
-#: code:addons/translations_sale/product.py:110
+#: code:addons/translations_sale/___product.py:270
 #, python-format
-msgid "No more Quotations, Sale order %s is confirmed!"
-msgstr "Nemogu se više raditi ponude jer je ponuda %s potvrđena!"
-
-#. module: translations_sale
-#: view:translation.product:0
-msgid "Group By..."
-msgstr "Grupiraj po.."
+msgid ""
+"%s of %s \n"
+"from %s to %s"
+msgstr ""
+"%s %s \n"
+"sa %s na %s"
 
 #. module: translations_sale
 #: field:translation.product,task_id:0
 msgid "Task"
-msgstr "Task"
+msgstr "Zadatak"
 
 #. module: translations_sale
-#: field:translation.evidention,product_type:0
-#: field:translation.product,product_type:0
-msgid "Product type"
-msgstr "Product type"
+#: field:translation.evidention,fiscal_position:0
+msgid "Fiscal position"
+msgstr "Fiskalna pozicija"
 
 #. module: translations_sale
 #: field:translation.product,units:0
 msgid "Units"
-msgstr "Units"
+msgstr "Jed."
+
+#. module: translations_sale
+#: view:translation.evidention:0
+msgid "Count only cards done"
+msgstr "Broji samo odrađene kartice"
 
 #. module: translations_sale
 #: field:translation.product,document_id:0
@@ -68,14 +84,20 @@ msgid "Document"
 msgstr "Dokument"
 
 #. module: translations_sale
-#: view:translation.product:0
-msgid "Type"
-msgstr "Vrsta"
+#: code:addons/translations_sale/___product.py:241
+#, python-format
+msgid "No more Quotations, Sale order %s is confirmed!"
+msgstr "Nema više novih ponuda, ponuda %s je potvrđena!"
 
 #. module: translations_sale
 #: model:ir.model,name:translations_sale.model_translation_price
 msgid "Prices forming"
 msgstr "Formiranje cijena"
+
+#. module: translations_sale
+#: field:translation.product,name:0
+msgid "Name"
+msgstr "Naziv"
 
 #. module: translations_sale
 #: model:ir.actions.act_window,name:translations_sale.translation_marketing_menu_action
@@ -86,7 +108,7 @@ msgstr "Marketing postavke"
 #. module: translations_sale
 #: model:ir.model,name:translations_sale.model_translation_evidention
 msgid "Evidention of translations"
-msgstr "Evidencija prijevoda"
+msgstr "Evidencija prevoda"
 
 #. module: translations_sale
 #: field:translation.marketing,description:0
@@ -94,14 +116,20 @@ msgid "Marketing description"
 msgstr "Marketing opis"
 
 #. module: translations_sale
-#: field:translation.product,price_amount:0
-msgid "Amount"
-msgstr "Iznos"
+#: field:translation.price,parent_id:0
+msgid "Price base"
+msgstr "Osnovica cijene"
 
 #. module: translations_sale
-#: model:ir.model,name:translations_sale.model_translation_product
-msgid "Translation products - pre sale"
-msgstr "Prijevodi - proizvodi (prije prodaje)"
+#: field:translation.product,description:0
+msgid "Description"
+msgstr "Opis"
+
+#. module: translations_sale
+#: code:addons/translations_sale/___product.py:268
+#, python-format
+msgid "Certified translation"
+msgstr "Ovjereni prijevod"
 
 #. module: translations_sale
 #: field:translation.evidention,marketing_id:0
@@ -110,9 +138,9 @@ msgid "Marketing"
 msgstr "Marketing"
 
 #. module: translations_sale
-#: selection:translation.evidention,product_type:0
-msgid "(Single product, all tasks in description)"
-msgstr "(Single product, all tasks in description)"
+#: field:translation.evidention,company_id:0
+msgid "Company"
+msgstr "Organizacija"
 
 #. module: translations_sale
 #: field:translation.evidention,product_id:0
@@ -120,9 +148,9 @@ msgid "Translations"
 msgstr "Prijevodi"
 
 #. module: translations_sale
-#: view:translation.evidention:0
-msgid "Sales Orders"
-msgstr "Ponude"
+#: field:sale.order,trans_evid_ids:0
+msgid "Evidentions"
+msgstr "Evidencije"
 
 #. module: translations_sale
 #: field:translation.product,discount:0
@@ -135,20 +163,20 @@ msgid "Discount description"
 msgstr "Opis popusta"
 
 #. module: translations_sale
-#: view:translation.evidention:0
-msgid "Generate products"
-msgstr "Generiraj proizvode"
-
-#. module: translations_sale
 #: view:translation.price:0
 msgid "Prices"
 msgstr "Cijene"
 
 #. module: translations_sale
-#: view:translation.evidention:0
-#: view:translation.product:0
-msgid "Translation product"
-msgstr "Prijevod-proizvod"
+#: code:addons/translations_sale/___product.py:268
+#, python-format
+msgid "Translation"
+msgstr "Prijevod"
+
+#. module: translations_sale
+#: field:translation.product,price_id:0
+msgid "Price type"
+msgstr "Tip cijene"
 
 #. module: translations_sale
 #: model:product.uom.categ,name:translations_sale.translation_uom_category
@@ -156,14 +184,24 @@ msgid "Text"
 msgstr "Tekst"
 
 #. module: translations_sale
+#: view:translation.evidention:0
+msgid "Possible on recived evidention. Count Estimated Cards"
+msgstr "Moguće nakon zaprimanja. Broji procjenjene kartice"
+
+#. module: translations_sale
+#: view:translation.evidention:0
+msgid "Quotation"
+msgstr "Ponuda"
+
+#. module: translations_sale
 #: selection:translation.evidention,product_type:0
 msgid "Document=Product (aaa trans to bbb,ccc) (T+L)"
-msgstr "Dokument=Prproizvod (aaa prevedeno na bbb,ccc) (T+L)"
+msgstr "Dokument=Proizvod (aaa prevedeno na bbb,ccc) (T+L)"
 
 #. module: translations_sale
 #: view:translation.product:0
-msgid "Search"
-msgstr "Traži"
+msgid "Total tax"
+msgstr "Ukupno porez"
 
 #. module: translations_sale
 #: model:ir.actions.act_window,name:translations_sale.translation_price_menu_action
@@ -174,7 +212,7 @@ msgstr "Postavke cijena"
 #. module: translations_sale
 #: help:translation.evidention,product_type:0
 msgid "Rules for generating and invoicing translation"
-msgstr "Rules for generating and invoicing translation"
+msgstr "Pravila za generiranje i fakturiranje prijevoda"
 
 #. module: translations_sale
 #: selection:translation.evidention,product_type:0
@@ -187,9 +225,15 @@ msgid "Price name"
 msgstr "Naziv cijene"
 
 #. module: translations_sale
+#: view:translation.evidention:0
 #: field:translation.evidention,so_ids:0
 msgid "Sale orders"
 msgstr "Ponude"
+
+#. module: translations_sale
+#: field:translation.evidention,payment_term:0
+msgid "Payment term"
+msgstr "Uvijeti plaćanja"
 
 #. module: translations_sale
 #: field:translation.product,product_id:0
@@ -207,21 +251,24 @@ msgid "(Document=Product Translate, Product Lector)"
 msgstr "(Document=Product Translate, Product Lector)"
 
 #. module: translations_sale
-#: code:addons/translations_sale/product.py:110
+#: code:addons/translations_sale/___product.py:125
+#: code:addons/translations_sale/___product.py:241
 #, python-format
 msgid "Error!"
-msgstr "Greška !"
-
-#. module: translations_sale
-#: view:translation.evidention:0
-msgid "Invoice for avans"
-msgstr "Račun za avans"
+msgstr "Greška!"
 
 #. module: translations_sale
 #: field:translation.document,product_id:0
 #: field:translation.document.task,product_id:0
+#: view:translation.evidention:0
 msgid "Products"
 msgstr "Proozvodi"
+
+#. module: translations_sale
+#: field:account.tax,t_prod_ids:0
+#: field:translation.product,tax_ids:0
+msgid "Taxes"
+msgstr "Taxes"
 
 #. module: translations_sale
 #: help:translation.price,price:0
@@ -229,20 +276,41 @@ msgid "Price for translation"
 msgstr "Cijena prijevoda"
 
 #. module: translations_sale
-#: view:translation.product:0
 #: field:translation.product,evidention_id:0
 msgid "Evidention"
 msgstr "Evidencija"
 
 #. module: translations_sale
-#: field:translation.price,parent_id:0
-msgid "Price base"
-msgstr "Osnovica cijene"
+#: field:translation.price,price:0
+#: field:translation.product,price:0
+msgid "Price"
+msgstr "Cijena"
+
+#. module: translations_sale
+#: code:addons/translations_sale/translations_sale.py:294
+#, python-format
+msgid "Certified translation of"
+msgstr "Ovjereni prijevod"
+
+#. module: translations_sale
+#: code:addons/translations_sale/translations_sale.py:295
+#, python-format
+msgid ""
+"%s %s \n"
+"from %s to %s"
+msgstr ""
+"%s %s \n"
+"sa %s na %s"
+
+#. module: translations_sale
+#: field:translation.marketing,name:0
+msgid "name"
+msgstr "naziv"
 
 #. module: translations_sale
 #: view:translation.evidention:0
-msgid "Advance payed : "
-msgstr "Avansno plaćeno : "
+msgid "Check work"
+msgstr "Provjeri odrađeno"
 
 #. module: translations_sale
 #: model:product.uom,name:translations_sale.translation_uom_kartica
@@ -255,25 +323,25 @@ msgid "Marketing feedback"
 msgstr "Marketing"
 
 #. module: translations_sale
-#: model:ir.actions.act_window,name:translations_sale.translation_sale_product_action_menu
-#: model:ir.ui.menu,name:translations_sale.translation_sale_product_menu
-msgid "Translated products"
-msgstr "Prijevodi - proizvodi"
+#: view:translation.product:0
+#: field:translation.product,total:0
+msgid "Total"
+msgstr "Ukupno"
 
 #. module: translations_sale
-#: field:translation.product,name:0
-msgid "Code"
-msgstr "Šifra"
-
-#. module: translations_sale
-#: field:translation.marketing,name:0
-msgid "name"
-msgstr "naziv"
+#: model:ir.model,name:translations_sale.model_translation_product
+msgid "Translation products - pre sale"
+msgstr "Prijevodi - proizvodi (prije prodaje)"
 
 #. module: translations_sale
 #: field:translation.price,child_ids:0
 msgid "Child product price"
 msgstr "Podređena cijena"
+
+#. module: translations_sale
+#: view:translation.evidention:0
+msgid "Invoices"
+msgstr "Računi"
 
 #. module: translations_sale
 #: field:translation.document,price_id:0
@@ -283,19 +351,20 @@ msgid "Price template"
 msgstr "Predložak cijena"
 
 #. module: translations_sale
-#: view:translation.document.task:0
-msgid "Price "
-msgstr "Cijena"
-
-#. module: translations_sale
-#: view:translation.evidention:0
-msgid "Generate Sale Order"
-msgstr "Napravi ponudu"
+#: model:ir.model,name:translations_sale.model_account_tax
+#: field:translation.product,total_tax:0
+msgid "Tax"
+msgstr "Porez"
 
 #. module: translations_sale
 #: model:ir.model,name:translations_sale.model_translation_document
 msgid "Document for translation"
-msgstr "Dokument za prijevod"
+msgstr "Dokument za prevođenje"
+
+#. module: translations_sale
+#: view:translation.evidention:0
+msgid "Products generate"
+msgstr "Products generate"
 
 #. module: translations_sale
 #: field:translation.evidention,avans:0
@@ -303,26 +372,41 @@ msgid "Advace ammount"
 msgstr "Iznos avansa"
 
 #. module: translations_sale
-#: model:ir.ui.menu,name:translations_sale.translation_sales
-msgid "Sales"
-msgstr "Prodaja"
+#: view:translation.product:0
+msgid "Translation product"
+msgstr "Prijevod-proizvod"
 
 #. module: translations_sale
-#: view:translation.product:0
+#: view:translation.evidention:0
+msgid "Invoice"
+msgstr "Račun"
+
+#. module: translations_sale
+#: view:translation.evidention:0
+msgid "Sale and invoice"
+msgstr "Prodaja i računi"
+
+#. module: translations_sale
+#: code:addons/translations_sale/___product.py:126
+#, python-format
+msgid "Please define sales journal for this company: \"%s\" (id:%d)."
+msgstr "Molimo definirajte prodajne dnevnike za : \"%s\" (id:%d)."
+
+#. module: translations_sale
 #: field:translation.product,partner_id:0
 msgid "Partner"
 msgstr "Partner"
 
 #. module: translations_sale
+#: code:addons/translations_sale/___product.py:159
+#: code:addons/translations_sale/translations_sale.py:177
 #: model:ir.model,name:translations_sale.model_sale_order
+#, python-format
 msgid "Sales Order"
 msgstr "Prodajni nalog"
 
 #. module: translations_sale
-#: view:translation.document.task:0
-#: view:translation.evidention:0
-#: field:translation.price,price:0
-#: field:translation.product,price_id:0
-msgid "Price"
-msgstr "Cijena"
+#: selection:translation.evidention,product_type:0
+msgid "(Single product, all tasks in description)"
+msgstr "(Single product, all tasks in description)"
 

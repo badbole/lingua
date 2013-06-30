@@ -32,15 +32,15 @@ from openerp.report import report_sxw
 from netsvc import Service
 #del Service._services['report.translat
 
-class invoice_new(report_sxw.rml_parse):
+class account_invoice(report_sxw.rml_parse):
     def __init__(self, cr, uid, name, context):
-        super(invoice_wo_h, self).__init__(cr, uid, name, context=context)
+        super(account_invoice, self).__init__(cr, uid, name, context=context)
         self.localcontext.update({
             'time': time,
         })
 report_sxw.report_sxw(
-    'report.invoice_new',
+    'report.lingua.account.invoice',
     'account.invoice',
-    'addons/translation/report/invoice_new.rml',
-    parser=invoice_new , header=True
+    'addons/lingua_co/report/invoice_new.rml',
+    parser=account_invoice
 )
