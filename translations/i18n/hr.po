@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: OpenERP Server 7.0-20130615-231352\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-19 08:22+0000\n"
-"PO-Revision-Date: 2013-06-19 10:24+0100\n"
+"PO-Revision-Date: 2013-06-30 17:43+0100\n"
 "Last-Translator: Davor Bojkić <bole@dajmi5.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -394,7 +394,7 @@ msgstr "Jezik za prijevod"
 #. module: translations
 #: field:translation.evidention,ev_sequence:0
 msgid "Evidention Number"
-msgstr "Evidention Number"
+msgstr "Broj evidencije"
 
 #. module: translations
 #: view:translation.document.task:0
@@ -592,7 +592,7 @@ msgstr "Prevedi na"
 #. module: translations
 #: field:hr.employee,lecture_task_ids:0
 msgid "Lectured"
-msgstr "Lekturirano"
+msgstr "Lektorirano"
 
 #. module: translations
 #: view:hr.language.competence:0
@@ -609,7 +609,7 @@ msgstr "Unos denvnika prijevoda"
 #: view:translation.document.task:0
 #: selection:translation.work,work_type:0
 msgid "Lectoring"
-msgstr "Lekturiranje"
+msgstr "Lektoriranje"
 
 #. module: translations
 #: field:translation.document,message_summary:0

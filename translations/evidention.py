@@ -66,6 +66,8 @@ class translation_evidention(osv.osv):
                    ,('cancel','Canceled')
                    ]
     
+    
+    
     def _get_total_cards(self, cr, uid, ids, field_names, field_value, context=None):
         """
         returns number of cards translated and lectured as entered by employees
@@ -125,7 +127,7 @@ class translation_evidention(osv.osv):
         'total_cards':fields.function(_get_total_cards, string='Est cards', type="float",multi="Cards"),
         'tr_cards':fields.function(_get_total_cards, string='Translated cards', type="float", multi="Cards"),
         'le_cards':fields.function(_get_total_cards, string='Lectured cards', type="float", multi="Cards"),
-        'time_remain':fields.function(_get_deadline, string="Deadline", type="char")
+        'time_remain':fields.function(_get_deadline, string="Deadline", type="char"),
                 }
 
     _defaults = {
@@ -260,7 +262,7 @@ class translation_document(osv.Model):
                 'partner_id':fields.many2one('res.partner','Partner'),
                 'certified':fields.boolean('Certified'),
                 'merge_with':fields.selection(_merge_with,'Merge with'),
-                
+                'location':fields.char('Location', size=256, help="Where is document saved if not in system")
                 }
     
     def check_document_state(self, cr, uid, doc_id, context=None):

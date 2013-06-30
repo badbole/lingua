@@ -40,6 +40,14 @@ class account_invoice(osv.Model):
             'time': time,
         })
     """
+    
+    def _get_default_bank(self, cr, uid, ids, context=None):
+        return self.pool.get('res.partner.bank').search(cr, uid, ['company_id','=',1])[0]
+    
+    _default={
+              'partner_bank_id':_get_default_bank
+              }
+        
     def invoice_memo(self, cr, uid, ids, context=None):
         assert len(ids) == 1, 'This option should only be used for a single id at a time.'
         datas = {

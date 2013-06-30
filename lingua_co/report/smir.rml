@@ -91,7 +91,10 @@
     <para style="P2">Rok isporuke :<font color="white">..........</font> [[ formatLang(o.date_due,date_time=True) ]]</para>
     <para style="P2">Zaprimljeni dokumenti :</para>
 	<para style="Standard"> <font color="white"> </font></para>
-    <para style="terp_default_8">[[repeatIn(o.document_ids,'d')]]</para>
+	<!--
+    <para style="terp_default_8">[[ repeatIn(o.document_ids,'d') ]]</para>
 	<para stype="terp_default_8">[[ d.name or removeParentNode('para')]]</para>
+	
+	-->
   </story>
 </document>

@@ -162,6 +162,7 @@
 							<field name="type_id" />
 							<field name="partner_id" invisible="1" />
 							<field name="merge_with" />
+							<field name="location" />
 						</group>
 						<notebook>
 							<page string="Translation tasks">
@@ -299,18 +300,6 @@
 						 -->
 						<notebook colspan="4">
 							<page string="Translation">
-							<!-- 
-								<button string="Start" name="button_translate_start"
-									type="object"
-									attrs="{'invisible':[('user_status','not in',('No status','Assigned'))]}" />
-								<button string="Pause" name="button_pause" type="object"
-									attrs="{'invisible':[('user_status','!=','Translating')]}" />
-								<button string="Resume" name="button_resume" type="object"
-									attrs="{'invisible':[('user_status','!=','Translating paused')]}" />
-								<button string="Finish" name="%(translations_work_done_form_action)d"
-									type="action" context="{'type':'trans'}"
-									attrs="{'invisible':[('user_status','!=','Translating')]}" />
-                             -->
 								<h4>
 									<label string="Translation start : " />
 									<field name="trans_start" class="oe_inline" readonly="1" />
@@ -326,18 +315,7 @@
                                               'form_view_ref':'translations.translation_employee_edit_form_view'}" />
 							</page>
 							<page string="Lectoring">
-							<!-- 
-								<button string="Start" name="button_lecture_start" type="object"
-									attrs="{'invisible':[('user_status','not in',('No status','Assigned','Translating finished'))]}" />
-								<button string="Pause" name="button_pause" type="object"
-									attrs="{'invisible':[('user_status','!=','Lectoring')]}" />
-								<button string="Resume" name="button_resume" type="object"
-									attrs="{'invisible':[('user_status','!=','Lectoring paused')]}" />
 
-								<button string="Finish" name="%(translations_work_done_form_action)d"
-									type="action" context="{'type':'lect'}"
-									attrs="{'invisible':[('user_status','!=','Lectoring')]}" />
-								 -->
 								<h4>
 
 									<label string="Lectoring start : " />
@@ -347,9 +325,9 @@
 									<label string=", total lectured cards :" />
 									<field name="lect_cards" class="oe_inline" readonly="1"/>
 								</h4>
-
+<!-- domain="['&amp;',('language_ids','in',language_origin),('language_ids','in',language_id)]" -->
 								<field name="lecture_ids" nolabel="1" colspan="4"
-									domain="['&amp;',('language_ids','in',language_origin),('language_ids','in',language_id)]"
+									
 									context="{'tree_view_ref':'translations.translation_employee_edit_tree_view',
                                               'form_view_ref':'translations.translation_employee_edit_form_view'}">
 								</field>
