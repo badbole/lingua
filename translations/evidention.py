@@ -176,7 +176,7 @@ class translation_evidention(osv.osv):
             evid_={}
             evid_['id'] = evidention.id
             if not evidention.date_recived: 
-                evid_['date_recived'] = datetime.now(timezone('Europe/Zagreb')).strftime(DEFAULT_SERVER_DATETIME_FORMAT ) #log_time() #datetime.now(timezone('Europe/Zagreb')) #log_time()
+                evid_['date_recived'] = datetime.now().strftime(DEFAULT_SERVER_DATETIME_FORMAT)  #log_time() #datetime.now(timezone('Europe/Zagreb')) #log_time()
             evid_['ev_sequence'] = self.pool.get('ir.sequence').get(cr, uid, 'translation_evidention')
             evid_['state'] = 'open'
             for doc in evidention.document_ids:
@@ -200,7 +200,7 @@ class translation_evidention(osv.osv):
                 doc_list.append ([doc.id, doc_])
             evid_list.append([evidention.id, evid_])
             self.write_recived_all(cr, uid, task_list, doc_list, evid_list)
-            self.write(cr, uid, evidention.id,{})
+            self.write(cr, uid, evidention.id,{}, context=context)
         return True
     
     
