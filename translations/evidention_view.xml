@@ -42,7 +42,7 @@
 					<field name="ev_sequence" />
 					<field name="partner_id" />
 					<field name="date_due" />
-					<field name="time_remain" />
+					<field name="time_remain" invisible="1" />
 					<field name="total_cards" />
 					<field name="tr_cards" />
 					<field name="le_cards" />
@@ -70,6 +70,8 @@
 							<label string="Partner" />
 							<field name="partner_id" class="oe_inline" />
 						</h2>
+						<button name="button_deliver" string="Deliver and finish" type="object" class="oe_highlight" attrs="{'invisible':[ ('state','!=','deliver')]}" />
+						
 						<group colspan="4" col="4">
 							<field name="date_due" />
 							<field name="date_recived" attrs="{'readonly':[('state','!=','draft')]}" />
@@ -257,17 +259,18 @@
 			<field name="model">translation.document.task</field>
 			<field name="arch" type="xml">
 				<tree string="Translation task" create="false">
-					<field name="name" invisible="1" />
+					<field name="name" />
 					<field name="document_id" invisible="1" />
 					<field name="partner_id" invisible="1" />
 					<field name="language_origin" invisible="1" />
 					<field name="language_id" invisible="1" />
 					<field name="description" />
-					<field name="lectoring" />
+					<field name="lectoring" invisible="1" />
 					<field name="certified" />
 					<field name="est_cards" />
-					<field name="translate_ids" />
-					<field name="lecture_ids" />
+					<field name="translate_ids" string="Translator" />
+					<field name="lecture_ids" string="Lector"/>
+					<field name="date_due" />
 					<field name="state" readonly="1" />
 
 				</tree>

@@ -6,13 +6,13 @@
 			<field name="model">translation.evidention</field>
 			<field name="inherit_id" ref="translations.translation_evidention_form_view" />
 			<field name="arch" type="xml">
-			     <field name="ev_sequence" position="after">
-			         <div class="oe_button_box">
-			         <button name="print_smir" type="object" string="ŠMIR" states="open" class="oe_button_right"/>
-			         </div>
-			     </field>
+			     <button name="button_deliver" position="after">
+			         <button name="print_smir" type="object" string="ŠMIR-ISPIS" class="oe_button_right" sates='process' attrs="{'invisible':[ ('state','!=','process')]}"/>
+			         <button name="print_smir" type="object" string="ŠMIR-ISPIS" class="oe_button_right oe_highlight" attrs="{'invisible':[ ('state','!=','open')]}" />
+			     </button>
 				<field name="date_recived" position="after">
 					<field name="prostor_id" attrs="{'readonly':[('state','!=','draft')]}"/>
+					<field name="dogovorena_cijena" />
 				</field>
 			</field>
 		</record>
@@ -26,13 +26,55 @@
                 </field>
             </field>
         </record>
-        <record id="translation_evidention_filter_lingua" model="ir.ui.view">
-            <field name="name">translation_evidention_filter_lingua</field>
+
+        <record id="translations.translation_evidention_filter" model="ir.ui.view">
+            <field name="name">translation_evidention_filter</field>
             <field name="model">translation.evidention</field>
             <field name="arch" type="xml">
-                <xpath expr="//filter[@name='state_proc']" position="after">
-                    <filter name="prostor_id" string="Prostor" domain="[('prostor_id','=', get_prostor_id)]" />
-                </xpath>
+                <search string="Search translation evidention">
+                    <field name="name" filter_domain="['|',('name','ilike',self),('partner_id','ilike',self)]" />
+                    <filter name="state_notfin" string="Not finished" domain="[('state','!=','finish')]" />
+                    <filter name="state_proc" string="Processing" domain="[('state','=','process')]" />
+                    <filter name="state_del" string="For delivery" domain="[('state','=','deliver')]" />
+                    <filter name="state_fin" string="Finished" domain="[('state','=','finish')]" />
+                    <!-- 
+                    <filter name="prostor_id" string="Podružnica" domain="[('prostor_id','=', )]" />
+                     -->
+                    <group expand="0" string="Group By...">
+                        <separator />
+                        <filter string="Company" context="{'group_by':'partner_id'}" />
+                        <filter string="Status" context="{'group_by':'state'}" />
+                        <filter string="Days to deliver" context="{'group_by':'time_remain'}" />
+                        <filter string="Podružnica" context="{'group_by':'prostor_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        <record id="translations.translation_document_task_filter" model="ir.ui.view">
+            <field name="name">translation_document_task_filter</field>
+            <field name="model">translation.document.task</field>
+            <field name="arch" type="xml">
+                <search string="Search translation task">
+                    <field name="name" filter_domain="['|',('description','ilike',self),('partner_id','ilike',self)]" />
+                    <filter name="state_nostart" string="Not started" domain="[('state','in',('draft','asigned'))]" />
+                    <filter name="state_tran" string="In translation" domain="[('state','=','trans')]" />
+                    <filter name="state_lect" string="Lectoring" domain="[('state','=',('lect','lect_w'))]" />
+                    <filter name="state_notfin" string="Not Finished" domain="[('state','!=','finish')]" />
+                    <filter name="state_fin" string="Finished" domain="[('state','=','finish')]" />
+                    <!--  
+                    <filter name="mine" string ="Moji zadaci" domain="[('translate_ids','in',uid)]"
+                     -->
+                    <group expand="0" string="Group By...">
+                        <filter string="Language original" domain="[]" context="{'group_by':'language_origin'}" />
+                        <filter string="Language translation" domain="[]" context="{'group_by':'language_id'}" />
+                        <separator />
+                        <filter string="Company" context="{'group_by':'partner_id'}" />
+                        <filter string="Status" context="{'group_by':'state'}" />
+                        <separator />
+                        <filter string="Document" context="{'group_by':'document_id'}" />
+                    </group>
+                     
+                </search>
             </field>
         </record>
 	</data>

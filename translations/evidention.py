@@ -138,13 +138,16 @@ class translation_evidention(osv.osv):
     
     _order = "id desc"
     
+    def button_deliver(self,cr, uid, ids, context=None):
+        return self.write(cr, uid, ids[0],{'state':'finish'})
+    
     def check_evidention_state(self, cr, uid, evid_id, context=None):
         evidention = self.pool.get('translation.evidention').browse(cr, uid, evid_id)
         finished = True
         for doc in evidention.document_ids:
             if doc.state != 'finish':
                 finished = False
-        if finished :evidention.write({'state':'deliver'})
+        if finished :evidention.write({'state':'finish'})
         return finished
     
     def copy(self, cr, uid, id, default=None, context=None):
@@ -193,6 +196,7 @@ class translation_evidention(osv.osv):
                     if task.translate_ids : 
                         task_['state'] = 'assign'
                         doc_['state'] = 'open' 
+                    task_['date_due'] = task.date_due or doc.date_due or evidention.date_due or False
                     task_['est_cards'] = doc.cards_estm
                     task_['partner_id'] = evidention.partner_id.id,
                     task_['language_origin'] = doc.language_id.id
@@ -363,6 +367,7 @@ class translation_document_task (osv.Model):
                 'lect_cards':fields.float('Cards lectured'),
                 'certified':fields.boolean('Certified'),
                 'work_ids':fields.one2many('translation.work','task_id','Work log'),
+                'date_due':fields.datetime('Date due')
                 #'user_status':fields.function(_my_task_work_status, string='My status', type="char"),
                 #'user_competent':fields.function(_my_task_competence, string="Competent", type="boolean")
                 }

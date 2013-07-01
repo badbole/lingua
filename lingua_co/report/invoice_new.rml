@@ -116,7 +116,7 @@
           <para style="terp_header">Supplier Invoice [[ (o.type=='in_invoice' or removeParentNode('para')) and '' ]] [[ o.number ]]</para>
           <para style="terp_default_8"> <font color="white"> </font> </para>
           <para style="terp_default_8">Mjesto izdavanja : [[ o.uredjaj_id.prostor_id.name or '' ]]</para>
-          <para style="terp_default_8">Datum i vrijeme : [[ formatLang(o.vrijeme_izdavanja,date_time=True) ]]</para>
+          <para style="terp_default_8">Datum i vrijeme : [[ o.vrijeme_txt ]]</para>
           <para style="terp_default_8">Način plaćanja : [[ (o.nac_plac=="G" and "Gotovina" or
                                                             o.nac_plac=="K" and "Kartice" or
                                                             o.nac_plac=="C" and "Čekovi" or

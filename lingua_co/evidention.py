@@ -37,7 +37,8 @@ class translation_evidention(osv.Model):
         return self.pool.get('res.users').browse(cr, uid, uid).prostor_id.id or False
     
     _columns = {
-                'prostor_id':fields.many2one('fiskal.prostor','Podružnica')
+                'prostor_id':fields.many2one('fiskal.prostor','Podružnica'),
+                'dogovorena_cijena':fields.char('Dogovorena cijena', size=64)
                 }
     
     _defaults = {
