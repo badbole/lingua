@@ -90,13 +90,36 @@
     <para style="P2">Dokumenti :</para>
 	<para style="Standard"> <font color="white"> </font></para>
 	
+	
+	<!-- DOKUMENTI -->
 	<section>
-    <para style="terp_default_8">[[ repeatIn(o.document_ids,'d') ]]</para>
-    
-    
-	<para style="P2">[[ d.name or removeParentNode('para')]]</para>
-	<para style="terp_default_8"> - Spoji sa : [[ d.merge_with or removeParentNode('para')]]</para>
-	<para style="terp_default_8"> - Procjena broja kartica : [[ d.cards_estm or removeParentNode('para')]]</para>
+       <para style="terp_default_8">[[ repeatIn(o.document_ids,'d') ]]</para>
+	   <para style="P2">[[ d.name or removeParentNode('para')]]</para>
+	   
+	   <para style="terp_default_8"> - Spoji sa : [[ d.merge_with or removeParentNode('para')]]</para>
+	   <para style="terp_default_8"> - Procjena broja kartica : [[ d.cards_estm or removeParentNode('para')]]</para>
+	   
+	   <!-- ZADACI -->
+	   
+	   <section>
+	       <para style="terp_default_8">[[ repeatIn(d.task_ids,'t') ]]</para>
+	       <para style="terp_default_8"> - Prijevod sa : [[ t.language_origin.trans_from ]] na [[t.language_id.trans_to]]</para>
+	       
+	       <!-- PREVODTELJI -->
+	       <para style="terp_default_8">Prijevod :</para>
+	       <section>
+	           <para style="terp_default_8">[[ repeatIn(t.translate_ids,'p') ]]</para>
+	           <para style="terp_default_8"> - [[ p.name ]] </para>
+	       </section>
+	       
+	       <!-- LEKTORI -->
+           <para style="terp_default_8">Lektura :</para>
+           <section>
+               <para style="terp_default_8">[[ repeatIn(t.lecture_ids,'l') ]]</para>
+               <para style="terp_default_8"> - [[ l.name ]] </para>
+           </section>
+	       
+	   </section>
 	</section>
 	
   </story>
