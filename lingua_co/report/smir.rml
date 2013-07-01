@@ -76,10 +76,8 @@
     <blockTable colWidths="372.0" style="Table1">
       <tr>
         <td>
-          <para style="Header left">[[ (o.partner_id and o.partner_id.title.name) or '' ]] [[ (o.partner_id and o.partner_id.name) or '' ]] </para>
-          <para style="Header left">
-            <font color="white"> </font>
-          </para>
+          <para style="Caption">[[ (o.partner_id and o.partner_id.title.name) or '' ]] [[ (o.partner_id and o.partner_id.name) or '' ]] </para>
+          <para style="Header left"> <font color="white"> </font> </para>
           <para style="Header left">Tel.: [[ (o.partner_id.phone) or removeParentNode('para') ]] </para>
           <para style="Header left">Fax : [[ (o.partner_id.fax) or removeParentNode('para') ]] </para>
           <para style="Header left">Email: [[ (o.partner_id.email) or removeParentNode('para') ]]</para>
@@ -89,12 +87,17 @@
     <para style="Standard"> <font color="white"> </font></para>
     <para style="P2">Zaprimljeno :<font color="white">...........</font> [[ formatLang(o.date_recived,date_time=True) ]]</para>
     <para style="P2">Rok isporuke :<font color="white">..........</font> [[ formatLang(o.date_due,date_time=True) ]]</para>
-    <para style="P2">Zaprimljeni dokumenti :</para>
+    <para style="P2">Dokumenti :</para>
 	<para style="Standard"> <font color="white"> </font></para>
-	<!--
+	
+	<section>
     <para style="terp_default_8">[[ repeatIn(o.document_ids,'d') ]]</para>
-	<para stype="terp_default_8">[[ d.name or removeParentNode('para')]]</para>
-	-->
+    
+    
+	<para style="P2">[[ d.name or removeParentNode('para')]]</para>
+	<para style="terp_default_8"> - Spoji sa : [[ d.merge_with or removeParentNode('para')]]</para>
+	<para style="terp_default_8"> - Procjena broja kartica : [[ d.cards_estm or removeParentNode('para')]]</para>
+	</section>
 	
   </story>
 </document>
