@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <document filename="lingua_invoice_no_header.pdf">
-  <template pageSize="(595.0,842.0)" title="Račun" author="Davor Bojkić" allowSplitting="20">
+  <template pageSize="(595.0,842.0)" title="Racun" author="Davor Bojkic" allowSplitting="20">
     <pageTemplate id="first">
       <frame id="first" x1="34.0" y1="118.0" width="530" height="608"/>
     </pageTemplate>
@@ -110,11 +110,11 @@
     <blockTable colWidths="297.0,233.0" style="Table_Partner_Address">
       <tr>
         <td>
-          <para style="terp_header">Račun R1 [[ ((o.type == 'out_invoice' and (o.state == 'open' or o.state == 'paid')) or removeParentNode('para')) and '' ]] [[ o.number ]]</para>
+          <para style="terp_header">Invoice [[ ((o.type == 'out_invoice' and (o.state == 'open' or o.state == 'paid')) or removeParentNode('para')) and '' ]] [[ o.number ]]</para>
           <para style="terp_header">Refund [[ (o.type=='out_refund' or removeParentNode('para')) and '' ]] [[ o.number ]]</para>
           <para style="terp_header">Supplier Refund [[ (o.type=='in_refund' or removeParentNode('para')) and '' ]] [[ o.number ]]</para>
           <para style="terp_header">Supplier Invoice [[ (o.type=='in_invoice' or removeParentNode('para')) and '' ]] [[ o.number ]]</para>
-          <para style="P1"> <font color="white"> </font> </para>
+          <para style="terp_default_8"> <font color="white"> </font> </para>
           <para style="terp_default_8">Mjesto izdavanja : [[ o.uredjaj_id.prostor_id.name or '' ]]</para>
           <para style="terp_default_8">Datum i vrijeme : [[ formatLang(o.vrijeme_izdavanja,date_time=True) ]]</para>
           <para style="terp_default_8">Način plaćanja : [[ (o.nac_plac=="G" and "Gotovina" or
@@ -129,11 +129,13 @@
           <para style="P2">Datum dospijeća : [[ formatLang(o.date_due, date=True) or removeParentNode('para') ]]</para>
         </td>
         <td>
-            <!--
+            <!--terp_header
           <para style="terp_default_Bold_9">[[ (o.partner_id and o.partner_id.title and o.partner_id.title.name) or '' ]] [[ (o.partner_id and o.partner_id.name) or '' ]]</para>
           <para style="terp_default_8">[[ (o.address_invoice_id and o.address_invoice_id.street) or '' ]]</para>
           -->
-          <para style="terp_default_Bold_9">[[ (o.partner_id and o.partner_id.title and o.partner_id.title.name) or '' ]] [[ (o.partner_id and o.partner_id.name) or '' ]]</para>
+          <para style="terp_header">[[ (o.partner_id and o.partner_id.title and o.partner_id.title.name) or '' ]] [[ (o.partner_id and o.partner_id.name) or '' ]]</para>
+          <para style="terp_default_8"> <font color="white"> </font> </para>
+          <para style="terp_default_8">OIB/VAT : [[ (o.partner_id and o.partner_id.vat) or removeParentNode('para') ]]</para>
           <para style="terp_default_8">[[ display_address(o.partner_id) ]]</para>
           <para style="terp_default_8">
             <font color="white"> </font>
@@ -148,7 +150,7 @@
           </para>
           <para style="terp_default_8">Tel. : [[ (o.address_invoice_id and o.address_invoice_id.phone) or removeParentNode('para') ]]</para>
           <para style="terp_default_8">Fax : [[ (o.address_invoice_id and o.address_invoice_id.fax) or removeParentNode('para') ]]</para>
-          <para style="terp_default_8">VAT : [[ (o.partner_id and o.partner_id.vat) or removeParentNode('para') ]]</para>
+          
         </td>
       </tr>
     </blockTable>

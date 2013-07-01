@@ -28,7 +28,7 @@
 
 import time
 from openerp.report import report_sxw
-
+from tools.translate import _
 from netsvc import Service
 #del Service._services['report.translat
 

@@ -42,7 +42,7 @@ class smir(report_sxw.rml_parse):
 report_sxw.report_sxw(
     'report.smir',
     'translation.evidention',
-    'addons/translation/report/smir.rml',
+    'addons/lingua_co/report/smir.rml',
     parser=smir , header=False
 )
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

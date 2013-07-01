@@ -57,6 +57,7 @@ Summary:
 #                   'hr_employee_view.xml',
                    'lingua_report.xml',
                    'account_invoice_view.xml',
+                   'res_company_view.xml'
                    ],
     "active": False,
     "installable": True,

@@ -33,13 +33,7 @@ import psycopg2
 
 class account_invoice(osv.Model):
     _inherit = "account.invoice"
-    """
-    def __init__(self, cr, uid, name, context):
-        super(account_invoice, self).__init__(cr, uid, name, context=context)
-        self.localcontext.update({
-            'time': time,
-        })
-    """
+    
     
     def _get_default_bank(self, cr, uid, ids, context=None):
         return self.pool.get('res.partner.bank').search(cr, uid, ['company_id','=',1])[0]
@@ -50,6 +44,7 @@ class account_invoice(osv.Model):
         
     def invoice_memo(self, cr, uid, ids, context=None):
         assert len(ids) == 1, 'This option should only be used for a single id at a time.'
+        self.write(cr, uid, ids, {'sent': True}, context=context)
         datas = {
              'ids': ids,
              'model': 'account.invoice',
@@ -63,9 +58,7 @@ class account_invoice(osv.Model):
         }
         
     def invoice_print(self, cr, uid, ids, context=None):
-        '''
-        This function prints the invoice and mark it as sent, so that we can see more easily the next step of the workflow
-        '''
+        
         assert len(ids) == 1, 'This option should only be used for a single id at a time.'
         self.write(cr, uid, ids, {'sent': True}, context=context)
         datas = {
@@ -73,9 +66,13 @@ class account_invoice(osv.Model):
              'model': 'account.invoice',
              'form': self.read(cr, uid, ids[0], context=context)
         }
+        
         return {
             'type': 'ir.actions.report.xml',
-            'report_name': 'lingua.account.invoice',
+            'report_name': 'invoice_new',
             'datas': datas,
             'nodestroy' : True
+            
         }
+        
+account_invoice()

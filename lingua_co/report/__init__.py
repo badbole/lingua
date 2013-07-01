@@ -29,3 +29,4 @@
 
 import smir
 import invoice_wo_h
+import invoice_new

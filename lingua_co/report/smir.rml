@@ -94,7 +94,7 @@
 	<!--
     <para style="terp_default_8">[[ repeatIn(o.document_ids,'d') ]]</para>
 	<para stype="terp_default_8">[[ d.name or removeParentNode('para')]]</para>
-	
 	-->
+	
   </story>
 </document>

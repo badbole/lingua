@@ -26,6 +26,11 @@
 ##############################################################################
 
 from osv import osv, fields
-from openerp.tools.translate import _
-import openerp.addons.decimal_precision as dp
-import psycopg2
+
+class res_company(osv.Model):
+    _inherit = ('res.company')
+    _columns = {
+                'head_logo':fields.binary('Header logo'),
+                'foot_logo':fields.binary('Footer logo')
+                }
+    

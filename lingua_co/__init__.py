@@ -25,10 +25,11 @@
 #
 ##############################################################################
 
-#import hr_employee
+
 import evidention
-import report
 import account_invoice
+import report
+import res_company
 
 
 
