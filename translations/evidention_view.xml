@@ -233,13 +233,17 @@
 			<field name="priority" eval="20" />
 			<field name="arch" type="xml">
 				<form string="Document">
-					<group colspan="4">
+					<group colspan="4" >
 						<field name="name" />
 						<field name="language_id" />
 						<field name="type_id" />
+						<field name="merge_with" />
+                        <field name="location" />
+						<group colspan="4" col="4">
 						<field name="cards_estm" />
 						<field name="date_due" />
-						<field name="merge_with" />
+						</group>
+						
 					</group>
 					<field name="task_ids" colspan="4"
 						context="{'tree_view_ref':'translations.translation_document_task_tree_view_enter',
