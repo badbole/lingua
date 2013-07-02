@@ -66,8 +66,8 @@
     <paraStyle name="datumi_mali" fontName="Helvetica" spaceBefore="0.0" alignment="CENTER"/>
     <paraStyle name="datumi_veci" fontName="Helvetica-Bold" fontSize="10.0" spaceBefore="2.0" spaceAfter="2.0" alignment="CENTER"/>
     <paraStyle name="terp_header_b1" fontName="Helvetica-Bold" fontSize="12.0" leading="10" alignment="CENTER" spaceBefore="2.0" spaceAfter="6.0"/>
-    <paraStyle name="Heading_bole_mali" fontName="Helvetica-BoldOblique" fontSize="12.0" alignment="CENTER" spaceBefore="6.0" spaceAfter="9.0"/>
-    <paraStyle name="Heading_bole_broj" fontName="Helvetica-BoldOblique" fontSize="20.0" alignment="CENTER" spaceBefore="6.0" spaceAfter="12.0"/>
+    <paraStyle name="Heading_bole_mali" fontName="Helvetica-Bold" fontSize="12.0" alignment="CENTER" spaceBefore="6.0" spaceAfter="9.0"/>
+    <paraStyle name="Heading_bole_broj" fontName="Helvetica-Bold" fontSize="20.0" alignment="CENTER" spaceBefore="6.0" spaceAfter="12.0"/>
     <images/>
   </stylesheet>
   <story>
@@ -101,10 +101,10 @@
       </tr>
       <tr>
         <td>
-          <para style="datumi_veci">[[ formatLang(o.date_recived,date_time=True)[:-3] ]]</para>
+          <para style="datumi_veci">[[ (formatLang(o.date_recived,date_time=True)[:-3]) or '' ]]</para>
           </td>
          <td>
-            <para style="datumi_veci">[[ formatLang(o.date_due,date=True) ]]  u [[ (formatLang(o.date_due,date_time=True)[:-3])[11:] ]]</para>
+            <para style="datumi_veci">[[ (formatLang(o.date_due,date=True) or removeParentNode('para') ]]  u [[ (formatLang(o.date_due,date_time=True)[:-3])[11:] ]]</para>
         </td>
       </tr>
     </blockTable>
@@ -129,7 +129,7 @@
        <blockTable colWidths="372.0" style="Table2">
          <tr>
            <td>
-	         <para style="datumi_veci">[[ d.name or removeParentNode('para')]]</para>
+	         <para style="datumi_veci">[[ (d.name or removeParentNode('para'))]]</para>
 	       </td>
 	     </tr>
 	     <tr>
@@ -166,7 +166,7 @@
               <td>
 	          <section>
 	           <para style="terp_default_8">[[ repeatIn(t.translate_ids,'p') ]]</para>
-	           <para style="datumi_veci">[[ p.name ]]</para>
+	           <para style="datumi_veci">[[ p.name or removeParentNode('tr')]]</para>
 	          </section>
 	          </td>
             </tr>
@@ -179,7 +179,7 @@
               <td>
            <section>
                <para style="terp_default_8">[[ repeatIn(t.lecture_ids,'l') ]]</para>
-               <para style="datumi_veci">[[ l.name ]]</para>
+               <para style="datumi_veci">[[ l.name or removeParentNode('tr')]]</para>
            </section>
             </td>
             </tr>
