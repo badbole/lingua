@@ -120,7 +120,7 @@
           <para style="terp_default_8">Interni dokument : [[ o.number or '' ]]</para>
           <para style="terp_default_8">Mjesto izdavanja : [[ o.uredjaj_id.prostor_id.name or '' ]]</para>
           <para style="terp_default_8">Datum i vrijeme  : [[ o.vrijeme_txt ]]</para>
-          <para style="terp_default_8">Način plaćanja   : [[ (o.nac_plac=="G" and "Gotovina" or
+          <para style="terp_default_8">Način plaćanja   : [[ (o.nac_plac=="G" and "Novčanice" or
                                                             o.nac_plac=="K" and "Kartice" or
                                                             o.nac_plac=="C" and "Čekovi" or
                                                             o.nac_plac=="T" and "Transakcijski račun" or
