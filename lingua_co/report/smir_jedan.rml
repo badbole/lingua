@@ -75,8 +75,14 @@
     <para style="terp_default_8">[[repeatIn(objects,'o')]]</para>
     <para style="terp_default_8">[[setLang(o.partner_id.lang)]]</para>
     <!--
-   
-    
+    <pto_header>
+      <blockTable colWidths="188.0,188.0" style="Table2">
+        <tr>
+        <td><para style="terp_tblheader_Details"><b>Prevoditelj</b></para></td>
+        <td><para style="terp_tblheader_Details_Centre"><b>Lektor</b></para></td>
+        </tr>
+      </blockTable>
+    </pto_header>
     -->
     <para style="Heading_bole_mali">EVIDENCIJA PRIJEVODA</para>
     <para style="Heading_bole_broj">[[ (o.ev_sequence) ]]</para>
@@ -115,7 +121,6 @@
       </tr>
     </blockTable>
  
- 
     <blockTable colWidths="372.0" style="Table2">
          <tr>
            <td>
@@ -132,9 +137,8 @@
     <para style="Standard"> <font color="white"> </font></para> 
     <para style="P2">Dokument:</para>
 <!--DOKUMENTI --><section> 
-
        <para style="terp_default_8">[[ repeatIn(o.document_ids,'d') ]]</para>
-     
+       
        <blockTable colWidths="372.0" style="Table2">
          <tr><td><para style="datumi_veci">[[ d.name ]]</para></td></tr>
 	     <tr><td><para style="terp_default_10">lokacija : [[ d.location or '']]</para></td></tr>
