@@ -71,9 +71,19 @@
     <images/>
   </stylesheet>
   <story>
+  <pto>
     <para style="terp_default_8">[[repeatIn(objects,'o')]]</para>
     <para style="terp_default_8">[[setLang(o.partner_id.lang)]]</para>
-    
+    <!--
+    <pto_header>
+      <blockTable colWidths="188.0,188.0" style="Table2">
+        <tr>
+        <td><para style="terp_tblheader_Details"><b>Prevoditelj</b></para></td>
+        <td><para style="terp_tblheader_Details_Centre"><b>Lektor</b></para></td>
+        </tr>
+      </blockTable>
+    </pto_header>
+    -->
     <para style="Heading_bole_mali">EVIDENCIJA PRIJEVODA</para>
     <para style="Heading_bole_broj">[[ (o.ev_sequence) ]]</para>
     <para style="Standard"> <font color="white"> </font></para>
@@ -89,24 +99,24 @@
           <para style="Standard"> <font color="white"> </font></para>
         </td>
       </tr> 
-      </blockTable>
-  
-      <para style="Standard"> <font color="white"> </font></para>
-      <blockTable colWidths="186.0,186.0" style="Table2">
+    </blockTable>
+    <para style="Standard"> <font color="white"> </font></para>
+    <!-- DATUMI  -->
+    <blockTable colWidths="186.0,186.0" style="Table2">
       <tr>
         <td>
           <para style="datumi_mali">Zaprimljeno :</para>
           </td>
          <td>
-            <para style="datumi_mali">Rok isporuke :</para>
+           <para style="datumi_mali">Rok isporuke :</para>
         </td>
       </tr>
       <tr>
         <td>
           <para style="datumi_veci">[[ (formatLang(o.date_recived,date_time=True)[:-3]) or '' ]]</para>
-          </td>
-         <td>
-            <para style="datumi_veci">[[ (formatLang(o.date_recived,date_time=True)[:-3]) or '' ]]</para>
+        </td>
+        <td>
+          <para style="datumi_veci">[[ (formatLang(o.date_due,date_time=True)[:-3]) or '' ]]</para>
         </td>
       </tr>
     </blockTable>
@@ -119,7 +129,7 @@
          </tr>
          <tr>
            <td>
-             <para style="datumi_veci">[[ (o.note)  or removeParentNode('tr') ]]</para>
+             <para style="datumi_veci">[[ (o.note)  or removeParentNode('blockTable') ]]</para>
            </td>
          </tr>
     </blockTable>
@@ -131,7 +141,6 @@
     <!--DOKUMENTI -->
 	<section> 
        <para style="terp_default_8">[[ repeatIn(o.document_ids,'d') ]]</para>
-       
        
        <blockTable colWidths="372.0" style="Table2">
          <tr>
@@ -160,42 +169,35 @@
 	
 	   
 	   <section> <!-- ZADATAK -->
-	       <para style="terp_default_8">[[ repeatIn(d.task_ids,'t') ]]</para>
-	       <blockTable colWidths="372.0" style="Table2">
+	   [[ repeatIn(d.task_ids,'t') ]]
+	     <blockTable colWidths="372.0" style="Table2">
             <tr>
              <td>
 	           <para style="datumi_veci"> [[ t.certified and 'ovjereni' or '' ]] prijevod s [[ t.language_origin.trans_from ]] na [[t.language_id.trans_to]]</para>
 	         </td>
 	        </tr>
+	     </blockTable>
+	     <blockTable colWidths="186.0,186.0" style="Table2">
 	        <tr>
-	          <td>
-	            <para style="terp_default_8">Prevoditelj :</para>
-	         </td>
+              <td><para style="terp_default_8">Prevoditelj</para></td>
+              <td><para style="terp_default_8">Lektor</para></td>
             </tr>
-            <tr>
-              <td>
-	          <section> <!-- PREVODITELJ -->
-	           <para style="terp_default_8">[[ repeatIn(t.translate_ids,'p') ]]</para>
-	           <para style="datumi_veci">[[ p.name or '']]</para>
-	          </section>
-	          </td>
-            </tr>
-	       <tr>
-              <td>
-           <para style="terp_default_8">Lektor :</para>
-              </td>
-            </tr>
-            <tr>
-              <td>
-           <section> <!-- LEKTOR -->
-               <para style="terp_default_8">[[ repeatIn(t.lecture_ids,'l') ]]</para>
-               <para style="datumi_veci">[[ l.name or '']]</para>
-           </section>
+            <td> 
+               <section> <!-- PREVODITELJ -->
+	            [[ repeatIn(t.translate_ids,'p') ]]
+	            <para style="datumi_veci">[[ p.name or '']]</para>
+	           </section>
+	        </td>
+            <td>
+               <section> <!-- LEKTOR -->
+                [[ repeatIn(t.lecture_ids,'l') ]]
+                <para style="datumi_veci">[[ l.name or '']]</para>
+               </section>
             </td>
-            </tr>
-	       </blockTable>
+	     </blockTable>
+	   
 	   </section>
 	</section>
-
+</pto>
   </story>
 </document>
