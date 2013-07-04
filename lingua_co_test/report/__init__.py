@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Module: lingua
+#    Module: lingua_co
 #    Author: Davor Bojkić
 #    mail:   bole@dajmi5.com
 #    Copyright (C) 2012- Daj Mi 5, 
@@ -26,11 +26,7 @@
 ##############################################################################
 
 
-import evidention
-import account_invoice
-import report
-import res_company
-import res_partner
 
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+import smir1
+import smir2
+import smir3

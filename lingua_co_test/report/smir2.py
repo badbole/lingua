@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Module: lingua
+#    Module: lingua_company
 #    Author: Davor Bojkić
 #    mail:   bole@dajmi5.com
 #    Copyright (C) 2012- Daj Mi 5, 
@@ -26,11 +26,23 @@
 ##############################################################################
 
 
-import evidention
-import account_invoice
-import report
-import res_company
-import res_partner
+import time
+from openerp.report import report_sxw
 
+from netsvc import Service
+#del Service._services['report.translation.evidention.smir'] 
+#del Service._services['report.translations.smir'] 
 
+class smir2(report_sxw.rml_parse):
+    def __init__(self, cr, uid, name, context):
+        super(smir2, self).__init__(cr, uid, name, context=context)
+        self.localcontext.update({
+            'time': time,
+        })
+report_sxw.report_sxw(
+    'report.smir2',
+    'translation.evidention',
+    'addons/lingua_co/report/smir2.rml',
+    parser=smir2 , header=False
+)
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

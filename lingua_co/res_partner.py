@@ -2,13 +2,17 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Module: lingua
+#    Module: lingua_co_
 #    Author: Davor Bojkić
 #    mail:   bole@dajmi5.com
 #    Copyright (C) 2012- Daj Mi 5, 
 #                  http://www.dajmi5.com
-#    Contributions: 
-#                   
+#
+#    Description : totaly usless part, made upon request of customer 
+#                   Only description in this module is quoting George Carlin - 
+#Never argue with an idiot. 
+#They will only bring you down to their level 
+#and beat you with experience.
 #                    
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -25,12 +29,20 @@
 #
 ##############################################################################
 
+from osv import osv, fields
+from openerp.tools.translate import _
 
-import evidention
-import account_invoice
-import report
-import res_company
-import res_partner
-
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+class res_partner(osv.Model):
+    _inherit = "res.partner"
+    
+    def _get_clean_oib(self, cr, uid, ids, field_name, field_value, context=None):
+        res={}
+        for p in self.browse(cr, uid, ids):
+            res[p.id]=False
+            if p.vat and p.vat[:2]=="HR":
+                res[p.id] = p.vat[2:] 
+        return res
+        
+    _columns = {
+                'OIB':fields.function(_get_clean_oib, string='OIB', type="char")
+                }

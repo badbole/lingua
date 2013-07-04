@@ -138,7 +138,7 @@
           -->
           <para style="terp_header">[[ (o.partner_id and o.partner_id.title and o.partner_id.title.name) or '' ]] [[ (o.partner_id and o.partner_id.name) or '' ]]</para>
           <para style="terp_default_8"> <font color="white"> </font> </para>
-          <para style="terp_default_8">OIB/VAT : [[ (o.partner_id and o.partner_id.vat) or removeParentNode('para') ]]</para>
+          <para style="terp_default_8">OIB : [[ o.partner_id and o.partner_id.OIB or o.partner_id.vat or removeParentNode('para') ]]</para>
           <para style="terp_default_8">[[ display_address(o.partner_id) ]]</para>
           <para style="terp_default_8">
             <font color="white"> </font>

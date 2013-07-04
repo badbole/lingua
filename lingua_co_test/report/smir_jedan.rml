@@ -59,7 +59,7 @@
     <paraStyle name="Heading 1" fontName="Helvetica-Bold" fontSize="115%" leading="NaN" spaceBefore="12.0" spaceAfter="6.0"/>
     <paraStyle name="terp_header" fontName="Helvetica-Bold" fontSize="12.0" leading="15" alignment="LEFT" spaceBefore="12.0" spaceAfter="6.0"/>
     <paraStyle name="terp_default_8" rightIndent="0.0" leftIndent="0.0" fontName="Helvetica" fontSize="8.0" leading="10" alignment="LEFT" spaceBefore="0.0" spaceAfter="0.0"/>
-    <paraStyle name="terp_default_10" rightIndent="0.0" leftIndent="0.0" fontName="Helvetica" fontSize="10.0" leading="10" alignment="LEFT" spaceBefore="1.5" spaceAfter="1.5"/>
+    <paraStyle name="terp_default_10" rightIndent="0.0" leftIndent="0.0" fontName="Helvetica" fontSize="10.0" leading="10" alignment="LEFT" spaceBefore="1.5" spaceAfter="2.5"/>
     <paraStyle name="Table Contents" fontName="Helvetica"/>
     <paraStyle name="Header left" fontName="Helvetica"/>
     <paraStyle name="Table Heading" fontName="Helvetica" alignment="CENTER"/>
@@ -68,7 +68,6 @@
     <paraStyle name="terp_header_b1" fontName="Helvetica-Bold" fontSize="12.0" leading="10" alignment="CENTER" spaceBefore="2.0" spaceAfter="6.0"/>
     <paraStyle name="Heading_bole_mali" fontName="Helvetica-Bold" fontSize="12.0" alignment="CENTER" spaceBefore="6.0" spaceAfter="9.0"/>
     <paraStyle name="Heading_bole_broj" fontName="Helvetica-Bold" fontSize="20.0" alignment="CENTER" spaceBefore="6.0" spaceAfter="12.0"/>
-    <paraStyle name="terp_mali_prevoditelj" fontName="Helvetica" fontSize="7.0" leading="6" alignment="CENTER" spaceBefore="1.0" spaceAfter="3.0"/>
     <images/>
   </stylesheet>
   <story>
@@ -76,28 +75,33 @@
     <para style="terp_default_8">[[repeatIn(objects,'o')]]</para>
     <para style="terp_default_8">[[setLang(o.partner_id.lang)]]</para>
     <!--
-   
-    
+    <pto_header>
+      <blockTable colWidths="188.0,188.0" style="Table2">
+        <tr>
+        <td><para style="terp_tblheader_Details"><b>Prevoditelj</b></para></td>
+        <td><para style="terp_tblheader_Details_Centre"><b>Lektor</b></para></td>
+        </tr>
+      </blockTable>
+    </pto_header>
     -->
-    <para style="Heading_bole_mali">EVIDENCIJA PRIJEVODA - [[ (o.ev_sequence) ]]</para>
+    <para style="Heading_bole_mali">EVIDENCIJA PRIJEVODA</para>
+    <para style="Heading_bole_broj">[[ (o.ev_sequence) ]]</para>
     <para style="Standard"> <font color="white"> </font></para>
  
     <blockTable colWidths="372.0" style="Table2">
       <tr>
         <td>
           <para style="terp_header_b1">[[ (o.partner_id and o.partner_id.title.name) or '' ]] [[ (o.partner_id and o.partner_id.name) or '' ]] - [[ o.partner_id.vat or 'NEMA UNEŠEN OIB' ]]</para>
-          <para style="terp_default_10">Mob:[[o.partner_id.mobile or '-']], Tel:[[o.partner_id.phone or '-' ]],Fax:[[ o.partner_id.fax or '-' ]]</para>
-          <!--
+          <para style="terp_default_10">Mob.: [[ (o.partner_id.mobile) or removeParentNode('para') ]] </para>
           <para style="terp_default_10">Tel.: [[ (o.partner_id.phone) or removeParentNode('para') ]] </para>
           <para style="terp_default_10">Fax : [[ (o.partner_id.fax) or removeParentNode('para') ]] </para>
-          -->
           <para style="terp_default_10">Email: [[ (o.partner_id.email) or removeParentNode('para') ]]</para>
+          <para style="Standard"> <font color="white"> </font></para>
         </td>
       </tr> 
     </blockTable>
-    <!-- 
     <para style="Standard"> <font color="white"> </font></para>
-    DATUMI  -->
+    <!-- DATUMI  -->
     <blockTable colWidths="186.0,186.0" style="Table2">
       <tr>
         <td>
@@ -117,7 +121,6 @@
       </tr>
     </blockTable>
  
- 
     <blockTable colWidths="372.0" style="Table2">
          <tr>
            <td>
@@ -132,13 +135,15 @@
     </blockTable>
  
     <para style="Standard"> <font color="white"> </font></para> 
+    <para style="P2">Dokument:</para>
 <!--DOKUMENTI --><section> 
        <para style="terp_default_8">[[ repeatIn(o.document_ids,'d') ]]</para>
-     
+       
        <blockTable colWidths="372.0" style="Table2">
          <tr><td><para style="datumi_veci">[[ d.name ]]</para></td></tr>
-	     <tr><td><para style="terp_default_10">lokacija : [[ d.location or removeParentNode('para') ]]</para></td></tr>
-	     <tr><td><para style="terp_default_10">cca [[ d.cards_estm or '']] kartica , spoji sa <b>[[ d.merge_with or '________?' ]]</b></para></td></tr>
+	     <tr><td><para style="terp_default_10">lokacija : [[ d.location or '']]</para></td></tr>
+	     <tr><td><para style="terp_default_10">cca [[ d.cards_estm or '']] kartica </para></td></tr>
+         <tr><td><para style="datumi_veci">spoji sa [[ d.merge_with or '________?' ]]</para></td></tr>
 	  </blockTable>
 <!-- ZADATAK --><section> 
 	   [[ repeatIn(d.task_ids,'t') ]]
@@ -147,8 +152,8 @@
 	     </blockTable>
 	     <blockTable colWidths="186.0,186.0" style="Table2">
 	        <tr>
-              <td><para style="terp_mali_prevoditelj">Prevoditelj</para></td>
-              <td><para style="terp_mali_prevoditelj">Lektor</para></td>
+              <td><para style="terp_default_8">Prevoditelj</para></td>
+              <td><para style="terp_default_8">Lektor</para></td>
             </tr>
             <tr>
               <td>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record id="translation_evidention_form_view_inherit_prostor" model="ir.ui.view">
+            <field name="name">translation_evidention_form_view_inherit_prostor</field>
+            <field name="model">translation.evidention</field>
+            <field name="inherit_id" ref="translations.translation_evidention_form_view" />
+            <field name="arch" type="xml">
+                 <button name="button_deliver" position="after">
+                     <button name="print_smir1" type="object" string="ŠMIR-1" />
+                     <button name="print_smir2" type="object" string="ŠMIR-2" />
+                     <button name="print_smir3" type="object" string="ŠMIR-3" />
+                     
+                 </button>
+               
+            </field>
+        </record>
+       </data>
+       </openerp>

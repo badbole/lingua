@@ -2,12 +2,13 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Module: lingua
+#    Module: lingua_co_gluposti
 #    Author: Davor Bojkić
 #    mail:   bole@dajmi5.com
 #    Copyright (C) 2012- Daj Mi 5, 
 #                  http://www.dajmi5.com
-#    Contributions: 
+#
+#    Description : totaly usless module, made upon request of customer 
 #                   
 #                    
 #    This program is free software: you can redistribute it and/or modify
@@ -27,10 +28,8 @@
 
 
 import evidention
-import account_invoice
 import report
-import res_company
-import res_partner
+
 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

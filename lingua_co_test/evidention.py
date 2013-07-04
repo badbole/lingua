@@ -31,58 +31,57 @@ import openerp.addons.decimal_precision as dp
 import psycopg2
 
 
-class account_invoice(osv.Model):
-    _inherit = "account.invoice"
+class translation_evidention(osv.Model):
+    _inherit = 'translation.evidention'
     
-    
-    def _get_default_bank(self, cr, uid, ids, context=None):
-        return self.pool.get('res.partner.bank').search(cr, uid, [('company_id','=',1)])[0]
-    
-    
-    
-    _columns = {
-                'double_check':fields.boolean('SPREMNO ZA IZDAVANJE')
-                }
-    
-    _defaults={
-              'partner_bank_id':_get_default_bank,
-              'double_check':False
-              }
-    
-    
-    
-        
-    def invoice_memo(self, cr, uid, ids, context=None):
+    def print_smir1(self, cr, uid, ids, context=None):
+        '''
+        This function prints the SMIR envelope
+        '''
         assert len(ids) == 1, 'This option should only be used for a single id at a time.'
-        self.write(cr, uid, ids, {'sent': True}, context=context)
         datas = {
              'ids': ids,
-             'model': 'account.invoice',
+             'model': 'translation.evidention',
              'form': self.read(cr, uid, ids[0], context=context)
         }
         return {
             'type': 'ir.actions.report.xml',
-            'report_name': 'invoice_wo_h',
+            'report_name': 'smir1',
             'datas': datas,
             'nodestroy' : True
         }
-        
-    def invoice_print(self, cr, uid, ids, context=None):
-        
+    
+    def print_smir2(self, cr, uid, ids, context=None):
+        '''
+        This function prints the SMIR envelope
+        '''
         assert len(ids) == 1, 'This option should only be used for a single id at a time.'
-        self.write(cr, uid, ids, {'sent': True}, context=context)
         datas = {
              'ids': ids,
-             'model': 'account.invoice',
+             'model': 'translation.evidention',
              'form': self.read(cr, uid, ids[0], context=context)
         }
-        
         return {
             'type': 'ir.actions.report.xml',
-            'report_name': 'invoice_new',
+            'report_name': 'smir2',
             'datas': datas,
             'nodestroy' : True
-            
         }
-        
-account_invoice()
+    
+    def print_smir3(self, cr, uid, ids, context=None):
+        '''
+        This function prints the SMIR envelope
+        '''
+        assert len(ids) == 1, 'This option should only be used for a single id at a time.'
+        datas = {
+             'ids': ids,
+             'model': 'translation.evidention',
+             'form': self.read(cr, uid, ids[0], context=context)
+        }
+        return {
+            'type': 'ir.actions.report.xml',
+            'report_name': 'smir3',
+            'datas': datas,
+            'nodestroy' : True
+        }
+    
