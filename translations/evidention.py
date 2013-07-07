@@ -335,7 +335,7 @@ class translation_document_task (osv.Model):
         tasks=self.browse(cr, uid, ids)
         res={}
         for t in tasks:
-            if not t.language_origin.trans_from or not t.language_id.trans_to:
+            if not t.language_origin.trans_from or not t.language_id.trans_to or not t.document_id.name:
                 res[t.id] = "Neispravan odabir jezika"
             else:
                 res[t.id]=' '.join([t.document_id.name,'\n',_('from'),
