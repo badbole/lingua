@@ -94,8 +94,10 @@ class translation_evidention(osv.osv):
         diff_day = timedelta.days #+ float(timedelta.seconds) / 86400
         return diff_day
     
-    def _get_deadline(self, cr, uid, ids, field_name, field_value, context=None):
+    def _get_deadline(self, cr, uid, ids, field_names, field_value, context=None):
         res={}
+        DAY_FORMAT = "%A"
+        DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
         for id in self.browse(cr, uid, ids):
             if id.state == 'finish':
                 res[id.id] = False
@@ -112,9 +114,32 @@ class translation_evidention(osv.osv):
                         time_remain = "%d days" %(diff)
                     elif diff<0:
                         time_remain="Late %d days!" %(diff)
-                    res[id.id] = time_remain
+                        
+                    #tt = datetime.strptime(id.date_due, DATETIME_FORMAT)
+                    #td = datetime.strftime(tt, DAY_FORMAT)
+                    #dan=datetime.strftime(datetime.strptime(id.date_due, DATETIME_FORMAT),DAY_FORMAT)
+                    
+                    res[id.id] = time_remain,
+                                  #'day_of_week' : dan
+                                 
+                    
+                    
         return res
-    
+    #datetime.strftime(datetime.strptime(id.date_due, DATETIME_FORMAT),DAY_FORMAT
+    def _get_deadline1(self, cr, uid, ids, field_names, field_value, context=None):
+        res={}
+        DAY_FORMAT = "%A"
+        DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
+        for id in self.browse(cr, uid, ids):
+            if id.state == 'finish':
+                res[id.id] = False
+            else:
+                if id.date_due == False:
+                    res[id.id] = False
+                else:
+                    res[id.id] =  datetime.strftime(datetime.strptime(id.date_due, DATETIME_FORMAT),DAY_FORMAT)
+        return res
+
     _columns = {
         'name': fields.char('Name', size=128 , select=1),
         'ev_sequence':fields.char('Evidention Number', size=64, select=1),
@@ -128,6 +153,7 @@ class translation_evidention(osv.osv):
         'tr_cards':fields.function(_get_total_cards, string='Translated cards', type="float", multi="Cards"),
         'le_cards':fields.function(_get_total_cards, string='Lectured cards', type="float", multi="Cards"),
         'time_remain':fields.function(_get_deadline, string="Deadline", type="char"),
+        'day_of_week':fields.function(_get_deadline1, string="Dan", type="char")
                 }
 
     _defaults = {
@@ -309,7 +335,10 @@ class translation_document_task (osv.Model):
         tasks=self.browse(cr, uid, ids)
         res={}
         for t in tasks:
-            res[t.id]=' '.join([t.document_id.name,'\n',_('from'),
+            if not t.language_origin.trans_from or not t.language_id.trans_to:
+                res[t.id] = "Neispravan odabir jezika"
+            else:
+                res[t.id]=' '.join([t.document_id.name,'\n',_('from'),
                                t.language_origin.trans_from,_('to'),
                                t.language_id.trans_to])
         return res

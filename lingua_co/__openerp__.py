@@ -49,7 +49,8 @@ Summary:
 
     'depends': [
                 'l10n_hr_fiskal',
-                'translations_sale'
+                'translations_sale',
+                'hr_languages',
                 ],
     
     'update_xml': [
@@ -57,7 +58,8 @@ Summary:
 #                   'hr_employee_view.xml',
                    'lingua_report.xml',
                    'account_invoice_view.xml',
-                   'res_company_view.xml'
+                   'res_company_view.xml',
+                   #'data/hr_language.csv',
                    ],
     "active": False,
     "installable": True,

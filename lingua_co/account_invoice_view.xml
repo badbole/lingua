@@ -10,6 +10,12 @@
                    <xpath expr='/form/header/button[@name="invoice_proforma2"]' position="before" >
                         <button name="invoice_memo" type="object" string="Ispis na MEMO"/>
                     </xpath>
+                    
+                    <field name="partner_id" position="after">
+                        <field name="oib_check"  />
+                        
+                    </field>
+                    
             </field>
         </record>
     </data>

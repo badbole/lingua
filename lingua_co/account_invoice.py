@@ -38,15 +38,14 @@ class account_invoice(osv.Model):
     def _get_default_bank(self, cr, uid, ids, context=None):
         return self.pool.get('res.partner.bank').search(cr, uid, [('company_id','=',1)])[0]
     
-    
-    
+        
     _columns = {
-                'double_check':fields.boolean('SPREMNO ZA IZDAVANJE')
+                'oib_check':fields.related('partner_id','vat',type='char', string='OIB/VAT' )
                 }
     
     _defaults={
               'partner_bank_id':_get_default_bank,
-              'double_check':False
+              #'double_check':False
               }
     
     

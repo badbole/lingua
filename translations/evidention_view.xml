@@ -41,11 +41,13 @@
 
 					<field name="ev_sequence" />
 					<field name="partner_id" />
+					<field name="date_recived" />
 					<field name="date_due" />
 					<field name="time_remain" invisible="1" />
-					<field name="total_cards" />
-					<field name="tr_cards" />
-					<field name="le_cards" />
+					<field name="day_of_week" />
+					<field name="total_cards" sum="Proc"/>
+					<field name="tr_cards" sum="prev"/>
+					<field name="le_cards" invisible="1"/>
 					<field name="state" />
 
 				</tree>
