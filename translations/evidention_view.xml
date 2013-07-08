@@ -228,6 +228,7 @@
 					<field name="language_id" />
 					<field name="doc_sequence" />
 					<field name="task_ids" />
+					<field name="location" />
 					<field name="state" />
 				</tree>
 			</field>
