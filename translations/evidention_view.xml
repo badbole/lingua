@@ -84,6 +84,7 @@
 									<label string="Documents in this evidention" />
 								</h3>
 								<field name="document_ids" colspan="4" nolabel="1"
+								    
 									context="{'tree_view_ref':'translations.translation_document_tree_view_enter',
 								              'form_view_ref':'translations.translation_document_form_view_enter'}" />
 							</page>

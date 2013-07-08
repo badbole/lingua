@@ -449,11 +449,18 @@ class translation_work(osv.Model):
     _get_work_type=[('trans','Translating'),
                     ('lect','Lectoring'),
                     ('other','Other')]
+    
+    def _fix_time(self, cr, uid, ids, context="None"):
+        work_log == self.pool.get('translation_work')
+        sel = work_log.search(cr, uid, [('len(job_stop)','>',19)])
+        return True
 
     def _get_time_spent(self, cr, uid, ids, field_name, field_values, context=None):
         res = {}
         for job in self.browse(cr, uid, ids):
             if job.job_stop: 
+                if len (job.job_start) > 19:
+                    job.job_start=job.job_start[:19]
                 time_from=datetime.strptime(job.job_start, DEFAULT_SERVER_DATETIME_FORMAT)
                 time_to = datetime.strptime(job.job_stop, DEFAULT_SERVER_DATETIME_FORMAT)
                 delta = time_to - time_from
@@ -498,6 +505,7 @@ class translation_work(osv.Model):
         task_id = work_obj.task_id.id
         work_type=work_obj.work_type
         task_obj = self.pool.get('translation.document.task')
+        #time=datetime.strptime(log_time(), "%d %H:%M")
         if work_type=='trans':
             if not work_obj.task_id.trans_start:
                 task_obj.write(cr, uid, task_id, {'trans_start':log_time()})
