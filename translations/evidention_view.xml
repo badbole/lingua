@@ -73,7 +73,9 @@
 							<field name="partner_id" class="oe_inline" />
 						</h2>
 						<button name="button_deliver" string="Deliver and finish" type="object" class="oe_highlight" attrs="{'invisible':[ ('state','!=','deliver')]}" />
-						
+						<button name="button_show_task" string="All tasks" type="object" attrs="{'invisible':[ ('state','in',('draft','cancel'))]}" />
+						<button name="button_cancel" string="Cancel" type="object" attrs="{'invisible':[ ('state','in',('cancel','finish'))]}" groups="translations.group_translations_manager"/>
+						<button name="button_force_finish" string="Finish (force)" type="object" attrs="{'invisible':[ ('state','in',('draft','cancel','finish'))]}" groups="translations.group_translations_manager"/>
 						<group colspan="4" col="4">
 							<field name="date_due" />
 							<field name="date_recived" attrs="{'readonly':[('state','!=','draft')]}" />
@@ -107,7 +109,7 @@
 			<field name="arch" type="xml">
 				<search string="Search translation evidention">
 					<field name="name" filter_domain="['|',('name','ilike',self),('partner_id','ilike',self)]" />
-					<filter name="state_notfin" string="Not finished" domain="[('state','!=','finish')]" />
+					<filter name="state_notfin" string="Not finished" domain="[('state','in',('draft','open','process','deliver'))]" />
 					<filter name="state_proc" string="Processing" domain="[('state','=','process')]" />
 					<filter name="state_del" string="For delivery" domain="[('state','=','deliver')]" />
 					<filter name="state_fin" string="Finished" domain="[('state','=','finish')]" />
@@ -194,7 +196,7 @@
 					<filter name="state_new" string="Not started" domain="[('state','=','open')]" />
 					<filter name="state_proc" string="In process" domain="[('state','=','process')]" />
 					<filter name="state_notfin" string="Not Finished"
-						domain="[('state','!=','finish')]" />
+						domain="[('state','not in',('finish','cancel'))]" />
 					<filter name="state_fin" string="Finished" domain="[('state','=','finish')]" />
 
 					<group expand="0" string="Group By...">
@@ -214,7 +216,7 @@
 			<field name="domain">[('doc_sequence','!=', False)]</field>
 			<field name="view_id" ref="translation_document_tree_view" />
 			<field name="search_view_id" ref="translation_document_filter" />
-			<!-- <field name="context">{"search_default_state_notfin":1}</field> -->
+			<field name="context">{"search_default_state_notfin":1}</field>
 		</record>
 		<menuitem action="translation_document_menu_action" parent="translation_overview"
 			id="translation_document_menu" sequence="20" />
@@ -411,7 +413,7 @@
 					<filter name="state_nostart" string="Not started" domain="[('state','in',('draft','asigned'))]" />
 					<filter name="state_tran" string="In translation" domain="[('state','=','trans')]" />
 					<filter name="state_lect" string="Lectoring" domain="[('state','=',('lect','lect_w'))]" />
-					<filter name="state_notfin" string="Not Finished" domain="[('state','!=','finish')]" />
+					<filter name="state_notfin" string="Not Finished" domain="[('state','not in',('finish','cancel'))]" />
 					<filter name="state_fin" string="Finished" domain="[('state','=','finish')]" />
 					<group expand="0" string="Group By...">
 						<filter string="Language original" domain="[]" context="{'group_by':'language_origin'}" />
@@ -432,6 +434,7 @@
 			<field name="domain">[('name','!=', False)]</field>
 			<field name="view_id" ref="translation_document_task_tree_view" />
 			<field name="search_view_id" ref="translation_document_task_filter" />
+			<field name="context">{"search_default_state_notfin":1}</field>
 		</record>
 		<menuitem action="translation_document_task_menu_action"
 			parent="translation_overview" id="translation_document_task_menu"

@@ -167,13 +167,54 @@ class translation_evidention(osv.osv):
     def button_deliver(self,cr, uid, ids, context=None):
         return self.write(cr, uid, ids[0],{'state':'finish'})
     
+    def cancel_are_you_sure(self, cr, uid, evid):
+        return {'warning':{'title': _('Warning!'),
+                           'message' : 'Your are about to cancel evidention and all related documents and tasks'}}
+        #TODO : finish this warning...
+    def button_cancel(self, cr, uid, ids, context=None):
+        evid = self.browse(cr, uid, ids[0])
+        self.cancel_are_you_sure(cr, uid, evid)
+        for doc in evid.document_ids:
+            doc.write({'state':'cancel'})
+            for task in doc.task_ids:
+                task.write({'state':'cancel'})
+        
+        return evid.write({'state':'cancel'})
+    
+    def button_force_finish(self, cr, uid, ids, context=None):
+        evid = self.browse(cr, uid, ids[0])
+        for doc in evid.document_ids:
+            doc.write({'state':'finish'})
+            for task in doc.task_ids:
+                task.write({'state':'finish'})
+        return evid.write({'state':'finish'})
+    
+    def button_show_task(self, cr, uid, ids, context=None):
+        evid = self.browse(cr, uid, ids[0])
+        docs=[]
+        for doc in evid.document_ids:
+            docs.append(doc.id)
+        view_ref = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'translations', 'translation_document_task_tree_view')
+        view_id = view_ref and view_ref[1] or False,
+        return {
+                'type': 'ir.actions.act_window',
+                'name': _('Task'),
+                'res_model': 'translation.document.task',
+                'domain': [('document_id','in',docs)],
+                'view_type': 'form',
+                'view_mode': 'tree',
+                'view_id': view_id,
+                'target': 'current',
+                'nodestroy': True,
+                }
+    
     def check_evidention_state(self, cr, uid, evid_id, context=None):
         evidention = self.pool.get('translation.evidention').browse(cr, uid, evid_id)
         finished = True
         for doc in evidention.document_ids:
             if doc.state != 'finish':
                 finished = False
-        if finished :evidention.write({'state':'finish'})
+        if finished :evidention.write({'state':'deliver'})
         return finished
     
     def copy(self, cr, uid, id, default=None, context=None):
