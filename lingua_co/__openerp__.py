@@ -59,7 +59,7 @@ Summary:
                    'lingua_report.xml',
                    'account_invoice_view.xml',
                    'res_company_view.xml',
-                   #'data/hr_language.csv',
+                   'data/hr.language.csv',
                    ],
     "active": False,
     "installable": True,
