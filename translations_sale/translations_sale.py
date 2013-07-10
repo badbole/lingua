@@ -261,7 +261,7 @@ class translation_evidention(osv.Model):
         return self.pool.get('product.product').create(cr, uid, prod_vals)
     
     def _create_product_template(self, cr, uid, product, context=None):
-        uom_id=self.pool.get('product.uom').search(cr, uid, [('name', '=', _('card'))] )[0]
+        uom_id=self.pool.get('product.uom').search(cr, uid, [('name', '=', ('card'))] )[0]
         ir_values = self.pool.get('ir.values')
         product['tax_ids'] = ir_values.get_default(cr, uid, 'product.product', 'taxes_id', company_id=1)
         
