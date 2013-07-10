@@ -197,6 +197,7 @@ class translation_evidention(osv.Model):
                   'product_uos':uom_id,
                   'tax_id':taxes and [(6,0,taxes)] or False,
                   'product_uom_qty':product.units,
+                  'product_uos_qty':product.units,
                   'discount':product.discount,
                   }
         return self.pool.get('sale.order.line').create(cr, uid, values)

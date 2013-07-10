@@ -157,7 +157,7 @@ class translation_evidention(osv.osv):
                 }
 
     _defaults = {
-                 'ev_sequence':'Draft Evidention',
+                 'ev_sequence':'Draft',
                  'name':'Translation ',
                  'state':"draft",
                  }

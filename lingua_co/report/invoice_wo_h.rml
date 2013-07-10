@@ -130,6 +130,8 @@
           <para style="terp_default_8">Račun obradio : [[ o.fiskal_user_id.name or '' ]]</para>
           <para style="P1"> <font color="white"> </font> </para>
           <para style="P2">Datum dospijeća : [[ formatLang(o.date_due, date=True) or removeParentNode('para') ]]</para>
+          
+          
         </td>
         <td>
             <!--terp_header
@@ -153,8 +155,20 @@
           </para>
           <para style="terp_default_8">Tel. : [[ (o.address_invoice_id and o.address_invoice_id.phone) or removeParentNode('para') ]]</para>
           <para style="terp_default_8">Fax : [[ (o.address_invoice_id and o.address_invoice_id.fax) or removeParentNode('para') ]]</para>
+         
           
         </td>
+      </tr>
+      <tr>
+            <td>
+            <para style="P1"> <font color="white"> </font> </para>
+          <para style="P2">Isporučio : __________________________</para>
+            </td>
+            
+            <td>
+            <para style="P1"> <font color="white"> </font> </para>
+          <para style="P2">Preuzeo : __________________________</para>
+            </td>
       </tr>
     </blockTable>
  
@@ -334,5 +348,8 @@
     <para style="terp_default_9"> Navedeni iznos, sa pozivom na broj : [[ (o.nac_plac in ('T','O') and o.partner_bank_id and o.reference) or removeParentNode('para') ]]</para>
     <para style="terp_default_9"> molimo uplatiti na račun : [[ (o.nac_plac in ('T','O') and o.partner_bank_id and o.partner_bank_id.acc_number) or removeParentNode('para') ]] </para>
     <para style="terp_default_9"> poslovna banka : [[ (o.nac_plac in ('T','O') and o.partner_bank_id and o.partner_bank_id.name) or removeParentNode('para') ]] - [[ (o.partner_bank_id and o.partner_bank_id.bank_bic) ]]</para>
+    
+    
   </story>
+  
 </document>

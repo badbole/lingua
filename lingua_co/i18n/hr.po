@@ -1,0 +1,322 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+#	* lingua_co
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 7.0-20130615-231352\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-07-06 20:46+0000\n"
+"PO-Revision-Date: 2013-07-06 22:47+0100\n"
+"Last-Translator: Davor Bojkić <bole@dajmi5.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+
+#. module: lingua_co
+#: report:smir:0
+msgid "Rok isporuke :"
+msgstr "Rok isporuke :"
+
+#. module: lingua_co
+#: report:invoice_wo_h:0
+msgid "OIB :"
+msgstr "OIB :"
+
+#. module: lingua_co
+#: report:invoice_wo_h:0
+msgid "Osnovica"
+msgstr "Osnovica"
+
+#. module: lingua_co
+#: report:invoice_wo_h:0
+msgid "molimo uplatiti na račun :"
+msgstr "molimo uplatiti na račun :"
+
+#. module: lingua_co
+#: report:invoice_wo_h:0
+msgid "Datum dospijeća :"
+msgstr "Datum dospijeća :"
+
+#. module: lingua_co
+#: report:smir:0
+msgid "lokacija :"
+msgstr "lokacija :"
+
+#. module: lingua_co
+#: report:invoice_wo_h:0
+msgid "Porez :"
+msgstr "Porez :"
+
+#. module: lingua_co
+#: report:smir:0
+msgid "Mob:"
+msgstr "Mob:"
+
+#. module: lingua_co
+#: report:invoice_wo_h:0
+msgid "Supplier Invoice"
+msgstr "Supplier Invoice"
+
+#. module: lingua_co
+#: report:invoice_wo_h:0
+msgid "Supplier Refund"
+msgstr "Supplier Refund"
+
+#. module: lingua_co
+#: report:smir:0
+msgid ",Fax:"
+msgstr ",Fax:"
+
+#. module: lingua_co
+#: report:smir:0
+msgid ", Tel:"
+msgstr ", Tel:"
+
+#. module: lingua_co
+#: report:smir:0
+msgid "napomena"
+msgstr "napomena"
+
+#. module: lingua_co
+#: field:account.invoice,oib_check:0
+msgid "OIB osobe"
+msgstr "OIB osobe"
+
+#. module: lingua_co
+#: model:ir.model,name:lingua_co.model_translation_evidention
+msgid "Evidention of translations"
+msgstr "Evidention of translations"
+
+#. module: lingua_co
+#: report:smir:0
+msgid "EVIDENCIJA PRIJEVODA -"
+msgstr "EVIDENCIJA PRIJEVODA -"
+
+#. module: lingua_co
+#: report:smir:0
+msgid "na"
+msgstr "na"
+
+#. module: lingua_co
+#: model:ir.actions.report.xml,name:lingua_co.report_account_invoice_wo_h
+msgid "Račun bez zaglavlja"
+msgstr "Račun bez zaglavlja"
+
+#. module: lingua_co
+#: view:res.company:0
+msgid "Lingua logo"
+msgstr "Lingua logo"
+
+#. module: lingua_co
+#: report:smir:0
+msgid "kartica , spoji sa"
+msgstr "kartica , spoji sa"
+
+#. module: lingua_co
+#: report:invoice_wo_h:0
+msgid "Tel. :"
+msgstr "Tel. :"
+
+#. module: lingua_co
+#: report:invoice_wo_h:0
+msgid "Račun"
+msgstr "Račun"
+
+#. module: lingua_co
+#: report:invoice_wo_h:0
+msgid "Mjesto izdavanja :"
+msgstr "Mjesto izdavanja :"
+
+#. module: lingua_co
+#: report:invoice_wo_h:0
+msgid "Kol."
+msgstr "Kol."
+
+#. module: lingua_co
+#: report:invoice_wo_h:0
+msgid "Pop.(%)"
+msgstr "Pop.(%)"
+
+#. module: lingua_co
+#: field:res.company,head_logo:0
+msgid "Header logo"
+msgstr "Header logo"
+
+#. module: lingua_co
+#: report:invoice_wo_h:0
+msgid "Uvijeti plaćanja :"
+msgstr "Uvijeti plaćanja :"
+
+#. module: lingua_co
+#: field:translation.evidention,dogovorena_cijena:0
+msgid "Dogovorena cijena"
+msgstr "Dogovorena cijena"
+
+#. module: lingua_co
+#: report:invoice_wo_h:0
+msgid "Porez"
+msgstr "Porez"
+
+#. module: lingua_co
+#: report:invoice_wo_h:0
+msgid "Primjena poreza :"
+msgstr "Primjena poreza :"
+
+#. module: lingua_co
+#: report:invoice_wo_h:0
+msgid "Netto:"
+msgstr "Netto:"
+
+#. module: lingua_co
+#: model:ir.model,name:lingua_co.model_res_company
+msgid "Companies"
+msgstr "Tvrtke"
+
+#. module: lingua_co
+#: view:account.invoice:0
+msgid "Ispis na MEMO"
+msgstr "Ispis na MEMO"
+
+#. module: lingua_co
+#: report:invoice_wo_h:0
+msgid "Način plaćanja   : [[ (o.nac_plac==\"G\" and \"Novčanice\" or                                                             o.nac_plac==\"K\" and \"Kartice\" or                                                             o.nac_plac==\"C\" and \"Čekovi\" or                                                             o.nac_plac==\"T\" and \"Transakcijski račun\" or                                                             o.nac_plac==\"O\" and \"Ostali načini plaćanja\") or '' ]]"
+msgstr "Način plaćanja   : [[ (o.nac_plac==\"G\" and \"Novčanice\" or                                                             o.nac_plac==\"K\" and \"Kartice\" or                                                             o.nac_plac==\"C\" and \"Čekovi\" or                                                             o.nac_plac==\"T\" and \"Transakcijski račun\" or                                                             o.nac_plac==\"O\" and \"Ostali načini plaćanja\") or '' ]]"
+
+#. module: lingua_co
+#: report:invoice_wo_h:0
+msgid "Opis"
+msgstr "Opis"
+
+#. module: lingua_co
+#: report:invoice_wo_h:0
+msgid "JIR :"
+msgstr "JIR :"
+
+#. module: lingua_co
+#: model:ir.actions.report.xml,name:lingua_co.report_translations_smir
+msgid "Evidention SMIR"
+msgstr "Evidention SMIR"
+
+#. module: lingua_co
+#: report:smir:0
+msgid "prijevod s"
+msgstr "prijevod s"
+
+#. module: lingua_co
+#: report:smir:0
+msgid "Prevoditelj"
+msgstr "Prevoditelj"
+
+#. module: lingua_co
+#: report:smir:0
+msgid "Lektor"
+msgstr "Lektor"
+
+#. module: lingua_co
+#: report:invoice_wo_h:0
+msgid "Navedeni iznos, sa pozivom na broj :"
+msgstr "Navedeni iznos, sa pozivom na broj :"
+
+#. module: lingua_co
+#: field:translation.evidention,prostor_id:0
+msgid "Podružnica"
+msgstr "Podružnica"
+
+#. module: lingua_co
+#: report:invoice_wo_h:0
+msgid "poslovna banka :"
+msgstr "poslovna banka :"
+
+#. module: lingua_co
+#: report:invoice_wo_h:0
+msgid "Refund"
+msgstr "Refund"
+
+#. module: lingua_co
+#: report:invoice_wo_h:0
+msgid "UKUPNO:"
+msgstr "UKUPNO:"
+
+#. module: lingua_co
+#: report:invoice_wo_h:0
+msgid "Interni dokument :"
+msgstr "Interni dokument :"
+
+#. module: lingua_co
+#: report:invoice_wo_h:0
+msgid "Jed.cj."
+msgstr "Jed.cj."
+
+#. module: lingua_co
+#: report:invoice_wo_h:0
+msgid "Datum i vrijeme  :"
+msgstr "Datum i vrijeme  :"
+
+#. module: lingua_co
+#: report:invoice_wo_h:0
+msgid "ZKI :"
+msgstr "ZKI :"
+
+#. module: lingua_co
+#: report:smir:0
+msgid "Zaprimljeno :"
+msgstr "Zaprimljeno :"
+
+#. module: lingua_co
+#: field:res.partner,OIB:0
+msgid "OIB"
+msgstr "OIB"
+
+#. module: lingua_co
+#: report:invoice_wo_h:0
+msgid "Iznos"
+msgstr "Iznos"
+
+#. module: lingua_co
+#: field:res.company,foot_logo:0
+msgid "Footer logo"
+msgstr "Footer logo"
+
+#. module: lingua_co
+#: report:smir:0
+msgid "Email:"
+msgstr "Email:"
+
+#. module: lingua_co
+#: report:invoice_wo_h:0
+msgid "Račun obradio :"
+msgstr "Račun obradio :"
+
+#. module: lingua_co
+#: model:ir.model,name:lingua_co.model_account_invoice
+msgid "Invoice"
+msgstr "Račun"
+
+#. module: lingua_co
+#: view:translation.evidention:0
+msgid "ŠMIR-ISPIS"
+msgstr "ŠMIR-ISPIS"
+
+#. module: lingua_co
+#: model:ir.model,name:lingua_co.model_res_partner
+msgid "Partner"
+msgstr "Partner"
+
+#. module: lingua_co
+#: report:invoice_wo_h:0
+msgid "Cijena"
+msgstr "Cijena"
+
+#. module: lingua_co
+#: report:smir:0
+msgid "cca"
+msgstr "cca"
+
+#. module: lingua_co
+#: report:invoice_wo_h:0
+msgid "Fax :"
+msgstr "Fax :"
+
