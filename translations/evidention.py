@@ -194,16 +194,16 @@ class translation_evidention(osv.osv):
         docs=[]
         for doc in evid.document_ids:
             docs.append(doc.id)
-        view_ref = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'translations', 'translation_document_task_tree_view')
-        view_id = view_ref and view_ref[1] or False,
+        #view_ref = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'translations', 'translation_document_task_tree_view')
+        #view_id = view_ref and view_ref[1] or False,
         return {
                 'type': 'ir.actions.act_window',
                 'name': _('Task'),
                 'res_model': 'translation.document.task',
                 'domain': [('document_id','in',docs)],
                 'view_type': 'form',
-                'view_mode': 'tree',
-                'view_id': view_id,
+                'view_mode': 'tree,form',
+                #'view_id': view_id,
                 'target': 'current',
                 'nodestroy': True,
                 }
