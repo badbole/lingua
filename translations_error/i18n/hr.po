@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 7.0-20130615-231352\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-06 20:43+0000\n"
-"PO-Revision-Date: 2013-07-06 22:43+0100\n"
+"POT-Creation-Date: 2013-07-11 06:25+0000\n"
+"PO-Revision-Date: 2013-07-11 08:29+0100\n"
 "Last-Translator: Davor Bojkić <bole@dajmi5.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -18,13 +18,13 @@ msgstr ""
 #. module: translations_error
 #: selection:translation.error,state:0
 msgid "Confirmed"
-msgstr "Confirmed"
+msgstr "Potvrđeno"
 
 #. module: translations_error
 #: code:addons/translations_error/error.py:69
 #, python-format
 msgid "Error is confirmed"
-msgstr "Error is confirmed"
+msgstr "Greška je potvrđena"
 
 #. module: translations_error
 #: field:translation.error,message_follower_ids:0
@@ -34,22 +34,22 @@ msgstr "Followers"
 #. module: translations_error
 #: selection:translation.error,state:0
 msgid "Draft"
-msgstr "Draft"
+msgstr "Nacrt"
 
 #. module: translations_error
 #: selection:translation.error,reported_by:0
 msgid "Employee"
-msgstr "Employee"
+msgstr "Djelatnik"
 
 #. module: translations_error
 #: model:ir.model,name:translations_error.model_translation_document_task
 msgid "Signle langugae for translation"
-msgstr "Signle langugae for translation"
+msgstr "Pojedini jezik za prijevod"
 
 #. module: translations_error
 #: field:translation.error,description:0
 msgid "Description"
-msgstr "Description"
+msgstr "Opis"
 
 #. module: translations_error
 #: field:translation.error,message_unread:0
@@ -59,7 +59,7 @@ msgstr "Unread Messages"
 #. module: translations_error
 #: selection:translation.error,state:0
 msgid "Corrected"
-msgstr "Corrected"
+msgstr "Ispravljeno"
 
 #. module: translations_error
 #: help:translation.error,message_unread:0
@@ -73,8 +73,8 @@ msgid ""
 "No related documet task found!\n"
 "It is not possible to validate error if it is not related to some document or task!"
 msgstr ""
-"No related documet task found!\n"
-"It is not possible to validate error if it is not related to some document or task!"
+"Nije pronađen niti jedan dokumen ili zadatak!\n"
+"Nije moguće potvrditi grešku koja nije povezana sa dokumentom ili sa zadatkom prijevoda!"
 
 #. module: translations_error
 #: field:translation.error,message_is_follower:0
@@ -84,40 +84,40 @@ msgstr "Is a Follower"
 #. module: translations_error
 #: view:translation.error:0
 msgid "Validate"
-msgstr "Validate"
+msgstr "Potvrdi"
 
 #. module: translations_error
 #: view:translation.error:0
 msgid "Error Evidention"
-msgstr "Error Evidention"
+msgstr "Evidencija pogrešaka"
 
 #. module: translations_error
 #: code:addons/translations_error/error.py:68
 #, python-format
 msgid "Error %s confirmed"
-msgstr "Error %s confirmed"
+msgstr "Greška %s je potvrđena"
 
 #. module: translations_error
 #: field:translation.error,name:0
 msgid "Name"
-msgstr "Name"
+msgstr "Naziv"
 
 #. module: translations_error
 #: code:addons/translations_error/error.py:46
 #: help:translation.error,reported_by:0
 #, python-format
 msgid "Who reported error"
-msgstr "Who reported error"
+msgstr "Tko je prijavio grešku"
 
 #. module: translations_error
 #: field:translation.error,reported_date:0
 msgid "Date reported"
-msgstr "Date reported"
+msgstr "Datum prijave"
 
 #. module: translations_error
 #: field:translation.error,message_ids:0
 msgid "Messages"
-msgstr "Messages"
+msgstr "Poruke"
 
 #. module: translations_error
 #: field:translation.error,message_summary:0
@@ -128,25 +128,25 @@ msgstr "Summary"
 #: code:addons/translations_error/error.py:59
 #, python-format
 msgid "Error!"
-msgstr "Error!"
+msgstr "Greška!"
 
 #. module: translations_error
 #: field:translation.error,task_ids:0
 msgid "Tasks"
-msgstr "Tasks"
+msgstr "Zadaci"
 
 #. module: translations_error
 #: model:ir.ui.menu,name:translations_error.translation_error
 #: field:translation.document.task,error_ids:0
 #: view:translation.error:0
 msgid "Error"
-msgstr "Error"
+msgstr "Greška"
 
 #. module: translations_error
 #: model:ir.actions.act_window,name:translations_error.translation_error_evidention_action
 #: model:ir.ui.menu,name:translations_error.translation_errors_evidention_menu
 msgid "Error evidention"
-msgstr "Error evidention"
+msgstr "Evidencija pogrešaka"
 
 #. module: translations_error
 #: help:translation.error,message_ids:0
@@ -156,12 +156,12 @@ msgstr "Messages and communication history"
 #. module: translations_error
 #: field:translation.error,reported_by:0
 msgid "Reported by"
-msgstr "Reported by"
+msgstr "Prijavio "
 
 #. module: translations_error
 #: field:translation.error,state:0
 msgid "State"
-msgstr "State"
+msgstr "Status"
 
 #. module: translations_error
 #: help:translation.error,message_summary:0
@@ -176,5 +176,5 @@ msgstr "Partner"
 #. module: translations_error
 #: model:ir.model,name:translations_error.model_translation_error
 msgid "Error handling"
-msgstr "Error handling"
+msgstr "Upravljanje pogreškama"
 

@@ -1,8 +1,10 @@
 <?xml version="1.0"?>
-<document filename="lingua_invoice_no_header.pdf">
-  <template pageSize="(595.0,842.0)" title="Racun" author="Davor Bojkic" allowSplitting="20">
+<document filename="lingua_invoice.pdf">
+  <template pageSize="(21cm, 29.7cm)" title="Racun" author="Davor Bojkic" allowSplitting="10">
     <pageTemplate id="first">
-      <frame id="first" x1="34.0" y1="118.0" width="530" height="608"/>
+      
+      <frame id="first" x1="2.5cm" y1="6cm" width="530" height="608"/>
+     
     </pageTemplate>
   </template>
   <stylesheet>
@@ -23,6 +25,7 @@
       <lineStyle kind="LINEBELOW" colorName="#000000" start="3,-1" stop="3,-1"/>
       <lineStyle kind="LINEBELOW" colorName="#000000" start="4,-1" stop="4,-1"/>
       <lineStyle kind="LINEBELOW" colorName="#000000" start="5,-1" stop="5,-1"/>
+      <lineStyle kind="LINEBELOW" colorName="#000000" start="6,-1" stop="6,-1"/>
     </blockTableStyle>
     <blockTableStyle id="Table8">
       <blockAlignment value="LEFT"/>
@@ -31,6 +34,8 @@
       <lineStyle kind="LINEBELOW" colorName="#e6e6e6" start="1,-1" stop="1,-1"/>
       <lineStyle kind="LINEBELOW" colorName="#e6e6e6" start="2,-1" stop="2,-1"/>
       <lineStyle kind="LINEBELOW" colorName="#e6e6e6" start="3,-1" stop="3,-1"/>
+      <lineStyle kind="LINEBELOW" colorName="#e6e6e6" start="4,-1" stop="4,-1"/>
+      <lineStyle kind="LINEBELOW" colorName="#e6e6e6" start="5,-1" stop="5,-1"/>
     </blockTableStyle>
     <blockTableStyle id="Table10">
       <blockAlignment value="LEFT"/>
@@ -117,7 +122,7 @@
           <para style="terp_default_8"> <font color="white"> </font> </para>
           
           
-          <para style="terp_default_8">Interni broj     : [[ o.number or '' ]]</para>
+          <para style="terp_default_8">Interni dokument : [[ o.number or '' ]]</para>
           <para style="terp_default_8">Mjesto izdavanja : [[ o.uredjaj_id.prostor_id.name or '' ]]</para>
           <para style="terp_default_8">Datum i vrijeme  : [[ o.vrijeme_txt ]]</para>
           <para style="terp_default_8">Način plaćanja   : [[ (o.nac_plac=="G" and "Novčanice" or
@@ -138,7 +143,7 @@
           -->
           <para style="terp_header">[[ (o.partner_id and o.partner_id.title and o.partner_id.title.name) or '' ]] [[ (o.partner_id and o.partner_id.name) or '' ]]</para>
           <para style="terp_default_8"> <font color="white"> </font> </para>
-      <para style="terp_default_8">OIB : [[ o.partner_id and o.partner_id.OIB or o.partner_id.vat or removeParentNode('para') ]]</para>
+          <para style="terp_default_8">OIB : [[ o.partner_id and o.partner_id.OIB or o.partner_id.vat or removeParentNode('para') ]]</para>
           <para style="terp_default_8">[[ display_address(o.partner_id) ]]</para>
           <para style="terp_default_8">
             <font color="white"> </font>
@@ -161,7 +166,7 @@
     <para style="terp_default_8">
       <font color="white"> </font>
     </para>
-    <blockTable colWidths="202.0,87.0,71.0,57.0,42.0,71.0" style="Table7">
+    <blockTable colWidths="202.0,87.0,71.0,57.0,42.0,71.0" repeatRows="1"  style="Table7">
       <tr>
         <td>
           <para style="terp_tblheader_Details">Opis</para>
@@ -185,6 +190,7 @@
     </blockTable>
     <section>
       <para style="terp_default_2">[[ repeatIn(o.invoice_line,'l') ]]</para>
+      <condPageBreak height="3cm"/>
       <blockTable colWidths="202.0,88.0,71.0,57.0,42.0,71.0" style="Table8">
         <tr>
           <td>
@@ -235,7 +241,7 @@
           <para style="terp_default_9">Netto:</para>
         </td>
         <td>
-          <para style="terp_default_Right_9">[[ formatLang(o.amount_untaxed, digits=get_digits(dp='Account')) ]] [[ o.currency_id.symbol ]]</para>
+          <para style="terp_default_Right_9">[[ formatLang(o.amount_untaxed, digits=get_digits(dp='Product Price')) ]] [[ o.currency_id.symbol ]]</para>
         </td>
       </tr>
       <tr>
@@ -248,7 +254,7 @@
           <para style="terp_default_9">Porez :</para>
         </td>
         <td>
-          <para style="terp_default_Right_9">[[ formatLang(o.amount_tax, digits=get_digits(dp='Account')) ]] [[ o.currency_id.symbol ]]</para>
+          <para style="terp_default_Right_9">[[ formatLang(o.amount_tax, digits=get_digits(dp='Product Price')) ]] [[ o.currency_id.symbol ]]</para>
         </td>
       </tr>
       <tr>
@@ -261,7 +267,7 @@
           <para style="terp_tblheader_Details">UKUPNO:</para>
         </td>
         <td>
-          <para style="terp_default_Bold_Right_9">[[ formatLang(o.amount_total, digits=get_digits(dp='Account')) ]] [[ o.currency_id.symbol ]]</para>
+          <para style="terp_default_Bold_Right_9">[[ formatLang(o.amount_total, digits=get_digits(dp='Product Price')) ]] [[ o.currency_id.symbol ]]</para>
         </td>
       </tr>
     </blockTable>

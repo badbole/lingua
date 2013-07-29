@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <document filename="lingua_invoice_no_header.pdf">
-  <template pageSize="(595.0,842.0)" title="Racun" author="Davor Bojkic" allowSplitting="20">
+  <template pageSize="(21cm, 29.7cm)" title="Racun" author="Davor Bojkic" allowSplitting="10">
     <pageTemplate id="first">
-      <frame id="first" x1="34.0" y1="118.0" width="530" height="608"/>
+      <frame id="first" x1="34.0" y1="120.0" width="530" height="608"/>
     </pageTemplate>
   </template>
   <stylesheet>
@@ -23,6 +23,7 @@
       <lineStyle kind="LINEBELOW" colorName="#000000" start="3,-1" stop="3,-1"/>
       <lineStyle kind="LINEBELOW" colorName="#000000" start="4,-1" stop="4,-1"/>
       <lineStyle kind="LINEBELOW" colorName="#000000" start="5,-1" stop="5,-1"/>
+      <lineStyle kind="LINEBELOW" colorName="#000000" start="6,-1" stop="6,-1"/>
     </blockTableStyle>
     <blockTableStyle id="Table8">
       <blockAlignment value="LEFT"/>
@@ -31,6 +32,8 @@
       <lineStyle kind="LINEBELOW" colorName="#e6e6e6" start="1,-1" stop="1,-1"/>
       <lineStyle kind="LINEBELOW" colorName="#e6e6e6" start="2,-1" stop="2,-1"/>
       <lineStyle kind="LINEBELOW" colorName="#e6e6e6" start="3,-1" stop="3,-1"/>
+      <lineStyle kind="LINEBELOW" colorName="#e6e6e6" start="4,-1" stop="4,-1"/>
+      <lineStyle kind="LINEBELOW" colorName="#e6e6e6" start="5,-1" stop="5,-1"/>
     </blockTableStyle>
     <blockTableStyle id="Table10">
       <blockAlignment value="LEFT"/>
