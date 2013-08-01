@@ -213,9 +213,11 @@
           </td>
         </tr>
         <tr>
+        
           <td>
             <para style="terp_default_Note">[[ format(l.note or '') or removeParentNode('tr') ]]</para>
           </td>
+        
           <td>
             <para style="terp_default_Right_9"> <font color="white"> </font> </para>
           </td>
@@ -274,7 +276,9 @@
     <para style="Text body">
       <font color="white"> </font>
     </para>
+    <condPageBreak height="5cm"/>
     <blockTable colWidths="205.0,71.0,71.0,183.0" style="Table9">
+    
       <tr>
         <td>
           <para style="terp_tblheader_Details">Porez [[ o.tax_line==[] and removeParentNode('blockTable') ]]</para>
@@ -295,6 +299,7 @@
     <section>
       <para style="terp_default_2">[[ repeatIn(o.tax_line,'t') ]]</para>
       <blockTable colWidths="205.0,71.0,71.0,184.0" style="Table2">
+      <condPageBreak height="5cm"/>
         <tr>
           <td>
             <para style="terp_default_8">[[ t.name ]]</para>
@@ -325,6 +330,7 @@
       <font color="white"> </font>
     </para>
     <blockTable colWidths="120.0,410.0" style="Table1">
+    <condPageBreak height="5cm"/>
       <tr>
         <td>
           <para style="terp_default_Bold_9">Primjena poreza : </para>
@@ -337,11 +343,13 @@
     <para style="terp_default_2">
       <font color="white"> </font>
     </para>
+    
     <para style="terp_default_9"> Navedeni iznos, sa pozivom na broj : [[ (o.nac_plac in ('T','O') and o.partner_bank_id and o.reference) or removeParentNode('para') ]]</para>
     <para style="terp_default_9"> molimo uplatiti na račun : [[ (o.nac_plac in ('T','O') and o.partner_bank_id and o.partner_bank_id.acc_number) or removeParentNode('para') ]] </para>
-    <para style="terp_default_9"> poslovna banka : [[ (o.nac_plac in ('T','O') and o.partner_bank_id and o.partner_bank_id.name) or removeParentNode('para') ]] - [[ (o.partner_bank_id and o.partner_bank_id.bank_bic) ]]</para>
+    <para style="terp_default_9"> poslovna banka : [[ (o.nac_plac in ('T','O') and o.partner_bank_id and o.partner_bank_id.bank_name) or removeParentNode('para') ]] - [[ (o.partner_bank_id and o.partner_bank_id.bank_bic) ]]</para>
     
     <blockTable colWidths="260.0,260.0" style="Table1">
+    <condPageBreak height="5cm"/>
     <tr>
             <td>
             <para style="P1"> <font color="white"> </font> </para>

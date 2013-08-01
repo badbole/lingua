@@ -340,7 +340,7 @@
     </para>
     <para style="terp_default_9"> Navedeni iznos, sa pozivom na broj : [[ (o.nac_plac in ('T','O') and o.partner_bank_id and o.reference) or removeParentNode('para') ]]</para>
     <para style="terp_default_9"> molimo uplatiti na račun : [[ (o.nac_plac in ('T','O') and o.partner_bank_id and o.partner_bank_id.acc_number) or removeParentNode('para') ]] </para>
-    <para style="terp_default_9"> poslovna banka : [[ (o.nac_plac in ('T','O') and o.partner_bank_id and o.partner_bank_id.name) or removeParentNode('para') ]] - [[ (o.partner_bank_id and o.partner_bank_id.bank_bic) ]]</para>
+    <para style="terp_default_9"> poslovna banka : [[ (o.nac_plac in ('T','O') and o.partner_bank_id and o.partner_bank_id.bank_name) or removeParentNode('para') ]] - [[ (o.partner_bank_id and o.partner_bank_id.bank_bic) ]]</para>
     
     <blockTable colWidths="260.0,260.0" style="Table1">
     <tr>
