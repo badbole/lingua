@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: OpenERP Server 7.0-20130615-231352\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-07-11 06:29+0000\n"
-"PO-Revision-Date: 2013-07-11 08:31+0100\n"
+"PO-Revision-Date: 2013-08-21 07:49+0100\n"
 "Last-Translator: Davor Bojkić <bole@dajmi5.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -262,7 +262,7 @@ msgstr "Greška!"
 #: field:translation.document.task,product_id:0
 #: view:translation.evidention:0
 msgid "Products"
-msgstr "Proozvodi"
+msgstr "Proizvodi"
 
 #. module: translations_sale
 #: field:account.tax,t_prod_ids:0

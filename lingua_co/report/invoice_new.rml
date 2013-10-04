@@ -134,6 +134,7 @@
           <para style="P2">JIR : [[ (o.jir) or removeParentNode('para') ]]</para>
           <para style="terp_default_8">Račun obradio : [[ o.fiskal_user_id.name or '' ]]</para>
           <para style="P1"> <font color="white"> </font> </para>
+          <para style="P2">Datum isporuke  : [[ formatLang(o.date_delivery, date=True) or removeParentNode('para') ]]</para>
           <para style="P2">Datum dospijeća : [[ formatLang(o.date_due, date=True) or removeParentNode('para') ]]</para>
         </td>
         <td>
@@ -276,9 +277,19 @@
     <para style="Text body">
       <font color="white"> </font>
     </para>
+    <blockTable colWidths="120.0,410.0" style="Table1">
+    <condPageBreak height="5cm"/>
+      <tr>
+        <td>
+          <para style="terp_default_Bold_9">Primjena poreza : </para>
+        </td>
+        <td>
+          <para style="terp_default_9">[[ (o.fiscal_position and o.fiscal_position.note and format(o.fiscal_position.note)) or removeParentNode('blockTable') ]]</para>
+        </td>
+      </tr>
+    </blockTable>
     <condPageBreak height="5cm"/>
     <blockTable colWidths="205.0,71.0,71.0,183.0" style="Table9">
-    
       <tr>
         <td>
           <para style="terp_tblheader_Details">Porez [[ o.tax_line==[] and removeParentNode('blockTable') ]]</para>
@@ -325,21 +336,11 @@
     <para style="terp_default_8">
       <font color="white"> </font>
     </para>
-    <para style="terp_default_9">Uvijeti plaćanja : [[ (o.payment_term and o.payment_term.note and format(o.payment_term and o.payment_term.note)) or removeParentNode('para') ]]</para>
+    <para style="terp_default_9">Uvjeti plaćanja : [[ (o.payment_term and o.payment_term.note and format(o.payment_term and o.payment_term.note)) or removeParentNode('para') ]]</para>
     <para style="terp_default_9">
       <font color="white"> </font>
     </para>
-    <blockTable colWidths="120.0,410.0" style="Table1">
-    <condPageBreak height="5cm"/>
-      <tr>
-        <td>
-          <para style="terp_default_Bold_9">Primjena poreza : </para>
-        </td>
-        <td>
-          <para style="terp_default_9">[[ (o.fiscal_position and o.fiscal_position.note and format(o.fiscal_position.note)) or removeParentNode('blockTable') ]]</para>
-        </td>
-      </tr>
-    </blockTable>
+
     <para style="terp_default_2">
       <font color="white"> </font>
     </para>

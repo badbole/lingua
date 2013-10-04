@@ -132,6 +132,7 @@
           <para style="P2">JIR : [[ (o.jir) or removeParentNode('para') ]]</para>
           <para style="terp_default_8">Račun obradio : [[ o.fiskal_user_id.name or '' ]]</para>
           <para style="P1"> <font color="white"> </font> </para>
+          <para style="P2">Datum isporuke  : [[ formatLang(o.date_delivery, date=True) or removeParentNode('para') ]]</para>
           <para style="P2">Datum dospijeća : [[ formatLang(o.date_due, date=True) or removeParentNode('para') ]]</para>
           
           
@@ -192,6 +193,7 @@
     </blockTable>
     <section>
       <para style="terp_default_2">[[ repeatIn(o.invoice_line,'l') ]]</para>
+      <condPageBreak height="3cm"/>
       <blockTable colWidths="202.0,88.0,71.0,57.0,42.0,71.0" style="Table8">
         <tr>
           <td>
@@ -321,7 +323,7 @@
     <para style="terp_default_8">
       <font color="white"> </font>
     </para>
-    <para style="terp_default_9">Uvijeti plaćanja : [[ (o.payment_term and o.payment_term.note and format(o.payment_term and o.payment_term.note)) or removeParentNode('para') ]]</para>
+    <para style="terp_default_9">Uvjeti plaćanja : [[ (o.payment_term and o.payment_term.note and format(o.payment_term and o.payment_term.note)) or removeParentNode('para') ]]</para>
     <para style="terp_default_9">
       <font color="white"> </font>
     </para>
