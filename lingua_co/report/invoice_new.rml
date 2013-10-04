@@ -201,7 +201,7 @@
             <para style="terp_default_Centre_9">[[ ', '.join([ lt.name or '' for lt in l.invoice_line_tax_id ]) ]]</para>
           </td>
           <td>
-            <para style="terp_default_Right_9">[[ formatLang(l.quantity)]] [[ (l.uos_id and l.uos_id.name) or '' ]]</para>
+            <para style="terp_default_Right_9">[[ formatLang(l.quantity)]]</para>
           </td>
           <td>
             <para style="terp_default_Right_9">[[ formatLang(l.price_unit) ]]</para>
