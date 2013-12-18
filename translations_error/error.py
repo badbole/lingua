@@ -67,6 +67,16 @@ class translation_error(osv.Model):
     def action_error_validate_send_note(self, cr, uid, ids, error, context=None):
         return self.message_post(cr, uid, ids, _('Error %s confirmed' % (error.name)),
                           _("Error is confirmed"),context=context)
+    
+    def action_error_done(self, cr, uid, ids, context=None):
+        for error in self.browse(cr, uid, ids):
+            self.write(cr, uid, error.id, {'state':'correct'})
+            self.action_error_correct_send_note(cr, uid, ids, error)
+        return True
+    
+    def action_error_correct_send_note(self, cr, uid, ids, error, context=None):
+        return self.message_post(cr, uid, ids, _('Error %s corrected' % (error.name)),
+                          _("Error is corrected"),context=context)
         
         
 class translation_document_task(osv.Model):
