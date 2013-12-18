@@ -31,6 +31,7 @@ import openerp.addons.decimal_precision as dp
 import psycopg2
 from openerp import netsvc
 
+
 class translation_price(osv.osv):
     _name="translation.price"
     _description = "Prices forming"
@@ -65,6 +66,13 @@ class translation_price(osv.osv):
                 'discount_name':fields.char('Discount description', size=128),
                 'discount':fields.float('Discount %' ,digits_compute=dp.get_precision('Product Price'), help="Percentage as number (20)% (not decimal 0,2)!"),
                 }
+    
+    
+    def name_get(self, cr, uid, ids, context=None):
+        res=[]
+        for r in self.read(cr, uid, ids,['name','price']):
+            res.append((r['id'],'%s - %s' %(r['price'],r['name'])))
+        return res
     
 class translation_evidention(osv.Model):
     _inherit = 'translation.evidention'
@@ -105,8 +113,11 @@ class translation_evidention(osv.Model):
                  }
     
     def evidention_invoice_generate(self, cr, uid, ids, context=None):
-        if context==None : context={}
+        if context==None : 
+            context={}
         invoice_obj = self.pool.get('account.invoice')
+        
+        
         
         for evidention in self.browse(cr, uid, ids):
             inv_vals = self._prepare_invoice_vals(cr, uid, evidention)
