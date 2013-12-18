@@ -37,7 +37,7 @@
                 <form string="Error Evidention" version="7.0">
                     <header>
                             <button string="Validate" name="action_error_validate" type="object" states="draft" class="oe_highlight"/>
-                            <button string="Correct" name="action_error_correct" type="object" states="confirmed" class="oe_highlight"/>
+                            <button string="Correct" name="action_error_correct" type="object" states="confirm" class="oe_highlight"/>
                             <field name="state" widget="statusbar" />
                         </header>
                     <sheet>
