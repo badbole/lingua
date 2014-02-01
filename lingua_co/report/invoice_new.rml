@@ -260,12 +260,7 @@
           <para style="terp_default_Right_9">[[ formatLang(o.amount_tax, digits=get_digits(dp='Product Price')) ]] [[ o.currency_id.symbol ]]</para>
         </td>
       </tr>
-      <tr>
-        <td>
-          <para style="terp_default_8">
-            <font color="white"> </font>
-          </para>
-        </td>
+      <tr><td><para style="terp_default_8"><font color="white"> </font></para></td>
         <td>
           <para style="terp_tblheader_Details">UKUPNO:</para>
         </td>
@@ -274,64 +269,45 @@
         </td>
       </tr>
     </blockTable>
-    <para style="Text body">
-      <font color="white"> </font>
-    </para>
-    <blockTable colWidths="120.0,410.0" style="Table1">
-    <condPageBreak height="5cm"/>
-      <tr>
-        <td>
-          <para style="terp_default_Bold_9">Primjena poreza : </para>
-        </td>
-        <td>
-          <para style="terp_default_9">[[ (o.fiscal_position and o.fiscal_position.note and format(o.fiscal_position.note)) or removeParentNode('blockTable') ]]</para>
-        </td>
-      </tr>
+    <blockTable colWidths="367.0,58.0,105.0" style="Table10">
+    	<tr>
+    	  <td><para style="terp_default_8"><font color="white"> </font></para></td>
+      	  <td><para style="terp_default_9"> Tečaj:</para> </td>
+    	  <td><para style="terp_default_Right_9">[[ o.second_rate]]</para></td>
+        </tr>
+    	<tr>
+    	  <td><para style="terp_default_8"><font color="white"> </font></para></td>
+      	  <td><para style="terp_tblheader_Details"> TOTAL:</para> </td>
+    	  <td><para style="terp_default_Bold_Right_9">Eur [[ o.second_curr and formatLang(o.second_value, digits=get_digits(dp='Account')) or removeParentNonde('blockTable')]]</para></td>
+        </tr>
+        
     </blockTable>
     <condPageBreak height="5cm"/>
+    <para style="Text body">  <font color="white"> </font> </para>
     <blockTable colWidths="205.0,71.0,71.0,183.0" style="Table9">
       <tr>
-        <td>
-          <para style="terp_tblheader_Details">Porez [[ o.tax_line==[] and removeParentNode('blockTable') ]]</para>
-        </td>
-        <td>
-          <para style="terp_tblheader_Details_Right">Osnovica </para>
-        </td>
-        <td>
-          <para style="terp_tblheader_Details_Right">Iznos </para>
-        </td>
-        <td>
-          <para style="terp_default_8">
-            <font color="white"> </font>
-          </para>
-        </td>
+        <td><para style="terp_tblheader_Details">Porez [[ o.tax_line==[] and removeParentNode('blockTable') ]]</para></td>
+        <td><para style="terp_tblheader_Details_Right">Osnovica </para></td>
+        <td><para style="terp_tblheader_Details_Right">Iznos </para></td>
+        <td><para style="terp_default_8"><font color="white"> </font></para></td>
       </tr>
     </blockTable>
+    <para style="Text body">  <font color="white"> </font> </para>
+    <para style="Text body">  <font color="white"> </font> </para>
     <section>
       <para style="terp_default_2">[[ repeatIn(o.tax_line,'t') ]]</para>
       <blockTable colWidths="205.0,71.0,71.0,184.0" style="Table2">
       <condPageBreak height="5cm"/>
         <tr>
-          <td>
-            <para style="terp_default_8">[[ t.name ]]</para>
-          </td>
-          <td>
-            <para style="terp_default_Right_8">[[ formatLang(t.base, digits=get_digits(dp='Account')) ]] [[ o.currency_id.symbol ]]</para>
-          </td>
-          <td>
-            <para style="terp_default_Right_8">[[ (t.tax_code_id and t.tax_code_id.notprintable) and removeParentNode('blockTable') or '' ]] [[ formatLang(t.amount, digits=get_digits(dp='Account')) ]] [[ o.currency_id.symbol ]]</para>
-          </td>
-          <td>
-            <para style="terp_default_8">
-              <font color="white"> </font>
-            </para>
+          <td><para style="terp_default_8">[[ t.name ]]</para></td>
+          <td><para style="terp_default_Right_8">[[ formatLang(t.base, digits=get_digits(dp='Account')) ]] [[ o.currency_id.symbol ]]</para></td>
+          <td><para style="terp_default_Right_8">[[ (t.tax_code_id and t.tax_code_id.notprintable) and removeParentNode('blockTable') or '' ]] [[ formatLang(t.amount, digits=get_digits(dp='Account')) ]] [[ o.currency_id.symbol ]]</para></td>
+          <td><para style="terp_default_8"><font color="white"> </font></para>
           </td>
         </tr>
       </blockTable>
     </section>
-    <para style="terp_default_9">
-      <font color="white"> </font>
-    </para>
+    <para style="terp_default_9"><font color="white"> </font></para>
     <para style="terp_default_9">[[ (o.comment and format(o.comment )) or removeParentNode('para') ]]</para>
     <para style="terp_default_8">
       <font color="white"> </font>
@@ -340,28 +316,38 @@
     <para style="terp_default_9">
       <font color="white"> </font>
     </para>
-
-    <para style="terp_default_2">
-      <font color="white"> </font>
-    </para>
-    
-    <para style="terp_default_9"> Navedeni iznos, sa pozivom na broj : [[ (o.nac_plac in ('T','O') and o.partner_bank_id and o.reference) or removeParentNode('para') ]]</para>
+    <blockTable colWidths="120.0,410.0" style="Table1">
+      <tr>
+        <td> <para style="terp_default_Bold_9">Primjena poreza : </para> </td>
+        <td> <para style="terp_default_9">[[ (o.fiscal_position and o.fiscal_position.note and format(o.fiscal_position.note)) or removeParentNode('blockTable') ]]</para> </td>
+      </tr>
+    </blockTable>
+    <para style="Text body">  <font color="white"> </font> </para>
+    <para style="Text body">  <font color="white"> </font> </para>
+    <para style="Text body">  <font color="white"> </font> </para>
+    <para style="Text body">  <font color="white"> </font> </para>
+    <para style="terp_default_9"> Navedeni iznos, sa pozivom na broj : HR[[ (o.nac_plac in ('T','O') and o.partner_bank_id and o.reference) or removeParentNode('para') ]]</para>
     <para style="terp_default_9"> molimo uplatiti na račun : [[ (o.nac_plac in ('T','O') and o.partner_bank_id and o.partner_bank_id.acc_number) or removeParentNode('para') ]] </para>
     <para style="terp_default_9"> poslovna banka : [[ (o.nac_plac in ('T','O') and o.partner_bank_id and o.partner_bank_id.bank_name) or removeParentNode('para') ]] - [[ (o.partner_bank_id and o.partner_bank_id.bank_bic) ]]</para>
     
     <blockTable colWidths="260.0,260.0" style="Table1">
-    <condPageBreak height="5cm"/>
+    <para style="Text body">  <font color="white"> </font> </para>
+    <para style="Text body">  <font color="white"> </font> </para>
+    <para style="Text body">  <font color="white"> </font> </para>
     <tr>
             <td>
-            <para style="P1"> <font color="white"> </font> </para>
+            <para style="Text body">  <font color="white"> </font> </para>
+            <para style="Text body">  <font color="white"> </font> </para>
           <para style="P2">Izradio : __________________________</para>
             </td>
             
             <td>
-            <para style="P1"> <font color="white"> </font> </para>
+            <para style="Text body">  <font color="white"> </font> </para>
+            <para style="Text body">  <font color="white"> </font> </para>
           <para style="P2">Preuzeo : __________________________</para>
             </td>
       </tr>
       </blockTable>
   </story>
+  
 </document>
