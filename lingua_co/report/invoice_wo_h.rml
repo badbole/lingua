@@ -271,14 +271,14 @@
     </blockTable>
     <blockTable colWidths="367.0,58.0,105.0" style="Table10">
     	<tr>
-    	  <td><para style="terp_default_8"><font color="white"> </font></para></td>
+    	  <td><para style="terp_default_8"><font color="white"> [[ not o.second_curr and removeParentNode('blockTable')]]</font></para></td>
       	  <td><para style="terp_default_9"> Tečaj:</para> </td>
     	  <td><para style="terp_default_Right_9">[[ o.second_rate]]</para></td>
         </tr>
     	<tr>
     	  <td><para style="terp_default_8"><font color="white"> </font></para></td>
       	  <td><para style="terp_tblheader_Details"> TOTAL:</para> </td>
-    	  <td><para style="terp_default_Bold_Right_9">Eur [[ o.second_curr and formatLang(o.second_value, digits=get_digits(dp='Account')) or removeParentNonde('blockTable')]]</para></td>
+    	  <td><para style="terp_default_Bold_Right_9">Eur [[ o.second_curr and formatLang(o.second_value, digits=get_digits(dp='Account')) ]]</para></td>
         </tr>
         
     </blockTable>
