@@ -43,9 +43,9 @@ class account_invoice(osv.Model):
         for p in self.browse(cr, uid, ids):
             adresa=''
             adresa = p.partner_id.street and p.partner_id.street + '\n' or adresa
-            adresa += p.partner_id.zip and p.partner_id.zip + ' ' or adresa
-            adresa += p.partner_id.city and p.partner_id.city + '\n' or adresa
-            adresa += p.partner_id.country_id and p.partner_id.country_id.name or adresa
+            adresa = p.partner_id.zip and adresa + p.partner_id.zip + ' ' or adresa
+            adresa = p.partner_id.city and adresa + p.partner_id.city + '\n' or adresa
+            adresa = p.partner_id.country_id and adresa + p.partner_id.country_id.name or adresa
             res[p.id]= adresa
         return res
      
