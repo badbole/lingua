@@ -38,9 +38,20 @@ class account_invoice(osv.Model):
     def _get_default_bank(self, cr, uid, ids, context=None):
         return self.pool.get('res.partner.bank').search(cr, uid, [('company_id','=',1)])[0]
     
-        
+    def get_adresa(self, cr, uid, ids, name, value, context=None):
+        res={}
+        for p in self.browse(cr, uid, ids):
+            adresa=''
+            adresa = p.partner_id.street and p.partner_id.street + '\n' or adresa
+            adresa += p.partner_id.zip and p.partner_id.zip + ' ' or adresa
+            adresa += p.partner_id.city and p.partner_id.city + '\n' or adresa
+            adresa += p.partner_id.country_id and p.partner_id.country_id.name or adresa
+            res[p.id]= adresa
+        return res
+     
     _columns = {
-                'oib_check':fields.related('partner_id','vat',type='char', string='OIB/VAT' )
+                'oib_check':fields.related('partner_id','vat',type='char', string='OIB/VAT'),
+                'adresa':fields.function( get_adresa ,type='char', string='Adresa', readonly=True )
                 }
     
     _defaults={

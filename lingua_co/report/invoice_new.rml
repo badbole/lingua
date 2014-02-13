@@ -216,7 +216,7 @@
         <tr>
         
           <td>
-            <para style="terp_default_Note">[[ format(l.note or '') or removeParentNode('tr') ]]</para>
+<!--            <para style="terp_default_Note">[[ format(l.note or '') or removeParentNode('tr') ]]</para> -->
           </td>
         
           <td>
@@ -269,19 +269,21 @@
         </td>
       </tr>
     </blockTable>
+
     <blockTable colWidths="367.0,58.0,105.0" style="Table10">
     	<tr>
-    	  <td><para style="terp_default_8"><font color="white"> [[ not o.second_curr and removeParentNode('blockTable')]]</font></para></td>
+    	  <td><para style="terp_default_8"><font color="white">[[ not o.second_curr and removeParentNode('blockTable')]] </font></para></td>
       	  <td><para style="terp_default_9"> Tečaj:</para> </td>
     	  <td><para style="terp_default_Right_9">[[ o.second_rate]]</para></td>
         </tr>
     	<tr>
-    	  <td><para style="terp_default_8"><font color="white"> </font></para></td>
+    	  <td><para style="terp_default_8"><font color="white">[[ o.currency_id.name != 'HRK' and removeParentNode('blockTable')  ]] </font></para></td>
       	  <td><para style="terp_tblheader_Details"> TOTAL:</para> </td>
-    	  <td><para style="terp_default_Bold_Right_9">Eur [[ formatLang(o.second_value, digits=get_digits(dp='Account'))]]</para></td>
+    	  <td><para style="terp_default_Bold_Right_9">Eur [[ o.second_curr and formatLang(o.second_value, digits=get_digits(dp='Account')) or removeParentNonde('blockTable')]]</para></td>
         </tr>
         
     </blockTable>
+
     <condPageBreak height="5cm"/>
     <para style="Text body">  <font color="white"> </font> </para>
     <blockTable colWidths="205.0,71.0,71.0,183.0" style="Table9">
@@ -326,9 +328,9 @@
     <para style="Text body">  <font color="white"> </font> </para>
     <para style="Text body">  <font color="white"> </font> </para>
     <para style="Text body">  <font color="white"> </font> </para>
-    <para style="terp_default_9"> Navedeni iznos, sa pozivom na broj : HR[[ (o.nac_plac in ('T','O') and o.partner_bank_id and o.reference) or removeParentNode('para') ]]</para>
-    <para style="terp_default_9"> molimo uplatiti na račun : [[ (o.nac_plac in ('T','O') and o.partner_bank_id and o.partner_bank_id.acc_number) or removeParentNode('para') ]] </para>
-    <para style="terp_default_9"> poslovna banka : [[ (o.nac_plac in ('T','O') and o.partner_bank_id and o.partner_bank_id.bank_name) or removeParentNode('para') ]] - [[ (o.partner_bank_id and o.partner_bank_id.bank_bic) ]]</para>
+    <para style="terp_default_9"> Poziv na broj : HR[[ (o.nac_plac in ('T','O') and o.partner_bank_id and o.reference) or removeParentNode('para') ]]</para>
+    <para style="terp_default_9"> IBAN : [[ (o.nac_plac in ('T','O') and o.partner_bank_id and o.partner_bank_id.acc_number) or removeParentNode('para') ]] </para>
+    <para style="terp_default_9"> [[ (o.nac_plac in ('T','O') and o.partner_bank_id and o.partner_bank_id.bank_name) or removeParentNode('para') ]] - BIC : [[ (o.partner_bank_id and o.partner_bank_id.bank_bic) ]]</para>
     
     <blockTable colWidths="260.0,260.0" style="Table1">
     <para style="Text body">  <font color="white"> </font> </para>
