@@ -138,27 +138,23 @@
           
         </td>
         <td>
-            <!--terp_header
-          <para style="terp_default_Bold_9">[[ (o.partner_id and o.partner_id.title and o.partner_id.title.name) or '' ]] [[ (o.partner_id and o.partner_id.name) or '' ]]</para>
-          <para style="terp_default_8">[[ (o.address_invoice_id and o.address_invoice_id.street) or '' ]]</para>
-          -->
-          <para style="terp_header">[[ (o.partner_id and o.partner_id.title and o.partner_id.title.name) or '' ]] [[ (o.partner_id and o.partner_id.name) or '' ]]</para>
+       	 <para style="terp_header">[[ (o.partner_id and o.partner_id.title and o.partner_id.title.name) or '' ]] [[ (o.partner_id and o.partner_id.name) or '' ]]</para>
           <para style="terp_default_8"> <font color="white"> </font> </para>
           <para style="terp_default_8">OIB : [[ o.partner_id and o.partner_id.OIB or o.partner_id.vat or removeParentNode('para') ]]</para>
-          <para style="terp_default_8">[[ display_address(o.partner_id) ]]</para>
+          <!-- <para style="terp_default_8">[[ display_address(o.partner_id) ]]</para> -->
           <para style="terp_default_8">
             <font color="white"> </font>
           </para>
           
-          <para style="terp_default_8">[[ (o.address_invoice_id and o.address_invoice_id.street2) or removeParentNode('para') ]]</para>
-          <para style="terp_default_8">[[ (o.address_invoice_id and o.address_invoice_id.zip) or '' ]] [[ (o.address_invoice_id and o.address_invoice_id.city) or '' ]]</para>
-          <para style="terp_default_8">[[ (o.address_invoice_id and o.address_invoice_id.state_id and o.address_invoice_id.state_id.name) or removeParentNode('para') ]]</para>
-          <para style="terp_default_8">[[ (o.address_invoice_id and o.address_invoice_id.country_id and o.address_invoice_id.country_id.name) or '' ]]</para>
+          <para style="terp_default_8">[[ (o.partner_id and o.partner_id.street2) or removeParentNode('para') ]]</para>
+          <para style="terp_default_8">[[ (o.partner_id and o.partner_id.zip) or '' ]] [[ (o.partner_id and o.partner_id.city) or '' ]]</para>
+          <para style="terp_default_8">[[ (o.partner_id and o.partner_id.state_id and o.partner_id.state_id.name) or removeParentNode('para') ]]</para>
+          <para style="terp_default_8">[[ (o.partner_id and o.partner_id.country_id and o.partner_id.country_id.name) or '' ]]</para>
           <para style="terp_default_8">
             <font color="white"> </font>
           </para>
-          <para style="terp_default_8">Tel. : [[ (o.address_invoice_id and o.address_invoice_id.phone) or removeParentNode('para') ]]</para>
-          <para style="terp_default_8">Fax : [[ (o.address_invoice_id and o.address_invoice_id.fax) or removeParentNode('para') ]]</para>
+          <para style="terp_default_8">Tel. : [[ (o.partner_id and o.partner_id.phone) or removeParentNode('para') ]]</para>
+          <para style="terp_default_8">Fax : [[ (o.partner_id and o.partner_id.fax) or removeParentNode('para') ]]</para>
          
           
         </td>
@@ -217,7 +213,7 @@
         </tr>
         <tr>
           <td>
-            <para style="terp_default_Note">[[ format(l.note or '') or removeParentNode('tr') ]]</para>
+           <para style="terp_default_Right_9"> <font color="white"> </font> </para>
           </td>
           <td>
             <para style="terp_default_Right_9"> <font color="white"> </font> </para>
@@ -272,12 +268,12 @@
 
     <blockTable colWidths="367.0,58.0,105.0" style="Table10">
     	<tr>
-    	  <td><para style="terp_default_8"><font color="white">[[  not o.second_curr and removeParentNode('blockTable')]] </font></para></td>
+    	  <td><para style="terp_default_8"><font color="white"> </font></para></td>
       	  <td><para style="terp_default_9"> Tečaj:</para> </td>
     	  <td><para style="terp_default_Right_9">[[ o.second_rate]]</para></td>
         </tr>
     	<tr>
-    	  <td><para style="terp_default_8"><font color="white">[[ o.currency_id.name != 'HRK' and removeParentNode('blockTable')  ]] </font></para></td>
+    	  <td><para style="terp_default_8"><font color="white">[[ o.currency_id.name != 'HRK' or not o.second_curr and removeParentNode('blockTable')  ]] </font></para></td>
       	  <td><para style="terp_tblheader_Details"> TOTAL:</para> </td>
     	  <td><para style="terp_default_Bold_Right_9">Eur [[ o.second_curr and formatLang(o.second_value, digits=get_digits(dp='Account')) or removeParentNonde('blockTable')]]</para></td>
         </tr>
