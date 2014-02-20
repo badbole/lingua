@@ -164,14 +164,10 @@
       </tr>
     </blockTable>
  
-    <para style="terp_default_8">
-      <font color="white"> </font>
-    </para>
+    <para style="terp_default_8"><font color="white"> </font> </para>
     <blockTable colWidths="202.0,87.0,71.0,57.0,42.0,71.0" repeatRows="1"  style="Table7">
       <tr>
-        <td>
-          <para style="terp_tblheader_Details">Opis</para>
-        </td>
+        <td><para style="terp_tblheader_Details">Opis</para></td>
         <td>
           <para style="terp_tblheader_Details_Centre">Porez</para>
         </td>
@@ -194,62 +190,30 @@
       <condPageBreak height="3cm"/>
       <blockTable colWidths="202.0,88.0,71.0,57.0,42.0,71.0" style="Table8">
         <tr>
-          <td>
-            <para style="terp_default_9">[[ l.name ]]</para>
-          </td>
-          <td>
-            <para style="terp_default_Centre_9">[[ ', '.join([ lt.name or '' for lt in l.invoice_line_tax_id ]) ]]</para>
-          </td>
-          <td>
-            <para style="terp_default_Right_9">[[ formatLang(l.quantity)]]</para>
-          </td>
-          <td>
-            <para style="terp_default_Right_9">[[ formatLang(l.price_unit) ]]</para>
-          </td>
-          <td>
-            <para style="terp_default_Right_9">[[ formatLang(l.discount, digits=get_digits(dp='Account')) ]] </para>
-          </td>
-          <td>
-            <para style="terp_default_Right_9">[[ formatLang(l.price_subtotal, digits=get_digits(dp='Account')) ]] [[ o.currency_id.symbol ]]</para>
-          </td>
+          <td><para style="terp_default_9">[[ l.name ]]</para></td>
+          <td><para style="terp_default_Centre_9">[[ ', '.join([ lt.name or '' for lt in l.invoice_line_tax_id ]) ]]</para></td>
+          <td><para style="terp_default_Right_9">[[ formatLang(l.quantity)]]</para></td>
+          <td><para style="terp_default_Right_9">[[ formatLang(l.price_unit) ]]</para></td>
+          <td><para style="terp_default_Right_9">[[ formatLang(l.discount, digits=get_digits(dp='Account')) ]] </para></td>
+          <td><para style="terp_default_Right_9">[[ formatLang(l.price_subtotal, digits=get_digits(dp='Account')) ]] [[ o.currency_id.symbol ]]</para></td>
         </tr>
         
       </blockTable>
     </section>
     <blockTable colWidths="367.0,58.0,105.0" style="Table10">
       <tr>
-        <td>
-          <para style="terp_default_8">
-            <font color="white"> </font>
-          </para>
-        </td>
-        <td>
-          <para style="terp_default_9">Netto:</para>
-        </td>
-        <td>
-          <para style="terp_default_Right_9">[[ formatLang(o.amount_untaxed, digits=get_digits(dp='Product Price')) ]] [[ o.currency_id.symbol ]]</para>
-        </td>
+        <td> <para style="terp_default_8"><font color="white"> </font></para> </td>
+        <td> <para style="terp_default_9">Netto:</para></td>
+        <td> <para style="terp_default_Right_9">[[ formatLang(o.amount_untaxed, digits=get_digits(dp='Product Price')) ]] [[ o.currency_id.symbol ]]</para>  </td>
       </tr>
       <tr>
-        <td>
-          <para style="terp_default_8">
-            <font color="white"> </font>
-          </para>
-        </td>
-        <td>
-          <para style="terp_default_9">Porez :</para>
-        </td>
-        <td>
-          <para style="terp_default_Right_9">[[ formatLang(o.amount_tax, digits=get_digits(dp='Product Price')) ]] [[ o.currency_id.symbol ]]</para>
-        </td>
+        <td> <para style="terp_default_8"> <font color="white"> </font> </para> </td>
+        <td><para style="terp_default_9">Porez :</para> </td>
+        <td> <para style="terp_default_Right_9">[[ formatLang(o.amount_tax, digits=get_digits(dp='Product Price')) ]] [[ o.currency_id.symbol ]]</para> </td>
       </tr>
       <tr><td><para style="terp_default_8"><font color="white"> </font></para></td>
-        <td>
-          <para style="terp_tblheader_Details">UKUPNO:</para>
-        </td>
-        <td>
-          <para style="terp_default_Bold_Right_9">[[ formatLang(o.amount_total, digits=get_digits(dp='Product Price')) ]] [[ o.currency_id.symbol ]]</para>
-        </td>
+        <td> <para style="terp_tblheader_Details">UKUPNO:</para></td>
+        <td> <para style="terp_default_Bold_Right_9">[[ formatLang(o.amount_total, digits=get_digits(dp='Product Price')) ]] [[ o.currency_id.symbol ]]</para></td>
       </tr>
     </blockTable>
 
@@ -260,7 +224,7 @@
     	  <td><para style="terp_default_Right_9">[[ o.second_rate]]</para></td>
         </tr>
     	<tr>
-    	  <td><para style="terp_default_8"><font color="white">[[[ o.currency_id.name != 'HRK' or not o.second_curr and removeParentNode('blockTable')  ]] </font></para></td>
+    	  <td><para style="terp_default_8">[[ o.currency_id.name != 'HRK' or not o.second_curr and removeParentNode('blockTable')]]</para></td>
       	  <td><para style="terp_tblheader_Details"> TOTAL:</para> </td>
     	  <td><para style="terp_default_Bold_Right_9">Eur [[ o.second_curr and formatLang(o.second_value, digits=get_digits(dp='Account')) or removeParentNonde('blockTable')]]</para></td>
         </tr>
