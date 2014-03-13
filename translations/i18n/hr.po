@@ -75,7 +75,7 @@ msgstr "Prevoditelj - ured"
 #. module: translations
 #: model:ir.model,name:translations.model_translation_evidention
 msgid "Evidention of translations"
-msgstr "Evidencija prevoda"
+msgstr "Evidencija prijevoda"
 
 #. module: translations
 #: view:translations.work.done:0

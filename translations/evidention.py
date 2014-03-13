@@ -419,6 +419,7 @@ class translation_document_task (osv.Model):
                 #'state':fields.function(check_task_state,'Translation status'),
                 'note':fields.text('Note'),
                 'est_cards':fields.float('Cards estimate'),
+                'done_cards':fields.float('Cards done', help="For evidention of template documents etc.. info"),
                 'translate_ids':fields.many2many('hr.employee',
                                                  'translate_task_translate_employee_rel',
                                                  'translation_document_task_translate_ids',

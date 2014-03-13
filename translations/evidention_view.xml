@@ -304,6 +304,7 @@
 							<field name="certified" />
 							<field name="lectoring" />
 							<field name="est_cards" />
+							<field name="done_cards" />
 						</group>
 						<!-- 
 						<group colspan="4" col="4">
